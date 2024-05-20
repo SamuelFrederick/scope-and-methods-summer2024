@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.313">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Sam Frederick">
+<meta name="dcterms.date" content="2023-06-21">
+
+<title>Section 9. Dummy Variables and Regression</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="section-9_files/libs/clipboard/clipboard.min.js"></script>
+<script src="section-9_files/libs/quarto-html/quarto.js"></script>
+<script src="section-9_files/libs/quarto-html/popper.min.js"></script>
+<script src="section-9_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="section-9_files/libs/quarto-html/anchor.min.js"></script>
+<link href="section-9_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="section-9_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="section-9_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="section-9_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="section-9_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#dummy-variables" id="toc-dummy-variables" class="nav-link active" data-scroll-target="#dummy-variables">Dummy Variables</a>
+  <ul class="collapse">
+  <li><a href="#fastdummies" id="toc-fastdummies" class="nav-link" data-scroll-target="#fastdummies"><code>fastDummies</code></a>
+  <ul class="collapse">
+  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example">Example</a></li>
+  </ul></li>
+  <li><a href="#interpreting-dummy-variable-coefficient-estimates" id="toc-interpreting-dummy-variable-coefficient-estimates" class="nav-link" data-scroll-target="#interpreting-dummy-variable-coefficient-estimates">Interpreting Dummy Variable Coefficient Estimates</a></li>
+  </ul></li>
+  <li><a href="#summarizing-regression-models" id="toc-summarizing-regression-models" class="nav-link" data-scroll-target="#summarizing-regression-models">Summarizing Regression Models</a></li>
+  <li><a href="#making-predictions-with-regression-models" id="toc-making-predictions-with-regression-models" class="nav-link" data-scroll-target="#making-predictions-with-regression-models">Making Predictions with Regression Models</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Section 9. Dummy Variables and Regression</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Sam Frederick </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 21, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+
+</div>
+<div class="cell">
+
+</div>
+<section id="dummy-variables" class="level1">
+<h1>Dummy Variables</h1>
+<p>We have previously talked about dummy, or indicator, variables which are binary (0,1) variables which take on a value of 1 if some condition is met and 0 otherwise. For example, we might have a variable called “democrat” which equals 1 if an individual in our dataset is a Democrat and 0 otherwise (i.e., if the individual is a Republican or Independent).</p>
+<p>Earlier in the semester, we learned about factor variables in R, a way of encoding and storing categorical variables. In order to meaningfully use these factor variables in regression, we generally put them into the form of a series of dummy variables. For example, if we have a factor variable called “party” which describes the party identification of individuals in the dataset, we might transform it into a series of dummy variables: democrat, independent, republican.</p>
+<p>R can do this automatically in the <code>lm()</code> function, but sometimes we want to do this manually as it gives us more control over the output.</p>
+<p><strong><em>Important Notes:</em></strong></p>
+<ol type="1">
+<li><p>The output when changing factor variables into a series of dummy variables depends on the ordering of the factor levels. Remember that, by default, R orders factor variables alphabetically or numerically.</p></li>
+<li><p>Regression <em>cannot</em> handle all categories of the factor variable as dummy variables, and it must exclude one level/category. By default, the excluded level is the first factor level.</p></li>
+</ol>
+<section id="fastdummies" class="level2">
+<h2 class="anchored" data-anchor-id="fastdummies"><code>fastDummies</code></h2>
+<p>We can do this using the <code>fastDummies</code> package in R.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"fastDummies"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fastDummies)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The main function to be aware of in <code>fastDummies</code> is the <code>dummy_columns()</code> function. Here are the main arguments for this function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dummy_columns</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>      <span class="co"># input the tibble/data.frame dataset</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>      .data, </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>      <span class="co"># input the columns you want to convert to a dummy variable</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      <span class="co"># this should be a character vector</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">select_columns =</span> <span class="cn">NULL</span>, </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>      <span class="co"># do you want to remove the first factor level?</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>      <span class="co"># should be TRUE for regression</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">remove_first_dummy =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>      <span class="co"># creates a dummy variable for missing values if FALSE</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">ignore_na =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>      <span class="co">#remove columns you're making the dummy variables from if TRUE</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">remove_selected_columns =</span> <span class="cn">FALSE</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="example" class="level3">
+<h3 class="anchored" data-anchor-id="example">Example</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>house <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"house2020_elections.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>house <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dummy_columns</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>      <span class="at">select_columns =</span> <span class="fu">c</span>(<span class="st">"party"</span>, <span class="st">"state"</span>, </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"incumbent_challenge_full"</span>), </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">remove_first_dummy =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">ignore_na =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">remove_selected_columns =</span> <span class="cn">TRUE</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 726 × 58
+   distr…¹ recei…² disbu…³ last  votes…⁴ party…⁵ state…⁶ state…⁷ state…⁸ state…⁹
+     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;
+ 1       1  2.34e6  2.23e6 CARL     64.4       1       1       0       0       0
+ 2       1  8.01e4  7.90e4 AVER…    35.5       0       1       0       0       0
+ 3       2  5.77e4  5.77e4 HARV…    34.7       0       1       0       0       0
+ 4       5  6.69e5  2.24e5 BROO…    95.8       1       1       0       0       0
+ 5       7  2.17e6  1.50e6 SEWE…    97.2       0       1       0       0       0
+ 6       1  9.67e5  1.10e6 CRAW…   100         1       0       1       0       0
+ 7       7  1.83e6  1.13e6 BERA     56.6       0       0       0       0       1
+ 8       3  3.97e5  3.85e5 HAMI…    45.3       1       0       0       0       1
+ 9       4  3.02e6  3.02e6 KENN…    44.1       0       0       0       0       1
+10       6  4.55e4  4.53e4 BISH     26.7       1       0       0       0       1
+# … with 716 more rows, 48 more variables: state_CO &lt;int&gt;, state_CT &lt;int&gt;,
+#   state_DC &lt;int&gt;, state_DE &lt;int&gt;, state_FL &lt;int&gt;, state_GA &lt;int&gt;,
+#   state_HI &lt;int&gt;, state_IA &lt;int&gt;, state_ID &lt;int&gt;, state_IL &lt;int&gt;,
+#   state_IN &lt;int&gt;, state_KS &lt;int&gt;, state_KY &lt;int&gt;, state_LA &lt;int&gt;,
+#   state_MA &lt;int&gt;, state_MD &lt;int&gt;, state_ME &lt;int&gt;, state_MI &lt;int&gt;,
+#   state_MN &lt;int&gt;, state_MO &lt;int&gt;, state_MS &lt;int&gt;, state_MT &lt;int&gt;,
+#   state_NC &lt;int&gt;, state_ND &lt;int&gt;, state_NE &lt;int&gt;, state_NH &lt;int&gt;, …</code></pre>
+</div>
+</div>
+<p>Let’s start with a simple regression of <code>voteshare</code> on <code>incumbent_challenge_full</code> and <code>log(disbursements)</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(voteshare<span class="sc">~</span><span class="fu">log</span>(disbursements) <span class="sc">+</span> <span class="st">`</span><span class="at">incumbent_challenge_full_Incumbent</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">incumbent_challenge_full_Open seat</span><span class="st">`</span>, </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>            house <span class="sc">%&gt;%</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">dummy_columns</span>(<span class="at">select_columns =</span> <span class="fu">c</span>(<span class="st">"incumbent_challenge_full"</span>),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">remove_first_dummy =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                          <span class="at">ignore_na =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = voteshare ~ log(disbursements) + incumbent_challenge_full_Incumbent + 
+    `incumbent_challenge_full_Open seat`, data = house %&gt;% dummy_columns(select_columns = c("incumbent_challenge_full"), 
+    remove_first_dummy = TRUE, ignore_na = FALSE))
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-41.400  -6.307   0.487   5.538  47.319 
+
+Coefficients:
+                                     Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)                           13.2845     3.7549   3.538 0.000429 ***
+log(disbursements)                     1.9156     0.2915   6.572 9.51e-11 ***
+incumbent_challenge_full_Incumbent    23.0113     1.0141  22.691  &lt; 2e-16 ***
+`incumbent_challenge_full_Open seat`   6.7225     1.5444   4.353 1.54e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 11.43 on 722 degrees of freedom
+Multiple R-squared:  0.5586,    Adjusted R-squared:  0.5568 
+F-statistic: 304.6 on 3 and 722 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="interpreting-dummy-variable-coefficient-estimates" class="level2">
+<h2 class="anchored" data-anchor-id="interpreting-dummy-variable-coefficient-estimates">Interpreting Dummy Variable Coefficient Estimates</h2>
+<p>The coefficient estimate for a dummy variable can be interpreted as the difference in the conditional expected value between the omitted category and the dummy variable. In other words, the inclusion of the dummy variables gives us a different intercept for each category in the factor variable.</p>
+<p>The actual intercept estimate for the regression is the conditional expectation for the omitted category/categories.</p>
+<p>In the example above,</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="section-9_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="summarizing-regression-models" class="level1">
+<h1>Summarizing Regression Models</h1>
+<p>Last time, we discussed using tables to summarize the output of regression models. Often, we want to visually display the results using a plot. We can do this using a variety of packages, including <code>dotwhisker</code> and <code>modelsummary</code>. Today, we will focus on <code>dotwhisker</code>.</p>
+<p>These types of plots are popular because they can convey a lot of information in a relatively compact and visually appealing way.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"dotwhisker"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dotwhisker)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>house <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"house2020_elections.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(voteshare<span class="sc">~</span><span class="fu">log</span>(disbursements), <span class="at">data =</span> house)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>mod2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(voteshare<span class="sc">~</span><span class="fu">log</span>(disbursements) <span class="sc">+</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>             incumbent_challenge_full_Incumbent <span class="sc">+</span> </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>             <span class="st">`</span><span class="at">incumbent_challenge_full_Open seat</span><span class="st">`</span>, </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> house <span class="sc">%&gt;%</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>             <span class="fu">dummy_columns</span>(<span class="at">select_columns =</span> <span class="fu">c</span>(<span class="st">"incumbent_challenge_full"</span>), </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>                           <span class="at">remove_first_dummy =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>mod3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(voteshare<span class="sc">~</span><span class="fu">log</span>(disbursements) <span class="sc">+</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>             incumbent_challenge_full_Incumbent <span class="sc">+</span> </span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>             <span class="st">`</span><span class="at">incumbent_challenge_full_Open seat</span><span class="st">`</span> <span class="sc">+</span> </span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>             party_REP, </span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> house <span class="sc">%&gt;%</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>             <span class="fu">dummy_columns</span>(<span class="at">select_columns =</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">c</span>(<span class="st">"incumbent_challenge_full"</span>, <span class="st">"party"</span>), </span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>                           <span class="at">remove_first_dummy =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="fu">dwplot</span>(<span class="fu">list</span>(mod1, mod2, mod3), </span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">show_intercept =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">ci =</span> <span class="fl">0.95</span>, </span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">vline =</span> <span class="fu">geom_vline</span>(</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>           <span class="at">xintercept =</span> <span class="dv">0</span>,</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>           <span class="at">colour =</span> <span class="st">"red"</span>,</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>           <span class="at">linetype =</span> <span class="st">"dashed"</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>       ),</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">vars_order =</span> <span class="fu">c</span>(<span class="st">"log(disbursements)"</span>,</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>       <span class="st">"incumbent_challenge_full_Incumbent"</span>,</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>       <span class="st">"incumbent_challenge_full_Open seat"</span>, </span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>       <span class="st">"party_REP"</span>),</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>       <span class="at">model_order =</span> <span class="fu">c</span>(<span class="st">"Model 1"</span>, <span class="st">"Model 2"</span>, <span class="st">"Model 3"</span>)</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>       ) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">relabel_predictors</span>(</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>        <span class="fu">c</span>(</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">log(disbursements)</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"log(Spending)"</span>,</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>            <span class="at">incumbent_challenge_full_Incumbent =</span> <span class="st">"Incumbent"</span>,</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">incumbent_challenge_full_Open seat</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"Open Seat"</span>,</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>            <span class="at">party_REP =</span> <span class="st">"Republican"</span></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>    )<span class="sc">+</span></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="section-9_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="making-predictions-with-regression-models" class="level1">
+<h1>Making Predictions with Regression Models</h1>
+<p>We can make predictions for new data points using our regression models using the <code>predict()</code> function in base R. To make these predictions, we need to have a new dataset in the same form as our old dataset with the same variables:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(voteshare<span class="sc">~</span><span class="fu">log</span>(disbursements) <span class="sc">+</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>            incumbent_challenge_full_Incumbent <span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">incumbent_challenge_full_Open seat</span><span class="st">`</span>, </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> house <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">dummy_columns</span>(<span class="at">select_columns =</span> </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">c</span>(<span class="st">"incumbent_challenge_full"</span>), </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                          <span class="at">remove_first_dummy =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">disbursements =</span> <span class="fu">rep</span>(<span class="dv">15000</span>, <span class="dv">3</span>),  </span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">incumbent_challenge_full_Incumbent =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), </span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>       <span class="st">`</span><span class="at">incumbent_challenge_full_Open seat</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">predict</span>(mod, . , <span class="at">interval =</span> <span class="st">"prediction"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">incumbency_status =</span> </span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>           <span class="fu">c</span>(<span class="st">"Incumbent"</span>, <span class="st">"Open Seat"</span>, <span class="st">"Challenger"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(incumbency_status, fit)) <span class="sc">+</span> </span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span> </span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span> incumbency_status,</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>                   <span class="at">xend =</span> incumbency_status, </span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>                   <span class="at">y =</span> lwr, <span class="at">yend =</span> upr), </span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>               <span class="at">lwd =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Predicted Value"</span>, <span class="at">x =</span> <span class="st">""</span>) <span class="sc">+</span> </span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="section-9_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

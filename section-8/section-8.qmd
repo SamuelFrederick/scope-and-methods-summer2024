@@ -1,0 +1,320 @@
+---
+title: "Section 8. Regression"
+author: "Sam Frederick"
+date: "June 14, 2023"
+format: 
+  html: 
+    code-copy: true
+    toc: true
+---
+
+```{r echo = F}
+knitr::opts_knit$set(root.dir ="/Users/samfrederick/scope-and-methods-summer2023/scope-and-methods-summer2023/")
+knitr::opts_chunk$set(root.dir = "/Users/samfrederick/scope-and-methods-summer2023/scope-and-methods-summer2023/")
+```
+
+```{r echo = F, message = F}
+library(tidyverse)
+house <- read_csv("house2020_elections.csv")
+```
+
+# New Package for Today
+
+```{r eval = F}
+install.packages("stargazer")
+```
+
+```{r, message = F}
+library(stargazer)
+```
+
+# Introduction to Linear Regression
+
+## A Refresher on Causality and Experiments
+
+```{r, engine = 'tikz', echo = F}
+\begin{tikzpicture}
+  \node(treatment) [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=blue!30, text width = 2.5cm] {Treatment}; 
+  \node(outcome) [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=blue!30, text width = 2.5cm, right of = treatment, xshift = 2.25in] {Outcome}; 
+  \node(confound) [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=black!20, text width = 2.5cm, above of = treatment, xshift = 1.25in, yshift = 1in] {Confounder}; 
+  \draw[red, line width=1mm] 
+    (confound.south west) -- (confound.north east)
+    (confound.south east) -- (confound.north west);
+  \path[->, thick, line width = 1mm, >= stealth] (treatment) edge 
+    node[circle, fill = red!20]{$\tau$} (outcome);
+    \draw[ thick,->,line width = 0.5mm, >= stealth, dashed] (confound) -- (treatment);
+    \draw[ thick,->,line width = 0.5mm, >= stealth, dashed] (confound) -- (outcome);
+\end{tikzpicture}
+```
+
+When we are in the world of experiments, the relationships in our data look like this. Because of random assignment, there are no differences between "treatment" and "control" groups on average. This means that any differences in the outcome variable should be attributable to the experimental treatment. 
+
+## Observational Data
+
+In the world of observational data (which all of us are for our final projects), we have to worry about the "treatment" and "control" groups being different. For example, if we want to study the effects of war on certain political outcomes, we have to worry about countries that go to war being systematically different from countries that do not go to war. In other words, in the real world, people or objects of study ***select into treatment***. People choose to watch Fox News; they choose to get vaccinated; state lawmaking bodies choose to adopt policies. 
+
+The reasons that people or lawmaking bodies have for selecting some "treatment" we are interested in often have the potential to shape the outcomes we are interested in too. These causal relationships that lead to people taking a "treatment" and also people having certain outcomes mean we cannot identify the effect of our treatment on the outcome without accounting for the underlying variable that causes both "treatment" and outcome. This underlying variable causing both treatment and outcome is called a "confounder". Thus, what we observe is: 
+
+```{r, engine = 'tikz', echo = F}
+\begin{tikzpicture}
+  \node(treatment) [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=blue!30, text width = 2.5cm] {Treatment}; 
+  \node(outcome) [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=blue!30, text width = 2.5cm, right of = treatment, xshift = 2.25in] {Outcome}; 
+  \node(confound) [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=black!20, text width = 2.5cm, above of = treatment, xshift = 1.25in, yshift = 1in] {Confounder}; 
+  \path[->, thick, line width = 1mm, >= stealth] (treatment) edge 
+    node[circle, fill = red!20]{$\tau$} (outcome);
+    \draw[ thick,->,line width = 0.5mm, >= stealth, dashed] (confound) -- (treatment);
+    \draw[ thick,->,line width = 0.5mm, >= stealth, dashed] (confound) -- (outcome);
+\end{tikzpicture}
+```
+
+Regression gives us a framework to account for these confounding variables and to better approximate the experimental ideal. It is important to note that we cannot ever be sure that we have accounted for all potential confounding variables, however. This is why experiments are the "gold standard" for identifying causal effects. 
+
+That said, sometimes it is impossible, infeasible, or unethical to conduct experiments, so observational data are the best available way to test our hypotheses. In these settings, it is crucial to think ***carefully*** about potential confounding variables which could cause "treated" units to systematically differ from "untreated" units. 
+## Bivariate Regression
+
+Starting with a single variable, we have a formula of the form:
+
+$$y_i = \beta_0 + \beta_1 * x_i + \varepsilon_i$$
+We fit our Y or outcome variable to a line with slope $\beta_1$ and y-intercept $\beta_0$. The $\varepsilon$ captures "error" which is not explained by our model. We estimate $\beta_0$ and $\beta_1$ using Ordinary Least Squares (OLS) or Linear Regression. 
+
+Ordinary Least Squares finds the values of $\beta_0$ and $\beta_1$ which minimize the sum of squared residuals. Residuals are the difference between our actual, observed Y values and the predicted Y values using $\beta_0$ and $\beta_1$. 
+
+The sum of squared residuals (SSR) is calculated as:
+
+$$SSR = \sum_{i =1}^n (y_i - \beta_0 - \beta_1 * x_i)^2$$
+
+In the animation below, we can see how the OLS coefficient estimates (displayed on the last frame) minimize the Sum of Squared Residuals.  
+
+```{r echo = F, cache = T, message = F}
+data2 <- read_csv("section-8/regression_data.csv")
+mod <- lm(y~x, data = data2)
+
+library(MASS)
+set.seed(123)
+ncoef <- 10
+samp_coef <- mvrnorm(10, c(coef(mod)[[1]], coef(mod)[[2]]), 
+        Sigma = matrix(c(3, 0.5, 0.5, 3), nrow = 2))
+samp_coef <- rbind(samp_coef, c(coef(mod)[[1]], coef(mod)[[2]]))
+temp <- cut(1:550, ncoef+1)
+res <- data.table::rbindlist(lapply(1:(ncoef+1), function(c) data2 |> mutate(intercept = samp_coef[c,1], slope = samp_coef[c, 2], fitted = intercept + slope*x , state = c))) |> 
+  group_by(state) |> 
+  mutate(ssr = sum((y - fitted)^2)) |> 
+  arrange(desc(ssr)) |> ungroup()
+res <- res|> 
+  mutate(equation = map2_chr(slope, intercept, 
+                             ~paste("y=", round(.y, 2), "+", round(.x,2), "*x")))
+res$state <- temp
+
+library(gganimate)
+res |> 
+  mutate(ssr_lab = map_chr(ssr, ~paste("SSR=", round(.x))))|> 
+  ggplot(aes(x, y)) + 
+  geom_point() + 
+  geom_abline(aes(intercept = intercept, slope = slope)) + 
+  geom_segment(aes(xend = x, yend = fitted), color = "red") + 
+  # geom_text(x = 0, y = 175, label = "TRUE EQUATION: y = 3 + 2*x", size = 10)+
+  labs(title = "OLS: Minimizing the Sum of Squared Residuals")+
+  geom_text(x = 0, y = 125, aes(label = equation), size = 10)+
+  geom_text(x = 0, y = 75, aes(label = ssr_lab), size = 10)+
+  gganimate::transition_states(state)
+```
+
+### The Meaning of Regression Estimates
+
+After estimating the coefficients for the line that minimizes the sum of squared residuals, we want to interpret these coefficient estimates.
+
+```{r, echo = F, results = 'asis'}
+tibble(Coefficient = c('$\\beta_0$', '$\\beta_1$'), 
+       Name = c("Intercept", "Coefficient Estimate/Slope"), 
+       Meaning = c("Predicted value of $y_i$ when $x_i = 0$" , 
+                   "Predicted increase in $y_i$ corresponding to an increase of 1 in $x_i$")) |> 
+  knitr::kable( booktabs = T, escape = T)
+```
+
+### Interpreting Regression Estimates
+
+Note: when we are working with observational data, we usually cannot definitively say that X ***causes*** Y because we cannot be sure that we have accurately and fully accounted for all confounding variables. As a result, we generally try not to say that $\beta_1$ is the estimate of the effect of X on Y, or that X leads to or causes Y. 
+
+Instead, we usually interpret our regression coefficients using some variation of the following:
+
+- An increase of 1 in X is **associated with** an increase/decrease/change of $\beta_1$ in Y. 
+
+- If X increases by 1, Y is **expected** to increase/decrease by $\beta_1$. 
+
+- If X increases by 1, Y is **predicted** to increase/decrease by $\beta_1$. 
+
+### Fitting a Bivariate Regression in R
+
+To fit regressions in R, we usually use the `lm()` command. The main arguments we need to worry about are the formula and the data. The formula is of the form `DV~IV` where the DV is your dependent variable and the IV is your independent or predictor variables. The `lm()` command adds an intercept automatically, so you don't have to worry about specifying this. 
+
+```{r, message = F}
+reg_data <- read_csv("section-8/regression_data.csv")
+reg_data %>% 
+  ggplot(aes(x, y)) + 
+  geom_point() 
+mod <- lm(y~x, data = reg_data)
+summary(mod)
+```
+
+The `lm()` function gives us a lot of useful information. It gives us summary statistics for Residuals at the top. It gives us estimates of our coefficients $\beta_0$ and $\beta_1$ as well as standard errors, t-values, and p-values. The p-values tell us the probability of observing a coefficient estimate at least as large as the one we actually observe if the null hypothesis that the coefficient estimate is 0 is true. Finally, we get a variety of measures of model fit and statistics for the model. 
+
+::: {.panel-tabset}
+
+### Question
+
+**1. How would we interpret the intercept estimate of our model?**
+
+
+### Answer
+
+**1. How would we interpret the intercept estimate of our model?**
+
+When x is 0, the expected value of y is about 3.8. 
+
+:::
+
+::: {.panel-tabset}
+
+### Question
+
+**2. How would we interpret the coefficient estimate for x in our model?**
+
+
+### Answer
+
+**2. How would we interpret the coefficient estimate for x in our model?**
+
+As x increases by 1, we would expect y to increase by about 2. 
+
+:::
+
+
+### Producing a Nice Regression Table: `stargazer()`
+
+```{r, message = F}
+stargazer(mod, type = 'text')
+```
+
+```{r, message = F}
+stargazer(mod, 
+          type = 'text', # specifying type = "text" can help when trying to format the table, but generally we want to use type = "html"
+          title = "Title", # this sets the title of the table
+          omit.stat = c( "f", "ser"),# this helps omit unnecessary statistics, including the F-Statistic and the Standard Error of the Regression 
+          covariate.labels = c("Covariate 1", "Intercept"), #sets the labels of the coefficient estimates (x, intercept)
+          column.labels = c("Dependent Variable 1"), #this sets the labels of the columns
+          dep.var.caption = "Dependent Var", #this sets a caption for the dependent variable
+          dep.var.labels = c("Y")) #this is useful if you are using multiple different dependent variables across multiple models
+```
+  
+### Visualizing a Bivariate Regression in `ggplot2`
+
+`ggplot2` gives us a nice function for drawing a regression line for our data. The function is `geom_smooth()`. 
+
+```{r}
+reg_data %>% 
+  ggplot(aes(x, y)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", se = F)
+```
+
+With the `method` argument, we are telling `ggplot` to add a line from a linear model to our plot. The `se = F` argument tells `ggplot` not to plot the standard error of the regression line. 
+
+# Multiple Linear Regression
+
+As noted above, when we are working with observational data, we want to account for potential confounding variables that affect both one's probability of getting a treatment and one's outcome variable. We can do this by simply adding potential confounding variables to the formula. 
+
+Instead of estimating the bivariate regression ($y_i = \beta_0 + \beta_1*x_i + \varepsilon_i$), we estimate:
+
+$$y_i = \beta_0 + \beta_1*x_1i + \beta_2*x_2i + ... + \beta_k*x_ki + \varepsilon_i$$
+
+Without adding the confounding variables to our regression equation, our estimates of the coefficients will be **biased**. This is known as Omitted Variables Bias. 
+
+Let's take a look at an example of confounding and how that affects our regression results. 
+
+These are fake data that come from a true model of $y_i = 4+2*x_i+5*confound_i + var1_i + \varepsilon_i$ and $x_i = 2 + 2*confound_i + \gamma_i$. 
+
+```{r, message = F}
+confound <- read_csv("section-8/confound.csv")
+mod1 <- lm(y~x, data = confound)
+summary(mod1)
+```
+
+Without accounting for the confounding variable, we get a coefficient estimate for $\beta_1$ of about 4.5 (remember the true coefficient for x is 2). What happens if we include the confounding variable in our regression model?
+
+```{r}
+mod2 <- lm(y~x+confound, data = confound)
+summary(mod2)
+```
+
+If we include the confounding variable in our model as a "control" variable, our estimate of the coefficient estimate for x decreases to about 2--an unbiased estimate of the true value (2). 
+
+Finally, because $var1$ does not affect **both** x and y, its exclusion from our regression model does not bias our results. 
+
+```{r}
+mod3 <- lm(y~x+confound+var1, data = confound)
+```
+
+```{r, results = 'asis'}
+stargazer(mod1, mod2, mod3, type = "html", 
+          omit.stat = c("ser",  "f"))
+```
+
+# Example with House Data
+
+Let's do a full analysis with our House data. Let's say we want to test the hypothesis that campaign spending leads to a better electoral performance. We can fit a simple regression of voteshare on logged campaign spending. 
+
+```{r, message = F}
+house <- read_csv("house2020_elections.csv")
+mod1_house <- lm(voteshare~log(disbursements), data = house)
+summary(mod1_house)
+```
+
+This is interesting by itself; however, there is good reason to believe there are some omitted variables here. Specifically, we might think that certain types of candidates are likely to both raise a lot of money and perform well electorally. This would make it appear that the spending is leading to the voteshare, when really it is the confounding variable that is generating this relationship. One such confounding variable is incumbency. 
+
+We can account for incumbency status by adding it into our regression.
+
+```{r}
+mod2_house <- lm(voteshare~log(disbursements)+incumbent_challenge_full, data = house)
+summary(mod2_house)
+```
+
+Indeed, we can see that our intuitions about incumbency status were likely pretty good: the coefficient estimate for campaign spending decreased by a lot once we include incumbency status.
+
+The election in 2020 was a fairly good one for Republican House candidates, so we might think that party is also an important potential confounder: Republicans might have been both able to raise more money and performed better in the election. 
+
+```{r}
+mod3_house <- lm(voteshare~log(disbursements)+incumbent_challenge_full + party, data = house)
+summary(mod3_house)
+```
+
+It does not appear that party was a big confounding variable (the coefficient estimate for spending didn't change much after we included party). That said, we do see that Republican candidates did perform better electorally than Democratic candidates in 2020. 
+
+Finally, let's put all of these regression models together:
+
+```{r, results = 'asis'}
+stargazer(mod1_house, mod2_house, mod3_house, type = "html", 
+          omit.stat = c("ser", "f"), 
+          covariate.labels = c("log(Spending)", "Incumbent", "Open-Seat", "Republican", "Intercept"), 
+          dep.var.labels = c("Vote Share"))
+```
+
+# Weighted Linear Regression
+
+The last thing to note is that when we are using data with weights, we want to conduct weighted regressions. We can do this using the `weights` argument in the `lm()` function. 
+
+For example, if we go back to the CES dataset we worked with last section:
+
+```{r, message = F, results = 'asis'}
+ces <- read_csv("ces2020_example.csv")|>
+  filter(ideo5%in%1:5&pid3%in%1:3)
+mod1_ces <- lm(ideo5~factor(pid3), data = ces)
+mod2_ces <- lm(ideo5~factor(pid3), data = ces, weights = commonweight)
+stargazer(mod1_ces, mod2_ces, type = "html", 
+          omit.stat = c("f", "ser"), 
+          column.labels = c("Unweighted", "Weighted"), 
+          dep.var.labels = c("Vote Share"))
+
+```
+
+
+

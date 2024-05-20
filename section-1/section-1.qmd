@@ -1,0 +1,380 @@
+---
+title: "Introduction to Scope and Methods"
+author: "Sam Frederick"
+format: 
+  revealjs:
+    css: [footer.css]
+    theme: [default, custom.scss]
+    chalkboard: true
+    progress: true
+    include-after-body: footer.html 
+    footer: "Introduction to R"
+knitr: 
+  opts_chunk: 
+      echo: true
+---
+```{r setup, include = F}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Installing R and RStudio
+
+- Navigate to https://posit.co/download/rstudio-desktop/
+  - Can also just search for RStudio Desktop
+
+- Follow the download instructions
+  1. Download R
+  2. Download RStudio
+
+## Installing R and RStudio
+
+![](download_R.png)
+
+
+
+## Working Directories
+
+- **Important!** 
+
+- Create a folder for this course on your computer
+
+- Give it a short and meaningful title (e.g., Scope and Methods)
+
+- Store your data, R files, and any other helpful info from the course in it
+
+- Know where it is located (i.e., know the path)
+
+## Working Directories
+
+Example Paths to Folders:
+
+- Mac:
+  - "/Users/samfrederick/Desktop/Scope and Methods"
+  - "~/Desktop/Scope and Methods"
+  
+- Windows:
+  - "C://Users/samfrederick/Desktop/Scope and Methods"
+
+## Working Directories
+
+- Depending on your preferences, you can:
+  - Specify the path to your file manually
+  - Set your working directory manually
+  - Use an RProject and associate it with your course folder
+
+## Manual Path Specification
+
+- Not recommended 
+  - lengthy, error-prone, not very replicable
+
+- Write out full path of file:
+  - e.g., "/Users/samfrederick/Desktop/Scope and Methods/file.csv"
+
+## Setting Working Directory Manually
+
+- Better but still can have issues with replication and lengthiness
+
+- Use the R command setwd() to specify the "working directory"
+  - i.e., your course folder
+  - Only need to do this once in a given R session
+  
+```{r, eval = FALSE}
+setwd("/Users/samfrederick/Desktop/Scope and Methods/")
+```
+
+## RProjects
+
+- Best method
+
+- "File" > 
+      "New Project" > 
+          "Existing Directory" > 
+              "Browse" > 
+                  "Create Project"
+
+- Only need to open project to access your files
+
+## Overview of R
+
+Top Left: Usually RScripts/RMarkdown files
+
+![](rscript3.png)
+
+## Overview of R
+
+Top Right: Environment where loaded objects will be shown
+
+![](rscript3.png)
+
+## Overview of R
+
+Bottom Left: Console (can run code--but this will not necessarily be as reproducible)
+
+![](rscript3.png)
+
+
+## Overview of R
+
+Bottom Right: Plots, Help, Files in Working Directory
+
+![](rscript3.png)
+
+
+
+## RScript
+
+- As (social) scientists, we want our work to be reproducible
+
+- Important to save work such that another person could follow your exact steps and would get the same results
+
+- Use RScript files to write and save code
+  - Like Word documents, but for R code
+
+## RScript
+
+![](rscript0.png)
+
+## RScript
+
+![](rscript1.png)
+
+. . . 
+
+![](rscript2.png)
+
+## RScript
+
+![](rscript3.png)
+
+## RScript: Running Code
+
+- command + return on a Mac or control + Enter on a Windows
+
+![](rscript_run.png)
+
+## RMarkdown
+
+- Similar to RScript files 
+
+- But also allows you to include text
+
+- Produces good output for Problem Sets
+
+## RMarkdown
+
+![](rscript1.png)
+
+. . . 
+
+![](rmd1.png)
+
+## RMarkdown
+
+- Select HTML or Word (have to install LaTeX to use PDF)
+
+![](rmd2.png)
+
+## RMarkdown
+
+![](rmd3.png)
+
+## RMarkdown Advice
+
+- Knit your RMarkdown frequently (i.e., at each step of creation)
+
+- Often small errors can cause issues 
+  - And can be hard to catch otherwise
+
+## RMarkdown Practice
+
+- Open RStudio
+
+- Try to open a new RMarkdown document
+
+- Which parts of the document seem to include R code? 
+
+- See if you can figure out how to insert a new code chunk (a section that R reads as code)
+
+## RMarkdown: Running Code
+
+- command + return on a Mac or control + Enter on a Windows
+
+![](rmd_run.png)
+
+## RMarkdown: Running Code
+
+![](rmd_run2.png)
+
+## Intro to Coding in R
+
+Arithmetic:
+
+- Addition: +
+
+- Subtraction: - 
+
+- Multiplication: *
+
+- Division: /
+
+- Exponents: x^y (x to the power of y)
+
+## Intro to Coding in R: Practice
+
+- Go to R and open an RScript file
+
+- Set your working directory to your course folder by writing out code in the RScript
+
+. . . 
+
+```{r, eval = F}
+setwd("/Users/samfrederick/Desktop/Scope and Methods")
+```
+
+## Intro to Coding in R
+
+What is the output of the following lines of code?
+
+```{r, eval = F}
+2+2
+2+2-3
+2+2-3*4
+2+2-3*4/6
+(2+2-3*4/6)^3
+```
+. . . 
+
+```{r, eval = T}
+2+2
+2+2-3
+2+2-3*4
+2+2-3*4/6
+(2+2-3*4/6)^3
+```
+
+## Functions in R
+
+Standard format: 
+
+- functionname(argumentname = argument)
+
+Function help:
+
+- Type "?functionname" and run that line of code
+  - Help page will pop up in the "Help" pane
+  
+  . . . 
+  
+  - Help pages usually have overviews of the function, descriptions of key     arguments, outputs, and example code
+
+## Basic Functions
+
+- Addition: `sum()`
+  - e.g., `sum(1, 2)`
+
+- Average: `mean()` 
+
+- Square Root: `sqrt()` 
+
+- Minimum: `min()`; Maximum: `max()`
+
+## Basic Functions
+
+Try running the following code:
+
+```{r, eval =T}
+9+8+157.5
+```
+
+How would you calculate this value using an R function? 
+
+What is the average of these three numbers?
+
+## Basic Functions: Vectors
+
+- Concatenate: `c()` (turns a comma separated list of numbers into a vector)
+  - Vectors of numbers can be passed to functions 
+
+```{r}
+mean(c(1,2,3))
+```
+
+- Determine length of vector: `length()`
+
+- Return unique items in vector: `unique()`
+
+## More Functions and Operators
+
+- `begin:end`: creates a vector containing the sequence of integers from begin to end
+
+- `seq(a, b, by = c)`: creates a vector containing the sequence of integers from a to b in steps of size c
+
+```{r}
+1:3
+seq(1,3, by = 1)
+mean(seq(2, 20, by = 2))
+```
+
+
+## Assignment Operator
+
+- `x <- y`: assign y to object x
+
+```{r}
+x <- 1:5
+mean(x)
+sum(x)
+y <- sum(x)
+y
+```
+
+## Loading Data into R
+
+- Mostly work with csv files (similar to Excel spreadsheets)
+
+- Load with some variant of `read.csv()` function
+
+- This is where setting your working directory becomes important 
+
+```{r, eval = F}
+data <- read.csv("example_data.csv")
+```
+
+- Data loaded in as a data.frame object in R
+  - Columns are variables and rows are individual observations
+
+## Recap
+
+- Set working directory to course folder:
+  - `setwd(path/to/course folder)`
+  - Use an RProject associated with course folder
+  
+- Write (and save) code in RScripts or RMarkdown files
+  - Knit RMarkdown files frequently after changes to catch bugs in code early
+  - RMarkdown will be *super* helpful for problem sets
+
+## Getting Help
+
+- Section
+
+- Other students
+
+- `?` operator in RStudio (run `?functionname`)
+
+- stackoverflow.com
+
+- I'm also happy to meet or to answer questions over email
+  - sdf2128@columbia.edu
+
+## Next Section:
+
+- Types of objects in R
+
+- If statements
+
+- Summarizing data
+
+- Missing data
+
+- For loops
+

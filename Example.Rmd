@@ -1,0 +1,54 @@
+---
+title: "Title of Your Project"
+author: "Your Name"
+date: "Project Due Date"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+# Sets up your markdown for compilation
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 40), tidy = TRUE)
+#recommend setwd() here or can change the root.dir below
+knitr::opts_knit$set(root.dir = "/path/to/your/course/folder")
+#load the packages that you will use in your project
+library(tidyverse)
+library(modelsummary)
+```
+
+# Question 1
+
+## Question 1(a)
+
+You can type your answer and interpretation here. If you are using code, you should not write that here, but should write it instead in the R code chunk below.
+
+```{r}
+#code goes here (note: text in code chunks that 
+#begins with a # will not be processed as code)
+```
+
+## Question 1(b)
+
+You can type your answer and interpretation here. 
+
+```{r}
+#code goes here
+```
+
+# Question 2
+
+## Question 2(a)
+
+You can type your answer and interpretation here. 
+
+```{r}
+# code goes here
+```
+
+## Question 2(b)
+
+```{r}
+#code goes here
+```
+
+

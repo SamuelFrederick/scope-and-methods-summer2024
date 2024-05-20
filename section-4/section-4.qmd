@@ -1,0 +1,178 @@
+---
+title: "Section 4. Introduction to dplyr"
+author: "Sam Frederick"
+date: "June 2, 2023"
+format: 
+  html: 
+    code-copy: true
+    toc: true
+---
+
+```{r echo = F}
+knitr::opts_knit$set(root.dir ="/Users/samfrederick/scope-and-methods-summer2023/")
+
+```
+
+```{r echo = F, message = F}
+library(tidyverse)
+house <- read_csv("house2020_elections.csv")
+```
+
+# Introduction to `dplyr`
+
+`dplyr` is a package within the `tidyverse` that is used for processing and cleaning data. 
+
+## Subsetting Rows: `filter()`
+
+Much like the `[]` and `$` operators, discussed above, we often want to analyze certain parts of our data. `dplyr` has a helpful command, `filter()`, which we can use to subset our data. `filter()` takes logical conditions as its arguments. We can use it to get only Republican candidates in our house data: 
+
+```{r}
+house %>% 
+  filter(party=="REP")
+```
+
+We can use it to get Republicans who received more than 50\% of the vote in Texas:
+
+```{r}
+house %>%
+  filter(party=="REP"&voteshare>50&state=="TX")
+```
+
+Often, we want to store these subsets for later analysis, so we can create a new variable. For our Republican subset, we could run the following code:
+
+```{r}
+rep <- house %>% 
+  filter(party=="REP")
+```
+
+
+## Subsetting Columns: `select()`
+
+We want to focus our analysis on specific columns. Again, like the `[]` or `$` operators above, `dplyr` has a helpful command to do this: the `select()` command. `select()` takes column names as its arguments. 
+
+Say we want to focus only on incumbency status and voteshare in our house data, we can run the following code to get just these columns:
+
+```{r}
+house %>% 
+  select(incumbent_challenge_full, voteshare)
+```
+
+## Renaming variables: `rename()`
+
+Variables don't always come with helpful names, so it's often helpful to rename columns to something more useful. The `rename()` function takes an argument of the form `"new_name" = "old_name"`. If we want to rename multiple columns, we put the sequence of arguments like `"new_name" = "old_name"` into a vector. 
+
+In our house data, we can rename the `incumbent_challenge_full` variable `incumbent` and the `disbursements` variable to `spending` instead.
+
+```{r}
+house %>% 
+  rename(c("incumbent" = "incumbent_challenge_full", 
+           "spending" = "disbursements"))
+```
+
+## Changing and Creating Variables: `mutate()`
+
+Sometimes we have to create new variables or modify old variables to put them into a useful form. For example, we might want to change one of our variables into a factor variable with levels in a specific order. Or, we might want to change the labels of our factor. Or, we might want to create a new variable. 
+
+We can change the order of our incumbent variable to "Incumbents", "Challengers", and then "Open-Seat Candidates":
+
+```{r}
+house %>% 
+  mutate(incumbent_challenge_full = factor(incumbent_challenge_full, 
+                                           levels = c("Incumbent", "Challenger", "Open seat")))
+```
+
+We can also change the labels of our party variable:
+
+```{r}
+house %>%
+  mutate(party = factor(party, labels = c("Democrat", "Republican")))
+```
+
+## Conditional logic in data processing: `ifelse()` and `case_when()`
+
+If we want to create a new variable that takes on certain values only when certain conditions are met or to alter our variable only when certain conditions are met, we need the logical conditions we talked about in the last section. 
+
+R and `dplyr` have special functions that let us use logical conditions. 
+
+`ifelse(condition, true value, false value)` returns the "true value" if the condition is `TRUE` and the "false condition" if the condition is `FALSE`. For example, 
+
+```{r}
+ifelse(2<3, "true", "false")
+ifelse(2>3, "true", "false")
+```
+
+Say we want to create a dummy or indicator variable for whether a candidate in our house dataset is a Democrat or not:
+
+```{r}
+house %>%
+  mutate(democrat = ifelse(party=="DEM", 1, 0))
+```
+
+The problem is that, sometimes, we want to check more than one condition and create or modify variables based off of these multiple conditions. An example of this might be we want to create a categorical variable that combines information about both voteshare and party (we want a variable that tells us whether the candidate is a Democratic winner or loser or a Republican winner or loser). 
+
+We can use `case_when()` for this task. We use `case_when()` as follows: `case_when(condition1~output1, condition2~output2, condition3~output3, ..., T~outputLast)`. If `condition1` is `TRUE`, the function will return `output1`, and so on... We include the `T~outputLast` statement to indicate what the function should return if *none* of our conditions are `TRUE`. 
+
+To create the party winner status variable from above, we can use the following code:
+
+```{r}
+house %>%
+  mutate(party_winner = case_when(party=="DEM"&voteshare>=50~"Dem. Winner", 
+                                  party=="DEM"&voteshare<50~"Dem. Loser", 
+                                  party=="REP"&voteshare>=50~"Rep. Winner", 
+                                  T~"Rep. Loser"))
+```
+
+Note: if we want to save the variables we create, we need to assign the output of the pipe operations above to the house variable. 
+
+```{r}
+house <- house %>%
+  mutate(party_winner = case_when(party=="DEM"&voteshare>=50~"Dem. Winner", 
+                                  party=="DEM"&voteshare<50~"Dem. Loser", 
+                                  party=="REP"&voteshare>=50~"Rep. Winner", 
+                                  T~"Rep. Loser"))
+```
+
+## Summarizing data: `summarize()`
+
+`dplyr` also gives us a nice function to summarize our data (remember the summary statistics we discussed last week). The `summarize()` function works similarly to the `mutate()` function: it creates variables. But unlike the `mutate()` function, it calculates numbers by combining all the data in a given column. For example, we can use summarize to find the averages of our columns. 
+
+Let's find the average, minimum, and maximum amounts of spending and receipts in our house dataset. 
+
+```{r}
+house %>% 
+  summarize(avg_spending = mean(disbursements), 
+            min_spending = min(disbursements), 
+            max_spending = max(disbursements), 
+            avg_receipts = mean(receipts), 
+            min_receipts = min(receipts), 
+            max_receipts = max(receipts))
+```
+
+
+## Grouping data for analysis: `group_by()`
+
+Many times, we want to get these summary statistics within specific groups in our dataset. We can do this by combining the `summarize()` function with the `group_by()` function. The `group_by()` function takes the variable(s) we want to group by as its arguments. 
+
+If we want to calculate the average amount of money raised, grouped by our party-winner variable we created earlier, we can do this using this code:
+
+```{r}
+house %>% 
+  group_by(party_winner) %>%
+  summarize(avg_receipts = mean(receipts))
+```
+
+## Joining multiple datasets
+
+Our data do not always come neatly packaged within a single .csv file. How do we get our data into a form we can use for analysis? We have to use some form of joining function to merge our data together. 
+
+There are a few different types of joins that we regularly use in R. We can see examples below in the graphic taken from Wickham and Grolemund (Ch. 13). 
+
+![](joins.png)
+
+Another function `anti_join(x, y)` gives us the observations in `x` which are not found in `y`. This can be helpful for checking our merges. 
+
+We need at least one key variable that matches between the two datasets. This key variable must be present in both datasets, and it must match exactly between the two datasets. We can use more than one key if we need (e.g., first name and last name). 
+
+This can be a ***challenging*** process. Much of the time keys do not match exactly between datasets: there might be different spellings, different spacing, different punctuation, different capitalization, etc. All of these differences can cause issues with merging, so it is important to be careful when merging. Merging is often an iterative process. We try merging, find mistakes, correct mistakes, and try again. 
+
+

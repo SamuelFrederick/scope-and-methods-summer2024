@@ -1,0 +1,304 @@
+---
+title: "Section 2. Introduction to R"
+author: "Sam Frederick"
+format: 
+  revealjs:
+    css: [footer.css]
+    theme: [default, custom.scss]
+    chalkboard: true
+    progress: true
+    include-after-body: footer.html 
+    footer: "Introduction to R"
+knitr: 
+  opts_chunk: 
+      echo: true
+---
+
+
+## Last Section
+
+-   Setting Working Directory to Course Folder
+    -   `setwd("/path/to/your/folder")`
+    -   RProjects
+
+. . .
+
+-   RScript and RMarkdown files
+
+. . .
+
+-   Beginning functions in R
+    -   e.g., `sum()`, `mean()`, `min()`, `max()`, `sqrt()`
+
+## Last Section
+
+-   Vectors
+    -   `c()`
+
+. . .
+
+-   Objects
+    -   `x <- 1:3`
+
+## Today's Section {auto-animate=true}
+
+- Types of Objects in R
+
+- Summarizing Data in One Variable
+
+- Working with Real Data in R
+
+
+# Today's Section {auto-animate=true}
+
+- Types of Objects in R
+  - Numeric
+  - Categorical
+  - Logical
+  
+:::{style="color: rgba(0, 0, 0, 0.5);"}
+- Summarizing Data in One Variable
+
+- Working with Real Data in R
+:::
+
+
+## Numeric Data
+
+-   Integers `int` type
+
+-   Doubles
+
+-   Ways of Summarizing (Univariate):
+
+    -   Mean, median, min, max, range, IQR, standard deviation
+    -   `summary()` function
+
+
+## Summary Statistics - Central Tendency: Mean
+
+```{r}
+x <- c(1, 100, 7, 6, 5)
+sum(x)/length(x)
+mean(x)
+```
+
+## Summary Statistics - Central Tendency: Median
+
+-   Median
+    -   arrange vector in numerical order
+    -   find the middle value (50% above and 50% below)
+    -   not susceptible to outliers like the mean/average
+    
+-   What's the median of this vector?
+
+```{r}
+x <- c(1, 100, 7,6,5)
+```
+
+. . .
+
+
+```{r}
+#| output-location: column-fragment
+median(x)
+```
+
+## Summary Statistics: Measures of Spread {auto-animate=true}
+
+- Standard Deviation
+  - Measures spread around mean
+  - Square root of the variance
+
+
+## Summary Statistics: Measures of Spread {auto-animate=true}
+
+:::{.fragment .semi-fade-out}
+
+```{r}
+var(x)
+
+```
+:::
+
+:::{.fragment .fade-in}
+
+```{r}
+sqrt(var(x))
+```
+
+```{r}
+sd(x)
+```
+:::
+
+## Summary Statistics: Measures of Spread
+
+- Range (minimum, maximum)
+
+```{r}
+range(x)
+min(x)
+max(x)
+```
+
+## Summary Statistics: Measures of Spread
+
+- Interquartile Range (IQR)
+  - Arrange in numerical order 
+  - Find values below which 25\% and 75\% of the data lie
+
+```{r}
+quantile(x, prob = c(0.25, 0.75))
+IQR(x)
+```
+
+## Summary Statistics
+
+- `summary()` function
+  - min, max, median, mean, IQR, # of missing observations
+
+```{r}
+summary(x)
+```
+
+## Tidyverse Digression
+
+- Install tidyverse
+
+```{r, eval = F}
+install.packages("tidyverse")
+```
+
+- Load tidyverse for use
+
+```{r}
+library(tidyverse)
+```
+
+## Tidyverse Digression
+
+- Pipe Operator: `x %>% function()`
+  - Basically puts the object x into the function
+  - More like writing/reading left to right
+
+## Tidyverse Digression
+
+- Tibbles:
+  - Tidyverse version of data.frame
+  - A lot of helpful functions that perform various operations
+    - Example: `mutate()` to create and change column(s)
+  
+```{r}
+#| output-location: column-fragment
+df <- tibble(x = x, y = 1:5)
+df <- df %>%
+  mutate(z = 6:10)
+df
+```
+
+## Categorical Data
+
+-   Character `chr` data
+
+-   Factors
+
+-   Ways of Summarizing (Univariate):
+
+    -   Tables
+    -   Proportion Tables
+
+## Factors
+
+-   Usually turn character data into factors for analysis
+    -   `factor()`
+-   R often turns these into dummy/indicator variables
+    -   Indicator variables: take on a value of 1 if some condition is met, 0 otherwise
+    -   e.g., Male (1 if individual identifies as a man, 0 otherwise)
+-   Come in default order (i.e., alphabetical or numerical order)
+
+## Factors
+
+-   `factor(variable, levels = c(...), labels = c(...))`
+    -   levels argument:
+        -   must match exact spelling of categories
+        -   can be used to reorder the levels/categories
+    -   labels argument:
+        -   doesn't have to match spelling (can be anything)
+        -   must be same length as number of levels/categories
+        -   must be in the same order as the levels argument
+
+## Factors
+
+```{r}
+grp <- c(rep("A", 3), rep("B", 6), rep("C", 8))
+grp
+```
+
+. . . 
+
+```{r}
+grp <- factor(grp)
+grp
+```
+
+. . . 
+
+```{r}
+grp <- factor(grp, levels = c("C", "B", "A"))
+grp
+```
+
+. . . 
+
+```{r}
+grp <- factor(grp, 
+              levels = c("C", "B", "A"), 
+              labels = c("Group C", "Group B", "Group A"))
+grp
+```
+
+
+## Tables and Proportion Tables
+
+- `table()`
+  - Number of observations in each category
+
+```{r}
+#| output-location: column-fragment
+table(grp)
+```
+
+. . .
+
+- `prop.table()`
+  - Proportion of total observations in each category
+
+```{r}
+#| output-location: column-fragment
+prop.table(table(grp))
+```
+
+
+## Working with Data in R
+
+- Download 2020 House elections results from Courseworks
+  - "Files" > "house2020_elections.csv"
+  
+- Put file into course folder
+
+- Set working directory in R or open course RProject
+
+- Read file into R using tidyverse:
+
+```{r}
+intro <- read_csv("intro_survey.csv")
+```
+
+## Next Section
+
+- Types of Data in R
+
+- Working with Data in R
+
+

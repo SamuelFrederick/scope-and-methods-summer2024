@@ -1,0 +1,110 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Scope and Methods (Summer 2023)</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:wght@300&display=swap" rel="stylesheet">
+    <!--<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300&display=swap" rel="stylesheet">-->
+    <link href="https://fonts.googleapis.com/css2?family=Francois+One&Oswald&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="scopestyles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function(){
+        // Show hide popover
+        $(".dropdown").click(function(){
+            $(this).find(".dropdown-menu").slideToggle("fast");
+        });
+    });
+    $(document).on("click", function(event){
+        var $trigger = $(".dropdown");
+        if($trigger !== event.target && !$trigger.has(event.target).length){
+            $(".dropdown-menu").slideUp("fast");
+        }            
+    });
+</script>
+  </head>
+  <body>
+      <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a class = "active" href="officehours.html">Office Hours</a></li>
+            <li><a href="schedule.html">Schedule</a></li>
+          <li><a href="statistical-relationships.html">Statistical Relationships</a></li>
+        </ul>
+        
+    </nav>
+    
+    <div class="navbar">
+        <div class="dropdown">
+            <button class="dropbtn"> 
+            <i class="bi bi-list"></i>
+            </button>
+            <div class="dropdown-content">
+                <a href="index.html">Home</a>
+                <a class="dropdown-active" href="officehours.html">Office Hours</a>
+                <a href="schedule.html">Schedule</a>
+              <a href="statistical-relationships.html">Statistical Relationships</a>
+            </div>
+        </div> 
+    </div>
+
+    <!--Desktop Header-->
+    <div class="desktop-header" style="width:100%;">
+      <div class="desktop-header-container" style="width:100%;padding-right:20%">
+          <table class="header-table" style="border-spacing:0;">
+              <tr>
+                  <td style="width:95%;margin:0;vertical-align:bottom;text-align:left;border:none;">
+                      <h1>Scope and Methods</h1>
+        <h2 style = "font-size:24px;color:white;padding-bottom:1%">Columbia University</h2>
+        <h2><a style= "font-size:22px;" class="author-link" href="mailto:sdf2128@columbia.edu">Sam Frederick</a></h2>
+                  </td>
+                  <td style="width:5%;text-align:right;vertical-align:bottom;border:none;">
+                      <img src="https://github.com/SamuelFrederick/scope-and-methods-summer2023/blob/main/columbia.png?raw=true" style="width:150px">
+                  </td>
+              </tr>
+          </table>
+
+      </div>
+    </div>
+    <!--Mobile Header-->
+        <div class="mobile-header" style="width:100%;">
+      <div class="mobile-header-container" style="width:100%">
+
+          <table class="header-table" style="border-spacing:0;">
+              <tr>
+                  <td style="width:95%;border:none;margin:0;vertical-align:bottom;text-align:center;">
+                      <h1>Scope and Methods</h1>
+        <h2 style = "font-size:24px;color:white;padding-bottom:1%">Columbia University</h2>
+        <h2><a style= "font-size:22px;" class="author-link" href="mailto:sdf2128@columbia.edu">Sam Frederick</a></h2>
+                  </td> 
+            <tr>
+                   <td style="width:5%;border:none;text-align:center;float:center;vertical-align:top;">
+                      <img src="https://github.com/SamuelFrederick/scope-and-methods-summer2023/blob/main/columbia.png?raw=true" style="width:150px">
+                  </td>               
+            </tr>
+          </table>
+
+      </div>
+    </div>
+    <div style="padding:5% 20% 2% 20%;text-align:center;font-size:24px">
+        <p>Office hours will be held on Wednesdays from 12-1 in person and Thursdays from 12-1 via <a href="https://columbiauniversity.zoom.us/j/5986709771" style="color:#00b0ff;text-decoration:none;">Zoom</a>. You can find available appointment slots below.</p> 
+        <p>If you're not able to make one of these times, feel free to email me: I'm happy to try to answer questions via email or to find another time that works for you. </p>
+    </div>
+    <h2 style="text-align:center;font-size:30px;font-weight:800;padding-top:0; padding-bottom:2%">Sign-Up Sheet</h2>
+<div class="sign-up" style="text-align:center;padding-bottom:5%">
+ <iframe src="https://jvy297.youcanbook.me/?noframe=true&skipHeaderFooter=true" id="ycbmiframejvy297" style="width:75%;height:1000px;border:0px;background-color:transparent;" frameborder="0" allowtransparency="true"></iframe><script>window.addEventListener && window.addEventListener("message", function(event){if (event.origin === "https://jvy297.youcanbook.me"){document.getElementById("ycbmiframejvy297").style.height =  event.data +"px";}}, false);</script>
+</div>
+  <footer>
+  <div class="footer-content">
+    <a href="mailto:sdf2128@columbia.edu"><i class="fa fa-envelope"></i></a>
+    <a href="https://github.com/samuelfrederick"><i class="fa fa-github"></i></a>
+  </div>
+</footer>
+  </body>
+</html>

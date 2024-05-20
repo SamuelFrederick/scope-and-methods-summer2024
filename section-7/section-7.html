@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.313">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Sam Frederick">
+<meta name="dcterms.date" content="2023-06-12">
+
+<title>Section 7. Tables, Chi-Squared Tests, and Correlations</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="section-7_files/libs/clipboard/clipboard.min.js"></script>
+<script src="section-7_files/libs/quarto-html/quarto.js"></script>
+<script src="section-7_files/libs/quarto-html/popper.min.js"></script>
+<script src="section-7_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="section-7_files/libs/quarto-html/anchor.min.js"></script>
+<link href="section-7_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="section-7_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="section-7_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="section-7_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="section-7_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#preliminary-data-cleaning" id="toc-preliminary-data-cleaning" class="nav-link active" data-scroll-target="#preliminary-data-cleaning">Preliminary Data Cleaning</a></li>
+  <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review">Review</a>
+  <ul class="collapse">
+  <li><a href="#review-of-hypothesis-testing" id="toc-review-of-hypothesis-testing" class="nav-link" data-scroll-target="#review-of-hypothesis-testing">Review of Hypothesis Testing</a></li>
+  <li><a href="#review-of-t-tests" id="toc-review-of-t-tests" class="nav-link" data-scroll-target="#review-of-t-tests">Review of t-tests</a>
+  <ul class="collapse">
+  <li><a href="#the-t-distribution" id="toc-the-t-distribution" class="nav-link" data-scroll-target="#the-t-distribution">The t-distribution</a></li>
+  <li><a href="#weighted-t-tests" id="toc-weighted-t-tests" class="nav-link" data-scroll-target="#weighted-t-tests">Weighted t-tests</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#tables-in-r" id="toc-tables-in-r" class="nav-link" data-scroll-target="#tables-in-r">Tables in R</a>
+  <ul class="collapse">
+  <li><a href="#tables-table-and-prop.table" id="toc-tables-table-and-prop.table" class="nav-link" data-scroll-target="#tables-table-and-prop.table">Tables: <code>table()</code> and <code>prop.table()</code></a></li>
+  <li><a href="#crosstable" id="toc-crosstable" class="nav-link" data-scroll-target="#crosstable"><code>CrossTable()</code></a>
+  <ul class="collapse">
+  <li><a href="#chi-squared-tests" id="toc-chi-squared-tests" class="nav-link" data-scroll-target="#chi-squared-tests">Chi-Squared Tests</a></li>
+  <li><a href="#unweighted-chi-squared-test" id="toc-unweighted-chi-squared-test" class="nav-link" data-scroll-target="#unweighted-chi-squared-test">Unweighted Chi-Squared Test</a></li>
+  <li><a href="#weighted-chi-squared-test" id="toc-weighted-chi-squared-test" class="nav-link" data-scroll-target="#weighted-chi-squared-test">Weighted Chi-Squared Test</a></li>
+  </ul></li>
+  <li><a href="#counting-numbers-in-groups-count" id="toc-counting-numbers-in-groups-count" class="nav-link" data-scroll-target="#counting-numbers-in-groups-count">Counting numbers in groups: <code>count()</code></a></li>
+  <li><a href="#gt" id="toc-gt" class="nav-link" data-scroll-target="#gt"><code>gt</code></a></li>
+  </ul></li>
+  <li><a href="#correlation-coefficients" id="toc-correlation-coefficients" class="nav-link" data-scroll-target="#correlation-coefficients">Correlation Coefficients</a>
+  <ul class="collapse">
+  <li><a href="#weighted-correlation-coefficients" id="toc-weighted-correlation-coefficients" class="nav-link" data-scroll-target="#weighted-correlation-coefficients">Weighted Correlation Coefficients</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Section 7. Tables, Chi-Squared Tests, and Correlations</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Sam Frederick </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 12, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+
+</div>
+<div class="cell">
+
+</div>
+<section id="preliminary-data-cleaning" class="level1">
+<h1>Preliminary Data Cleaning</h1>
+<p>First, we want to read in our data from the Cooperative Election Study conducted in 2020. We select the three variables we will use for our analyses (<code>ideo5</code>, <code>pid3</code>, and <code>commonweight</code>). Next, we use the <code>mutate()</code> function to give our ideology and party variables comprehensible labels.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>ces <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"ces2020_example.csv"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>ces <span class="ot">&lt;-</span> ces <span class="sc">%&gt;%</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(ideo5, pid3, commonweight) <span class="sc">%&gt;%</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ideology =</span> <span class="fu">factor</span>(ideo5, </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Very liberal"</span>, </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                                      <span class="st">"Liberal"</span>, </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                                      <span class="st">"Moderate"</span>, </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                                      <span class="st">"Conservative"</span>, </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                                      <span class="st">"Very Conservative"</span>, </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                                      <span class="st">"Not Sure"</span>)), </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">party =</span> <span class="fu">factor</span>(pid3, </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>                        <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Democrat"</span>, </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">"Republican"</span>, </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">"Independent"</span>, </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">"Other"</span>, </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">"Not Sure"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="review" class="level1">
+<h1>Review</h1>
+<section id="review-of-hypothesis-testing" class="level2">
+<h2 class="anchored" data-anchor-id="review-of-hypothesis-testing">Review of Hypothesis Testing</h2>
+<p>We usually start with our hypothesis, which is known as the alternative hypothesis, that some statistic is not equal to 0 or is greater than or less than 0. Implicit in this hypothesis is what is known as the null hypothesis: that the statistic we are interested in is equal to 0.</p>
+<p>There are two main types of alternative hypotheses: two-sided and one-sided. Two-sided hypotheses are of the form: <span class="math inline">\(A\not=B\)</span>.</p>
+<p>For example:</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: The difference between the means for group A and group B is 0.<br>
+</li>
+<li><span class="math inline">\(H_A\)</span>: The difference between the means for group A and group B is not 0.</li>
+</ul>
+<p>One-sided hypotheses are of the form: <span class="math inline">\(A&gt;B\)</span> or <span class="math inline">\(A&lt;B\)</span>.</p>
+<p>For example:</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: The difference between the means for group A and group B is 0.</li>
+<li><span class="math inline">\(H_A\)</span>: The mean for group A is greater than the mean for group B.</li>
+</ul>
+</section>
+<section id="review-of-t-tests" class="level2">
+<h2 class="anchored" data-anchor-id="review-of-t-tests">Review of t-tests</h2>
+<p>Under the Central Limit Theorem, the statistic <span class="math inline">\(Z = \frac{\bar{X}-\mu}{\sigma/\sqrt{n}}\)</span> is distributed approximately standard normal as the sample size increases.</p>
+<p>This allows us to conduct a test of the null hypothesis (as discussed above), under the assumption that the null hypothesis is true. If our null hypothesis is true, the statistic <span class="math inline">\(Z = \frac{\bar{X} - \mu_0}{\sigma/\sqrt{n}}\)</span>, where <span class="math inline">\(\mu_0\)</span> is the population value under the null hypothesis, will be distributed approximately standard normal with larger sample sizes.</p>
+<p>We can calculate this statistic using our observed data, and as a result of the Central Limit Theorem, we can calculate the probability that we observe a value of this statistic at least as large in magnitude as the one we actually observe <strong><em>if the null hypothesis is true</em></strong>.</p>
+<p>This probability of observing a value at least as large as that actually observed if the null hypothesis is true is known as the <strong><em>p-value</em></strong>.</p>
+<section id="the-t-distribution" class="level3">
+<h3 class="anchored" data-anchor-id="the-t-distribution">The t-distribution</h3>
+<p>Because we have small sample sizes and usually don’t know the true value of <span class="math inline">\(\sigma\)</span>, we usually use the t-distribution instead of the normal distribution.</p>
+<p>The t-distribution is more conservative than the normal distribution (there is more probability in the tails of the distribution, so it is less likely we reject the null hypothesis using the t-distribution). This helps us account for the uncertainty from the small sample sizes and our estimation of the standard deviation.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="section-7_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="weighted-t-tests" class="level3">
+<h3 class="anchored" data-anchor-id="weighted-t-tests">Weighted t-tests</h3>
+<p>One of the things that is important to remember is that we have to apply survey weights when we are analyzing survey data. Applying the weights will ensure that our survey samples (which may not be representative of the population) will be representative of the population.</p>
+<p>To apply weights when we are conducting t-tests, we should use the <code>weights</code> package in R.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"weights"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(weights)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>dem.sub <span class="ot">&lt;-</span> ces<span class="sc">%&gt;%</span> <span class="fu">filter</span>(party<span class="sc">==</span><span class="st">"Democrat"</span><span class="sc">&amp;</span>ideo5<span class="sc">!=</span><span class="dv">6</span>) </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>rep.sub <span class="ot">&lt;-</span> ces <span class="sc">%&gt;%</span> <span class="fu">filter</span>(party<span class="sc">==</span><span class="st">"Republican"</span><span class="sc">&amp;</span>ideo5<span class="sc">!=</span><span class="dv">6</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">wtd.t.test</span>(<span class="at">x =</span> dem.sub<span class="sc">$</span>ideo5, </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> rep.sub<span class="sc">$</span>ideo5, </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">weight =</span> dem.sub<span class="sc">$</span>commonweight, </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">weighty =</span> rep.sub<span class="sc">$</span>commonweight, </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">samedata =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$test
+[1] "Two Sample Weighted T-Test (Welch)"
+
+$coefficients
+  t.value        df   p.value 
+-28.88007 583.43253   0.00000 
+
+$additional
+ Difference      Mean.x      Mean.y    Std. Err 
+-2.09809561  2.14947769  4.24757330  0.07264856 </code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="tables-in-r" class="level1">
+<h1>Tables in R</h1>
+<p>We talked a bit about tables earlier in the semester. Tables are very helpful for summarizing categorical data. We can get the number of observations that fall into a given category or the proportion of observations that fall into each category.</p>
+<section id="tables-table-and-prop.table" class="level2">
+<h2 class="anchored" data-anchor-id="tables-table-and-prop.table">Tables: <code>table()</code> and <code>prop.table()</code></h2>
+<p>We can calculate basic tables in R using the <code>table()</code> function, as we saw a while ago. For example, if we want to discover the number of respondents in each ideological category in each party group, we can use the <code>table()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(ces<span class="sc">$</span>party, ces<span class="sc">$</span>ideology)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             
+              Very liberal Liberal Moderate Conservative Very Conservative
+  Democrat             105     136      105           18                 6
+  Republican             1       4       48           96                96
+  Independent           16      32      145           47                19
+  Other                 13       4       17            5                 6
+  Not Sure               3       3       13            3                 2
+             
+              Not Sure
+  Democrat          12
+  Republican         9
+  Independent        7
+  Other              1
+  Not Sure          27</code></pre>
+</div>
+</div>
+<p>We can also calculate the proportion of respondents in each category using the <code>prop.table()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(<span class="fu">table</span>(ces<span class="sc">$</span>party, ces<span class="sc">$</span>ideology))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             
+              Very liberal     Liberal    Moderate Conservative
+  Democrat     0.105105105 0.136136136 0.105105105  0.018018018
+  Republican   0.001001001 0.004004004 0.048048048  0.096096096
+  Independent  0.016016016 0.032032032 0.145145145  0.047047047
+  Other        0.013013013 0.004004004 0.017017017  0.005005005
+  Not Sure     0.003003003 0.003003003 0.013013013  0.003003003
+             
+              Very Conservative    Not Sure
+  Democrat          0.006006006 0.012012012
+  Republican        0.096096096 0.009009009
+  Independent       0.019019019 0.007007007
+  Other             0.006006006 0.001001001
+  Not Sure          0.002002002 0.027027027</code></pre>
+</div>
+</div>
+<p>Remember, we can round these numbers too.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(<span class="fu">table</span>(ces<span class="sc">$</span>party, ces<span class="sc">$</span>ideology)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">round</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             
+              Very liberal Liberal Moderate Conservative Very Conservative
+  Democrat           0.105   0.136    0.105        0.018             0.006
+  Republican         0.001   0.004    0.048        0.096             0.096
+  Independent        0.016   0.032    0.145        0.047             0.019
+  Other              0.013   0.004    0.017        0.005             0.006
+  Not Sure           0.003   0.003    0.013        0.003             0.002
+             
+              Not Sure
+  Democrat       0.012
+  Republican     0.009
+  Independent    0.007
+  Other          0.001
+  Not Sure       0.027</code></pre>
+</div>
+</div>
+</section>
+<section id="crosstable" class="level2">
+<h2 class="anchored" data-anchor-id="crosstable"><code>CrossTable()</code></h2>
+<p>There are a variety of packages that can be used to create nicer looking tables. One of these packages is <code>gmodels</code>. Within <code>gmodels</code>, there is a function called <code>CrossTable()</code> which can generate aesthetically pleasing cross tables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"gmodels"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gmodels)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossTable</span>(ces<span class="sc">$</span>ideology, </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>           ces<span class="sc">$</span>party, </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">digits =</span> <span class="dv">3</span>, </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ 
+   Cell Contents
+|-------------------------|
+|                       N |
+|           N / Row Total |
+|           N / Col Total |
+|         N / Table Total |
+|-------------------------|
+
+ 
+Total Observations in Table:  999 
+
+ 
+                  | ces$party 
+     ces$ideology |    Democrat |  Republican | Independent |       Other |    Not Sure |   Row Total | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+     Very liberal |         105 |           1 |          16 |          13 |           3 |         138 | 
+                  |       0.761 |       0.007 |       0.116 |       0.094 |       0.022 |       0.138 | 
+                  |       0.275 |       0.004 |       0.060 |       0.283 |       0.059 |             | 
+                  |       0.105 |       0.001 |       0.016 |       0.013 |       0.003 |             | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+          Liberal |         136 |           4 |          32 |           4 |           3 |         179 | 
+                  |       0.760 |       0.022 |       0.179 |       0.022 |       0.017 |       0.179 | 
+                  |       0.356 |       0.016 |       0.120 |       0.087 |       0.059 |             | 
+                  |       0.136 |       0.004 |       0.032 |       0.004 |       0.003 |             | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+         Moderate |         105 |          48 |         145 |          17 |          13 |         328 | 
+                  |       0.320 |       0.146 |       0.442 |       0.052 |       0.040 |       0.328 | 
+                  |       0.275 |       0.189 |       0.545 |       0.370 |       0.255 |             | 
+                  |       0.105 |       0.048 |       0.145 |       0.017 |       0.013 |             | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+     Conservative |          18 |          96 |          47 |           5 |           3 |         169 | 
+                  |       0.107 |       0.568 |       0.278 |       0.030 |       0.018 |       0.169 | 
+                  |       0.047 |       0.378 |       0.177 |       0.109 |       0.059 |             | 
+                  |       0.018 |       0.096 |       0.047 |       0.005 |       0.003 |             | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+Very Conservative |           6 |          96 |          19 |           6 |           2 |         129 | 
+                  |       0.047 |       0.744 |       0.147 |       0.047 |       0.016 |       0.129 | 
+                  |       0.016 |       0.378 |       0.071 |       0.130 |       0.039 |             | 
+                  |       0.006 |       0.096 |       0.019 |       0.006 |       0.002 |             | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+         Not Sure |          12 |           9 |           7 |           1 |          27 |          56 | 
+                  |       0.214 |       0.161 |       0.125 |       0.018 |       0.482 |       0.056 | 
+                  |       0.031 |       0.035 |       0.026 |       0.022 |       0.529 |             | 
+                  |       0.012 |       0.009 |       0.007 |       0.001 |       0.027 |             | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+     Column Total |         382 |         254 |         266 |          46 |          51 |         999 | 
+                  |       0.382 |       0.254 |       0.266 |       0.046 |       0.051 |             | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+
+ </code></pre>
+</div>
+</div>
+<p>If we also want to perform a Chi-Squared test of independence, we can do so using the <code>chisq</code> argument:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossTable</span>(ces<span class="sc">$</span>ideology, </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>           ces<span class="sc">$</span>party, </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">digits =</span> <span class="dv">3</span>, </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">chisq =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in chisq.test(t, correct = FALSE, ...): Chi-squared approximation may be
+incorrect</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ 
+   Cell Contents
+|-------------------------|
+|                       N |
+|           N / Row Total |
+|           N / Col Total |
+|         N / Table Total |
+|-------------------------|
+
+ 
+Total Observations in Table:  999 
+
+ 
+                  | ces$party 
+     ces$ideology |    Democrat |  Republican | Independent |       Other |    Not Sure |   Row Total | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+     Very liberal |         105 |           1 |          16 |          13 |           3 |         138 | 
+                  |       0.761 |       0.007 |       0.116 |       0.094 |       0.022 |       0.138 | 
+                  |       0.275 |       0.004 |       0.060 |       0.283 |       0.059 |             | 
+                  |       0.105 |       0.001 |       0.016 |       0.013 |       0.003 |             | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+          Liberal |         136 |           4 |          32 |           4 |           3 |         179 | 
+                  |       0.760 |       0.022 |       0.179 |       0.022 |       0.017 |       0.179 | 
+                  |       0.356 |       0.016 |       0.120 |       0.087 |       0.059 |             | 
+                  |       0.136 |       0.004 |       0.032 |       0.004 |       0.003 |             | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+         Moderate |         105 |          48 |         145 |          17 |          13 |         328 | 
+                  |       0.320 |       0.146 |       0.442 |       0.052 |       0.040 |       0.328 | 
+                  |       0.275 |       0.189 |       0.545 |       0.370 |       0.255 |             | 
+                  |       0.105 |       0.048 |       0.145 |       0.017 |       0.013 |             | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+     Conservative |          18 |          96 |          47 |           5 |           3 |         169 | 
+                  |       0.107 |       0.568 |       0.278 |       0.030 |       0.018 |       0.169 | 
+                  |       0.047 |       0.378 |       0.177 |       0.109 |       0.059 |             | 
+                  |       0.018 |       0.096 |       0.047 |       0.005 |       0.003 |             | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+Very Conservative |           6 |          96 |          19 |           6 |           2 |         129 | 
+                  |       0.047 |       0.744 |       0.147 |       0.047 |       0.016 |       0.129 | 
+                  |       0.016 |       0.378 |       0.071 |       0.130 |       0.039 |             | 
+                  |       0.006 |       0.096 |       0.019 |       0.006 |       0.002 |             | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+         Not Sure |          12 |           9 |           7 |           1 |          27 |          56 | 
+                  |       0.214 |       0.161 |       0.125 |       0.018 |       0.482 |       0.056 | 
+                  |       0.031 |       0.035 |       0.026 |       0.022 |       0.529 |             | 
+                  |       0.012 |       0.009 |       0.007 |       0.001 |       0.027 |             | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+     Column Total |         382 |         254 |         266 |          46 |          51 |         999 | 
+                  |       0.382 |       0.254 |       0.266 |       0.046 |       0.051 |             | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+
+ 
+Statistics for All Table Factors
+
+
+Pearson's Chi-squared test 
+------------------------------------------------------------
+Chi^2 =  768.1034     d.f. =  20     p =  8.288596e-150 
+
+
+ </code></pre>
+</div>
+</div>
+<p>The <code>CrossTable()</code> function also allows us to see what the “expected” values in each cell are under the null hypothesis if we use the <code>expected</code> argument.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossTable</span>(ces<span class="sc">$</span>ideology, </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>           ces<span class="sc">$</span>party, </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">digits =</span> <span class="dv">3</span>, </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">chisq =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">expected =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in chisq.test(t, correct = FALSE, ...): Chi-squared approximation may be
+incorrect</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ 
+   Cell Contents
+|-------------------------|
+|                       N |
+|              Expected N |
+|           N / Row Total |
+|           N / Col Total |
+|         N / Table Total |
+|-------------------------|
+
+ 
+Total Observations in Table:  999 
+
+ 
+                  | ces$party 
+     ces$ideology |    Democrat |  Republican | Independent |       Other |    Not Sure |   Row Total | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+     Very liberal |         105 |           1 |          16 |          13 |           3 |         138 | 
+                  |      52.769 |      35.087 |      36.745 |       6.354 |       7.045 |             | 
+                  |       0.761 |       0.007 |       0.116 |       0.094 |       0.022 |       0.138 | 
+                  |       0.275 |       0.004 |       0.060 |       0.283 |       0.059 |             | 
+                  |       0.105 |       0.001 |       0.016 |       0.013 |       0.003 |             | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+          Liberal |         136 |           4 |          32 |           4 |           3 |         179 | 
+                  |      68.446 |      45.512 |      47.662 |       8.242 |       9.138 |             | 
+                  |       0.760 |       0.022 |       0.179 |       0.022 |       0.017 |       0.179 | 
+                  |       0.356 |       0.016 |       0.120 |       0.087 |       0.059 |             | 
+                  |       0.136 |       0.004 |       0.032 |       0.004 |       0.003 |             | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+         Moderate |         105 |          48 |         145 |          17 |          13 |         328 | 
+                  |     125.421 |      83.395 |      87.335 |      15.103 |      16.745 |             | 
+                  |       0.320 |       0.146 |       0.442 |       0.052 |       0.040 |       0.328 | 
+                  |       0.275 |       0.189 |       0.545 |       0.370 |       0.255 |             | 
+                  |       0.105 |       0.048 |       0.145 |       0.017 |       0.013 |             | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+     Conservative |          18 |          96 |          47 |           5 |           3 |         169 | 
+                  |      64.623 |      42.969 |      44.999 |       7.782 |       8.628 |             | 
+                  |       0.107 |       0.568 |       0.278 |       0.030 |       0.018 |       0.169 | 
+                  |       0.047 |       0.378 |       0.177 |       0.109 |       0.059 |             | 
+                  |       0.018 |       0.096 |       0.047 |       0.005 |       0.003 |             | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+Very Conservative |           6 |          96 |          19 |           6 |           2 |         129 | 
+                  |      49.327 |      32.799 |      34.348 |       5.940 |       6.586 |             | 
+                  |       0.047 |       0.744 |       0.147 |       0.047 |       0.016 |       0.129 | 
+                  |       0.016 |       0.378 |       0.071 |       0.130 |       0.039 |             | 
+                  |       0.006 |       0.096 |       0.019 |       0.006 |       0.002 |             | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+         Not Sure |          12 |           9 |           7 |           1 |          27 |          56 | 
+                  |      21.413 |      14.238 |      14.911 |       2.579 |       2.859 |             | 
+                  |       0.214 |       0.161 |       0.125 |       0.018 |       0.482 |       0.056 | 
+                  |       0.031 |       0.035 |       0.026 |       0.022 |       0.529 |             | 
+                  |       0.012 |       0.009 |       0.007 |       0.001 |       0.027 |             | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+     Column Total |         382 |         254 |         266 |          46 |          51 |         999 | 
+                  |       0.382 |       0.254 |       0.266 |       0.046 |       0.051 |             | 
+------------------|-------------|-------------|-------------|-------------|-------------|-------------|
+
+ 
+Statistics for All Table Factors
+
+
+Pearson's Chi-squared test 
+------------------------------------------------------------
+Chi^2 =  768.1034     d.f. =  20     p =  8.288596e-150 
+
+
+ </code></pre>
+</div>
+</div>
+<section id="chi-squared-tests" class="level3">
+<h3 class="anchored" data-anchor-id="chi-squared-tests">Chi-Squared Tests</h3>
+<p>We test the null hypothesis that our categorical variables are independent using the Chi-Squared test statistic and the Chi-Squared distribution.</p>
+<p>As a reminder, the Chi-Squared test statistic is <span class="math inline">\(\chi^2 = \sum_{k=1}^K \frac{(Observed_k - Expected_k)^2}{Expected_k}\)</span> where <span class="math inline">\(k\)</span> indicates a given cell. The expected value in a given cell under the null hypothesis is the row total times the column total divided by the total number of observations.</p>
+<p>Finally, under the null hypothesis, our <span class="math inline">\(\chi^2\)</span> statistic will be distributed according to the <span class="math inline">\(\chi^2\)</span> distribution with <span class="math inline">\(g\)</span> degrees of freedom. <span class="math inline">\(g\)</span> is calculated by multiplying the number of rows minus 1 by the number of columns minus 1. Above, the degrees of freedom will be 20, leading to a Chi-Squared distribution that looks like this:</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="section-7_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="unweighted-chi-squared-test" class="level3">
+<h3 class="anchored" data-anchor-id="unweighted-chi-squared-test">Unweighted Chi-Squared Test</h3>
+<p>If we just want to conduct a Chi-Squared test, we can do so using the <code>chisq.test()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(ces<span class="sc">$</span>ideology, </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>           ces<span class="sc">$</span>party)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in chisq.test(ces$ideology, ces$party): Chi-squared approximation may be
+incorrect</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test
+
+data:  ces$ideology and ces$party
+X-squared = 768.1, df = 20, p-value &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p><strong>The Problem:</strong> the <code>chisq.test()</code> function does not apply survey weights.</p>
+</section>
+<section id="weighted-chi-squared-test" class="level3">
+<h3 class="anchored" data-anchor-id="weighted-chi-squared-test">Weighted Chi-Squared Test</h3>
+<p>If we want to conduct a weighted Chi-Squared test (which we should if our dataset contains weights), we should turn to the <code>weights</code> package. In the <code>weights</code> package, there is a <code>wtd.chi.sq()</code> function which allows us to easily apply weights.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(weights)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wtd.chi.sq</span>(<span class="at">var1 =</span> ces<span class="sc">$</span>ideology, </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">var2 =</span> ces<span class="sc">$</span>party, </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">weight =</span> ces<span class="sc">$</span>commonweight)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        Chisq            df       p.value 
+ 9.902687e+02  2.000000e+01 4.640567e-197 </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="counting-numbers-in-groups-count" class="level2">
+<h2 class="anchored" data-anchor-id="counting-numbers-in-groups-count">Counting numbers in groups: <code>count()</code></h2>
+<p>Another way to obtain a table is using the <code>count()</code> function in <code>dplyr</code>. One of the nice things about the count function is that it allows us to obtain the weighted number of observations in each category using the <code>wt</code> argument.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>ces <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(ideology, <span class="at">wt =</span> commonweight)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7 × 2
+  ideology                n
+  &lt;fct&gt;               &lt;dbl&gt;
+1 Very liberal      105.   
+2 Liberal           136.   
+3 Moderate          266.   
+4 Conservative      176.   
+5 Very Conservative 170.   
+6 Not Sure           67.0  
+7 &lt;NA&gt;                0.970</code></pre>
+</div>
+</div>
+<p>To see how important weights are, we can compare to the unweighted counts:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>ces <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(ideology)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7 × 2
+  ideology              n
+  &lt;fct&gt;             &lt;int&gt;
+1 Very liberal        138
+2 Liberal             179
+3 Moderate            328
+4 Conservative        169
+5 Very Conservative   129
+6 Not Sure             56
+7 &lt;NA&gt;                  1</code></pre>
+</div>
+</div>
+</section>
+<section id="gt" class="level2">
+<h2 class="anchored" data-anchor-id="gt"><code>gt</code></h2>
+<p>Finally, there are many packages in R that can be used to generate nice tables. The one we’ll talk about is <code>gt</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"gt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>ces <span class="sc">%&gt;%</span> </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(party) <span class="sc">%&gt;%</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(ideology, <span class="at">wt =</span> commonweight) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>(<span class="at">groupname_col =</span> <span class="st">"pid3"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">opt_row_striping</span>(<span class="at">row_striping =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div id="ylflgifosl" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+:where(#ylflgifosl) .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+:where(#ylflgifosl) .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+:where(#ylflgifosl) .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+:where(#ylflgifosl) .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+:where(#ylflgifosl) .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+:where(#ylflgifosl) .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+:where(#ylflgifosl) .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+:where(#ylflgifosl) .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+:where(#ylflgifosl) .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+:where(#ylflgifosl) .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+:where(#ylflgifosl) .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+:where(#ylflgifosl) .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+:where(#ylflgifosl) .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+:where(#ylflgifosl) .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+:where(#ylflgifosl) .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+:where(#ylflgifosl) .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+:where(#ylflgifosl) .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+:where(#ylflgifosl) .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+:where(#ylflgifosl) .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+:where(#ylflgifosl) .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+:where(#ylflgifosl) .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+:where(#ylflgifosl) .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+:where(#ylflgifosl) .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+:where(#ylflgifosl) .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+:where(#ylflgifosl) .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+:where(#ylflgifosl) .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+:where(#ylflgifosl) .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+:where(#ylflgifosl) .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+:where(#ylflgifosl) .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+:where(#ylflgifosl) .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+:where(#ylflgifosl) .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+:where(#ylflgifosl) .gt_left {
+  text-align: left;
+}
+
+:where(#ylflgifosl) .gt_center {
+  text-align: center;
+}
+
+:where(#ylflgifosl) .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+:where(#ylflgifosl) .gt_font_normal {
+  font-weight: normal;
+}
+
+:where(#ylflgifosl) .gt_font_bold {
+  font-weight: bold;
+}
+
+:where(#ylflgifosl) .gt_font_italic {
+  font-style: italic;
+}
+
+:where(#ylflgifosl) .gt_super {
+  font-size: 65%;
+}
+
+:where(#ylflgifosl) .gt_two_val_uncert {
+  display: inline-block;
+  line-height: 1em;
+  text-align: right;
+  font-size: 60%;
+  vertical-align: -0.25em;
+  margin-left: 0.1em;
+}
+
+:where(#ylflgifosl) .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+:where(#ylflgifosl) .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+:where(#ylflgifosl) .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+:where(#ylflgifosl) .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+:where(#ylflgifosl) .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">party</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">ideology</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">n</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_center">Democrat</td>
+<td class="gt_row gt_center">Very liberal</td>
+<td class="gt_row gt_right">86.1513497</td></tr>
+    <tr><td class="gt_row gt_center gt_striped">Democrat</td>
+<td class="gt_row gt_center gt_striped">Liberal</td>
+<td class="gt_row gt_right gt_striped">103.8848878</td></tr>
+    <tr><td class="gt_row gt_center">Democrat</td>
+<td class="gt_row gt_center">Moderate</td>
+<td class="gt_row gt_right">79.9934793</td></tr>
+    <tr><td class="gt_row gt_center gt_striped">Democrat</td>
+<td class="gt_row gt_center gt_striped">Conservative</td>
+<td class="gt_row gt_right gt_striped">14.8124399</td></tr>
+    <tr><td class="gt_row gt_center">Democrat</td>
+<td class="gt_row gt_center">Very Conservative</td>
+<td class="gt_row gt_right">6.7042232</td></tr>
+    <tr><td class="gt_row gt_center gt_striped">Democrat</td>
+<td class="gt_row gt_center gt_striped">Not Sure</td>
+<td class="gt_row gt_right gt_striped">9.3306875</td></tr>
+    <tr><td class="gt_row gt_center">Republican</td>
+<td class="gt_row gt_center">Very liberal</td>
+<td class="gt_row gt_right">0.3514461</td></tr>
+    <tr><td class="gt_row gt_center gt_striped">Republican</td>
+<td class="gt_row gt_center gt_striped">Liberal</td>
+<td class="gt_row gt_right gt_striped">7.2793520</td></tr>
+    <tr><td class="gt_row gt_center">Republican</td>
+<td class="gt_row gt_center">Moderate</td>
+<td class="gt_row gt_right">41.8180993</td></tr>
+    <tr><td class="gt_row gt_center gt_striped">Republican</td>
+<td class="gt_row gt_center gt_striped">Conservative</td>
+<td class="gt_row gt_right gt_striped">104.4875094</td></tr>
+    <tr><td class="gt_row gt_center">Republican</td>
+<td class="gt_row gt_center">Very Conservative</td>
+<td class="gt_row gt_right">126.9780632</td></tr>
+    <tr><td class="gt_row gt_center gt_striped">Republican</td>
+<td class="gt_row gt_center gt_striped">Not Sure</td>
+<td class="gt_row gt_right gt_striped">7.1685850</td></tr>
+    <tr><td class="gt_row gt_center">Independent</td>
+<td class="gt_row gt_center">Very liberal</td>
+<td class="gt_row gt_right">9.2598282</td></tr>
+    <tr><td class="gt_row gt_center gt_striped">Independent</td>
+<td class="gt_row gt_center gt_striped">Liberal</td>
+<td class="gt_row gt_right gt_striped">21.3422818</td></tr>
+    <tr><td class="gt_row gt_center">Independent</td>
+<td class="gt_row gt_center">Moderate</td>
+<td class="gt_row gt_right">116.5471971</td></tr>
+    <tr><td class="gt_row gt_center gt_striped">Independent</td>
+<td class="gt_row gt_center gt_striped">Conservative</td>
+<td class="gt_row gt_right gt_striped">45.6921294</td></tr>
+    <tr><td class="gt_row gt_center">Independent</td>
+<td class="gt_row gt_center">Very Conservative</td>
+<td class="gt_row gt_right">25.8717080</td></tr>
+    <tr><td class="gt_row gt_center gt_striped">Independent</td>
+<td class="gt_row gt_center gt_striped">Not Sure</td>
+<td class="gt_row gt_right gt_striped">4.2594498</td></tr>
+    <tr><td class="gt_row gt_center">Independent</td>
+<td class="gt_row gt_center">NA</td>
+<td class="gt_row gt_right">0.9702168</td></tr>
+    <tr><td class="gt_row gt_center gt_striped">Other</td>
+<td class="gt_row gt_center gt_striped">Very liberal</td>
+<td class="gt_row gt_right gt_striped">7.5267886</td></tr>
+    <tr><td class="gt_row gt_center">Other</td>
+<td class="gt_row gt_center">Liberal</td>
+<td class="gt_row gt_right">2.1869923</td></tr>
+    <tr><td class="gt_row gt_center gt_striped">Other</td>
+<td class="gt_row gt_center gt_striped">Moderate</td>
+<td class="gt_row gt_right gt_striped">16.1317720</td></tr>
+    <tr><td class="gt_row gt_center">Other</td>
+<td class="gt_row gt_center">Conservative</td>
+<td class="gt_row gt_right">6.0002626</td></tr>
+    <tr><td class="gt_row gt_center gt_striped">Other</td>
+<td class="gt_row gt_center gt_striped">Very Conservative</td>
+<td class="gt_row gt_right gt_striped">7.2110614</td></tr>
+    <tr><td class="gt_row gt_center">Other</td>
+<td class="gt_row gt_center">Not Sure</td>
+<td class="gt_row gt_right">0.4421898</td></tr>
+    <tr><td class="gt_row gt_center gt_striped">Not Sure</td>
+<td class="gt_row gt_center gt_striped">Very liberal</td>
+<td class="gt_row gt_right gt_striped">2.1532383</td></tr>
+    <tr><td class="gt_row gt_center">Not Sure</td>
+<td class="gt_row gt_center">Liberal</td>
+<td class="gt_row gt_right">1.5623802</td></tr>
+    <tr><td class="gt_row gt_center gt_striped">Not Sure</td>
+<td class="gt_row gt_center gt_striped">Moderate</td>
+<td class="gt_row gt_right gt_striped">11.7003928</td></tr>
+    <tr><td class="gt_row gt_center">Not Sure</td>
+<td class="gt_row gt_center">Conservative</td>
+<td class="gt_row gt_right">5.1063630</td></tr>
+    <tr><td class="gt_row gt_center gt_striped">Not Sure</td>
+<td class="gt_row gt_center gt_striped">Very Conservative</td>
+<td class="gt_row gt_right gt_striped">3.2099986</td></tr>
+    <tr><td class="gt_row gt_center">Not Sure</td>
+<td class="gt_row gt_center">Not Sure</td>
+<td class="gt_row gt_right">45.8422459</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="correlation-coefficients" class="level1">
+<h1>Correlation Coefficients</h1>
+<p>Turning back to our dataset of House election results and campaign finance data from 2020, we can think about how we might summarize the relationship between two numeric variables.</p>
+<p>We generally use what is known as the correlation coefficient to summarize bivariate relationships between two numeric variables.</p>
+<p>The correlation coefficient is calculated as follows:</p>
+<p><span class="math inline">\(\frac{Cov(X, Y)}{\sqrt{Var(X)*Var(Y)}} = \frac{\sum_{i=1}^{n}(X_i - \bar{X})*(Y_i - \bar{Y})}{\sqrt{\sum_{i = 1}^{n} (X_i - \bar{X})^2 * \sum_{i=1}^n(Y_i - \bar{Y})^2}}\)</span></p>
+<p>You can think of this as roughly the share of the variation in the two variables that is captured by the co-variation in the two variables.</p>
+<p>Correlation coefficients run from -1 to 1, where -1 is a perfect negative relationship and 1 is a perfect positive relationship. 0 indicates that there is no relationship between the variables.</p>
+<p>Note: a positive relationship means that, as X increases, Y tends to increase as well. A negative relationship means that, as X increases, Y tends to decrease.</p>
+<p>We can easily calculate the correlation in R using the <code>cor()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(<span class="fu">log</span>(house<span class="sc">$</span>disbursements), house<span class="sc">$</span>voteshare)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4844947</code></pre>
+</div>
+</div>
+<p>We can see this is the same as if we actually calculated the correlation coefficient by hand:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(<span class="fu">log</span>(house<span class="sc">$</span>disbursements), house<span class="sc">$</span>voteshare)<span class="sc">/</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sqrt</span>(<span class="fu">var</span>(<span class="fu">log</span>(house<span class="sc">$</span>disbursements))<span class="sc">*</span><span class="fu">var</span>(house<span class="sc">$</span>voteshare))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4844947</code></pre>
+</div>
+</div>
+<p>To conduct an actual hypothesis test, we need to use the <code>cor.test()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(<span class="fu">log</span>(house<span class="sc">$</span>disbursements), house<span class="sc">$</span>voteshare)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's product-moment correlation
+
+data:  log(house$disbursements) and house$voteshare
+t = 14.902, df = 724, p-value &lt; 2.2e-16
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ 0.4267770 0.5382815
+sample estimates:
+      cor 
+0.4844947 </code></pre>
+</div>
+</div>
+<p>This is just a t-test where the t-statistic is calculated as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">cor</span>(<span class="fu">log</span>(house<span class="sc">$</span>disbursements), house<span class="sc">$</span>voteshare)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>(r <span class="sc">-</span> <span class="dv">0</span>)<span class="sc">/</span>(<span class="fu">sqrt</span>((<span class="dv">1</span><span class="sc">-</span>r<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span>(<span class="fu">nrow</span>(house)<span class="sc">-</span><span class="dv">2</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 14.90227</code></pre>
+</div>
+</div>
+<p>We can confirm that the t-statistic we calculated by hand matches the t-statistic from the <code>cor.test()</code> function.</p>
+<section id="weighted-correlation-coefficients" class="level2">
+<h2 class="anchored" data-anchor-id="weighted-correlation-coefficients">Weighted Correlation Coefficients</h2>
+<p>If we are working with survey data or data with observation weights, we want to apply those weights in calculating the correlation coefficient.</p>
+<p>We can do this using the <code>weights</code> package and the <code>wtd.cor()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(weights)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wtd.cor</span>(<span class="at">x =</span> var1, </span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> var2, </span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">weight =</span> weight)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

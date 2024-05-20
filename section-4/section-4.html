@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.313">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Sam Frederick">
+<meta name="dcterms.date" content="2023-06-02">
+
+<title>Section 4. Introduction to dplyr</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="section-4_files/libs/clipboard/clipboard.min.js"></script>
+<script src="section-4_files/libs/quarto-html/quarto.js"></script>
+<script src="section-4_files/libs/quarto-html/popper.min.js"></script>
+<script src="section-4_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="section-4_files/libs/quarto-html/anchor.min.js"></script>
+<link href="section-4_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="section-4_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="section-4_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="section-4_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="section-4_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction-to-dplyr" id="toc-introduction-to-dplyr" class="nav-link active" data-scroll-target="#introduction-to-dplyr">Introduction to <code>dplyr</code></a>
+  <ul class="collapse">
+  <li><a href="#subsetting-rows-filter" id="toc-subsetting-rows-filter" class="nav-link" data-scroll-target="#subsetting-rows-filter">Subsetting Rows: <code>filter()</code></a></li>
+  <li><a href="#subsetting-columns-select" id="toc-subsetting-columns-select" class="nav-link" data-scroll-target="#subsetting-columns-select">Subsetting Columns: <code>select()</code></a></li>
+  <li><a href="#renaming-variables-rename" id="toc-renaming-variables-rename" class="nav-link" data-scroll-target="#renaming-variables-rename">Renaming variables: <code>rename()</code></a></li>
+  <li><a href="#changing-and-creating-variables-mutate" id="toc-changing-and-creating-variables-mutate" class="nav-link" data-scroll-target="#changing-and-creating-variables-mutate">Changing and Creating Variables: <code>mutate()</code></a></li>
+  <li><a href="#conditional-logic-in-data-processing-ifelse-and-case_when" id="toc-conditional-logic-in-data-processing-ifelse-and-case_when" class="nav-link" data-scroll-target="#conditional-logic-in-data-processing-ifelse-and-case_when">Conditional logic in data processing: <code>ifelse()</code> and <code>case_when()</code></a></li>
+  <li><a href="#summarizing-data-summarize" id="toc-summarizing-data-summarize" class="nav-link" data-scroll-target="#summarizing-data-summarize">Summarizing data: <code>summarize()</code></a></li>
+  <li><a href="#grouping-data-for-analysis-group_by" id="toc-grouping-data-for-analysis-group_by" class="nav-link" data-scroll-target="#grouping-data-for-analysis-group_by">Grouping data for analysis: <code>group_by()</code></a></li>
+  <li><a href="#joining-multiple-datasets" id="toc-joining-multiple-datasets" class="nav-link" data-scroll-target="#joining-multiple-datasets">Joining multiple datasets</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Section 4. Introduction to dplyr</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Sam Frederick </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 2, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+
+</div>
+<div class="cell">
+
+</div>
+<section id="introduction-to-dplyr" class="level1">
+<h1>Introduction to <code>dplyr</code></h1>
+<p><code>dplyr</code> is a package within the <code>tidyverse</code> that is used for processing and cleaning data.</p>
+<section id="subsetting-rows-filter" class="level2">
+<h2 class="anchored" data-anchor-id="subsetting-rows-filter">Subsetting Rows: <code>filter()</code></h2>
+<p>Much like the <code>[]</code> and <code>$</code> operators, discussed above, we often want to analyze certain parts of our data. <code>dplyr</code> has a helpful command, <code>filter()</code>, which we can use to subset our data. <code>filter()</code> takes logical conditions as its arguments. We can use it to get only Republican candidates in our house data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>house <span class="sc">%&gt;%</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(party<span class="sc">==</span><span class="st">"REP"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 348 × 8
+   party state district incumbent_challenge_full receipts disbur…¹ last  votes…²
+   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                       &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
+ 1 REP   AL           1 Open seat                2344517. 2232544. CARL    64.4 
+ 2 REP   AL           5 Incumbent                 669026.  223707. BROO…   95.8 
+ 3 REP   AR           1 Incumbent                 966801. 1095518. CRAW…  100   
+ 4 REP   CA           3 Challenger                397099.  384584. HAMI…   45.3 
+ 5 REP   CA           6 Challenger                 45504.   45286. BISH    26.7 
+ 6 REP   CA           7 Challenger                 81732.   67330. PATT…   43.4 
+ 7 REP   CA           8 Open seat                2028339. 1958786. OBER…   56.1 
+ 8 REP   CA           9 Challenger                 52225    52225  AMAD…   42.4 
+ 9 REP   CA          13 Challenger                  9879.    9944. PITE…    9.63
+10 REP   CA          11 Open seat                 186079.  182995. SHAR…   27.0 
+# … with 338 more rows, and abbreviated variable names ¹​disbursements,
+#   ²​voteshare</code></pre>
+</div>
+</div>
+<p>We can use it to get Republicans who received more than 50% of the vote in Texas:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>house <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(party<span class="sc">==</span><span class="st">"REP"</span><span class="sc">&amp;</span>voteshare<span class="sc">&gt;</span><span class="dv">50</span><span class="sc">&amp;</span>state<span class="sc">==</span><span class="st">"TX"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 21 × 8
+   party state district incumbent_challenge_full receipts disbur…¹ last  votes…²
+   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                       &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
+ 1 REP   TX           4 Challenger                257176.   95068. FALL…    75.1
+ 2 REP   TX          11 Open seat                2598806. 2004400. PFLU…    79.7
+ 3 REP   TX          13 Open seat                2151194. 1764055. JACK…    79.4
+ 4 REP   TX          22 Open seat                1818077. 1798160. NEHLS    51.5
+ 5 REP   TX          23 Open seat                2882972. 2851613. GONZ…    50.6
+ 6 REP   TX          17 Open seat                1485909. 1696588. SESS…    55.9
+ 7 REP   TX          25 Incumbent                2446005. 3358151. WILL…    55.9
+ 8 REP   TX          26 Incumbent                1827226. 2102030. BURG…    60.6
+ 9 REP   TX          31 Incumbent                2168868. 2223167. CART…    53.4
+10 REP   TX           1 Incumbent                 564861.  592388. GOHM…    72.6
+# … with 11 more rows, and abbreviated variable names ¹​disbursements,
+#   ²​voteshare</code></pre>
+</div>
+</div>
+<p>Often, we want to store these subsets for later analysis, so we can create a new variable. For our Republican subset, we could run the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>rep <span class="ot">&lt;-</span> house <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(party<span class="sc">==</span><span class="st">"REP"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="subsetting-columns-select" class="level2">
+<h2 class="anchored" data-anchor-id="subsetting-columns-select">Subsetting Columns: <code>select()</code></h2>
+<p>We want to focus our analysis on specific columns. Again, like the <code>[]</code> or <code>$</code> operators above, <code>dplyr</code> has a helpful command to do this: the <code>select()</code> command. <code>select()</code> takes column names as its arguments.</p>
+<p>Say we want to focus only on incumbency status and voteshare in our house data, we can run the following code to get just these columns:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>house <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(incumbent_challenge_full, voteshare)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 726 × 2
+   incumbent_challenge_full voteshare
+   &lt;chr&gt;                        &lt;dbl&gt;
+ 1 Open seat                     64.4
+ 2 Open seat                     35.5
+ 3 Open seat                     34.7
+ 4 Incumbent                     95.8
+ 5 Incumbent                     97.2
+ 6 Incumbent                    100  
+ 7 Incumbent                     56.6
+ 8 Challenger                    45.3
+ 9 Challenger                    44.1
+10 Challenger                    26.7
+# … with 716 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="renaming-variables-rename" class="level2">
+<h2 class="anchored" data-anchor-id="renaming-variables-rename">Renaming variables: <code>rename()</code></h2>
+<p>Variables don’t always come with helpful names, so it’s often helpful to rename columns to something more useful. The <code>rename()</code> function takes an argument of the form <code>"new_name" = "old_name"</code>. If we want to rename multiple columns, we put the sequence of arguments like <code>"new_name" = "old_name"</code> into a vector.</p>
+<p>In our house data, we can rename the <code>incumbent_challenge_full</code> variable <code>incumbent</code> and the <code>disbursements</code> variable to <code>spending</code> instead.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>house <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="fu">c</span>(<span class="st">"incumbent"</span> <span class="ot">=</span> <span class="st">"incumbent_challenge_full"</span>, </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>           <span class="st">"spending"</span> <span class="ot">=</span> <span class="st">"disbursements"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 726 × 8
+   party state district incumbent  receipts spending last        voteshare
+   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;         &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;           &lt;dbl&gt;
+ 1 REP   AL           1 Open seat  2344517. 2232544. CARL             64.4
+ 2 DEM   AL           1 Open seat    80095.   78973. AVERHART         35.5
+ 3 DEM   AL           2 Open seat    57723.   57661. HARVEY-HALL      34.7
+ 4 REP   AL           5 Incumbent   669026.  223707. BROOKS           95.8
+ 5 DEM   AL           7 Incumbent  2171040. 1498832. SEWELL           97.2
+ 6 REP   AR           1 Incumbent   966801. 1095518. CRAWFORD        100  
+ 7 DEM   CA           7 Incumbent  1830741. 1126436. BERA             56.6
+ 8 REP   CA           3 Challenger  397099.  384584. HAMILTON         45.3
+ 9 DEM   CA           4 Challenger 3022017. 3018529. KENNEDY          44.1
+10 REP   CA           6 Challenger   45504.   45286. BISH             26.7
+# … with 716 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="changing-and-creating-variables-mutate" class="level2">
+<h2 class="anchored" data-anchor-id="changing-and-creating-variables-mutate">Changing and Creating Variables: <code>mutate()</code></h2>
+<p>Sometimes we have to create new variables or modify old variables to put them into a useful form. For example, we might want to change one of our variables into a factor variable with levels in a specific order. Or, we might want to change the labels of our factor. Or, we might want to create a new variable.</p>
+<p>We can change the order of our incumbent variable to “Incumbents”, “Challengers”, and then “Open-Seat Candidates”:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>house <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">incumbent_challenge_full =</span> <span class="fu">factor</span>(incumbent_challenge_full, </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Incumbent"</span>, <span class="st">"Challenger"</span>, <span class="st">"Open seat"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 726 × 8
+   party state district incumbent_challenge_full receipts disbur…¹ last  votes…²
+   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;fct&gt;                       &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
+ 1 REP   AL           1 Open seat                2344517. 2232544. CARL     64.4
+ 2 DEM   AL           1 Open seat                  80095.   78973. AVER…    35.5
+ 3 DEM   AL           2 Open seat                  57723.   57661. HARV…    34.7
+ 4 REP   AL           5 Incumbent                 669026.  223707. BROO…    95.8
+ 5 DEM   AL           7 Incumbent                2171040. 1498832. SEWE…    97.2
+ 6 REP   AR           1 Incumbent                 966801. 1095518. CRAW…   100  
+ 7 DEM   CA           7 Incumbent                1830741. 1126436. BERA     56.6
+ 8 REP   CA           3 Challenger                397099.  384584. HAMI…    45.3
+ 9 DEM   CA           4 Challenger               3022017. 3018529. KENN…    44.1
+10 REP   CA           6 Challenger                 45504.   45286. BISH     26.7
+# … with 716 more rows, and abbreviated variable names ¹​disbursements,
+#   ²​voteshare</code></pre>
+</div>
+</div>
+<p>We can also change the labels of our party variable:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>house <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">party =</span> <span class="fu">factor</span>(party, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Democrat"</span>, <span class="st">"Republican"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 726 × 8
+   party      state district incumbent_challenge…¹ recei…² disbu…³ last  votes…⁴
+   &lt;fct&gt;      &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
+ 1 Republican AL           1 Open seat              2.34e6  2.23e6 CARL     64.4
+ 2 Democrat   AL           1 Open seat              8.01e4  7.90e4 AVER…    35.5
+ 3 Democrat   AL           2 Open seat              5.77e4  5.77e4 HARV…    34.7
+ 4 Republican AL           5 Incumbent              6.69e5  2.24e5 BROO…    95.8
+ 5 Democrat   AL           7 Incumbent              2.17e6  1.50e6 SEWE…    97.2
+ 6 Republican AR           1 Incumbent              9.67e5  1.10e6 CRAW…   100  
+ 7 Democrat   CA           7 Incumbent              1.83e6  1.13e6 BERA     56.6
+ 8 Republican CA           3 Challenger             3.97e5  3.85e5 HAMI…    45.3
+ 9 Democrat   CA           4 Challenger             3.02e6  3.02e6 KENN…    44.1
+10 Republican CA           6 Challenger             4.55e4  4.53e4 BISH     26.7
+# … with 716 more rows, and abbreviated variable names
+#   ¹​incumbent_challenge_full, ²​receipts, ³​disbursements, ⁴​voteshare</code></pre>
+</div>
+</div>
+</section>
+<section id="conditional-logic-in-data-processing-ifelse-and-case_when" class="level2">
+<h2 class="anchored" data-anchor-id="conditional-logic-in-data-processing-ifelse-and-case_when">Conditional logic in data processing: <code>ifelse()</code> and <code>case_when()</code></h2>
+<p>If we want to create a new variable that takes on certain values only when certain conditions are met or to alter our variable only when certain conditions are met, we need the logical conditions we talked about in the last section.</p>
+<p>R and <code>dplyr</code> have special functions that let us use logical conditions.</p>
+<p><code>ifelse(condition, true value, false value)</code> returns the “true value” if the condition is <code>TRUE</code> and the “false condition” if the condition is <code>FALSE</code>. For example,</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ifelse</span>(<span class="dv">2</span><span class="sc">&lt;</span><span class="dv">3</span>, <span class="st">"true"</span>, <span class="st">"false"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "true"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ifelse</span>(<span class="dv">2</span><span class="sc">&gt;</span><span class="dv">3</span>, <span class="st">"true"</span>, <span class="st">"false"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "false"</code></pre>
+</div>
+</div>
+<p>Say we want to create a dummy or indicator variable for whether a candidate in our house dataset is a Democrat or not:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>house <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">democrat =</span> <span class="fu">ifelse</span>(party<span class="sc">==</span><span class="st">"DEM"</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 726 × 9
+   party state district incumbent_challe…¹ recei…² disbu…³ last  votes…⁴ democ…⁵
+   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+ 1 REP   AL           1 Open seat           2.34e6  2.23e6 CARL     64.4       0
+ 2 DEM   AL           1 Open seat           8.01e4  7.90e4 AVER…    35.5       1
+ 3 DEM   AL           2 Open seat           5.77e4  5.77e4 HARV…    34.7       1
+ 4 REP   AL           5 Incumbent           6.69e5  2.24e5 BROO…    95.8       0
+ 5 DEM   AL           7 Incumbent           2.17e6  1.50e6 SEWE…    97.2       1
+ 6 REP   AR           1 Incumbent           9.67e5  1.10e6 CRAW…   100         0
+ 7 DEM   CA           7 Incumbent           1.83e6  1.13e6 BERA     56.6       1
+ 8 REP   CA           3 Challenger          3.97e5  3.85e5 HAMI…    45.3       0
+ 9 DEM   CA           4 Challenger          3.02e6  3.02e6 KENN…    44.1       1
+10 REP   CA           6 Challenger          4.55e4  4.53e4 BISH     26.7       0
+# … with 716 more rows, and abbreviated variable names
+#   ¹​incumbent_challenge_full, ²​receipts, ³​disbursements, ⁴​voteshare, ⁵​democrat</code></pre>
+</div>
+</div>
+<p>The problem is that, sometimes, we want to check more than one condition and create or modify variables based off of these multiple conditions. An example of this might be we want to create a categorical variable that combines information about both voteshare and party (we want a variable that tells us whether the candidate is a Democratic winner or loser or a Republican winner or loser).</p>
+<p>We can use <code>case_when()</code> for this task. We use <code>case_when()</code> as follows: <code>case_when(condition1~output1, condition2~output2, condition3~output3, ..., T~outputLast)</code>. If <code>condition1</code> is <code>TRUE</code>, the function will return <code>output1</code>, and so on… We include the <code>T~outputLast</code> statement to indicate what the function should return if <em>none</em> of our conditions are <code>TRUE</code>.</p>
+<p>To create the party winner status variable from above, we can use the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>house <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">party_winner =</span> <span class="fu">case_when</span>(party<span class="sc">==</span><span class="st">"DEM"</span><span class="sc">&amp;</span>voteshare<span class="sc">&gt;=</span><span class="dv">50</span><span class="sc">~</span><span class="st">"Dem. Winner"</span>, </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                                  party<span class="sc">==</span><span class="st">"DEM"</span><span class="sc">&amp;</span>voteshare<span class="sc">&lt;</span><span class="dv">50</span><span class="sc">~</span><span class="st">"Dem. Loser"</span>, </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                                  party<span class="sc">==</span><span class="st">"REP"</span><span class="sc">&amp;</span>voteshare<span class="sc">&gt;=</span><span class="dv">50</span><span class="sc">~</span><span class="st">"Rep. Winner"</span>, </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                                  T<span class="sc">~</span><span class="st">"Rep. Loser"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 726 × 9
+   party state district incumbent_challe…¹ recei…² disbu…³ last  votes…⁴ party…⁵
+   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  
+ 1 REP   AL           1 Open seat           2.34e6  2.23e6 CARL     64.4 Rep. W…
+ 2 DEM   AL           1 Open seat           8.01e4  7.90e4 AVER…    35.5 Dem. L…
+ 3 DEM   AL           2 Open seat           5.77e4  5.77e4 HARV…    34.7 Dem. L…
+ 4 REP   AL           5 Incumbent           6.69e5  2.24e5 BROO…    95.8 Rep. W…
+ 5 DEM   AL           7 Incumbent           2.17e6  1.50e6 SEWE…    97.2 Dem. W…
+ 6 REP   AR           1 Incumbent           9.67e5  1.10e6 CRAW…   100   Rep. W…
+ 7 DEM   CA           7 Incumbent           1.83e6  1.13e6 BERA     56.6 Dem. W…
+ 8 REP   CA           3 Challenger          3.97e5  3.85e5 HAMI…    45.3 Rep. L…
+ 9 DEM   CA           4 Challenger          3.02e6  3.02e6 KENN…    44.1 Dem. L…
+10 REP   CA           6 Challenger          4.55e4  4.53e4 BISH     26.7 Rep. L…
+# … with 716 more rows, and abbreviated variable names
+#   ¹​incumbent_challenge_full, ²​receipts, ³​disbursements, ⁴​voteshare,
+#   ⁵​party_winner</code></pre>
+</div>
+</div>
+<p>Note: if we want to save the variables we create, we need to assign the output of the pipe operations above to the house variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>house <span class="ot">&lt;-</span> house <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">party_winner =</span> <span class="fu">case_when</span>(party<span class="sc">==</span><span class="st">"DEM"</span><span class="sc">&amp;</span>voteshare<span class="sc">&gt;=</span><span class="dv">50</span><span class="sc">~</span><span class="st">"Dem. Winner"</span>, </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                                  party<span class="sc">==</span><span class="st">"DEM"</span><span class="sc">&amp;</span>voteshare<span class="sc">&lt;</span><span class="dv">50</span><span class="sc">~</span><span class="st">"Dem. Loser"</span>, </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>                                  party<span class="sc">==</span><span class="st">"REP"</span><span class="sc">&amp;</span>voteshare<span class="sc">&gt;=</span><span class="dv">50</span><span class="sc">~</span><span class="st">"Rep. Winner"</span>, </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                                  T<span class="sc">~</span><span class="st">"Rep. Loser"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="summarizing-data-summarize" class="level2">
+<h2 class="anchored" data-anchor-id="summarizing-data-summarize">Summarizing data: <code>summarize()</code></h2>
+<p><code>dplyr</code> also gives us a nice function to summarize our data (remember the summary statistics we discussed last week). The <code>summarize()</code> function works similarly to the <code>mutate()</code> function: it creates variables. But unlike the <code>mutate()</code> function, it calculates numbers by combining all the data in a given column. For example, we can use summarize to find the averages of our columns.</p>
+<p>Let’s find the average, minimum, and maximum amounts of spending and receipts in our house dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>house <span class="sc">%&gt;%</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_spending =</span> <span class="fu">mean</span>(disbursements), </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">min_spending =</span> <span class="fu">min</span>(disbursements), </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_spending =</span> <span class="fu">max</span>(disbursements), </span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">avg_receipts =</span> <span class="fu">mean</span>(receipts), </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">min_receipts =</span> <span class="fu">min</span>(receipts), </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_receipts =</span> <span class="fu">max</span>(receipts))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 6
+  avg_spending min_spending max_spending avg_receipts min_receipts max_receipts
+         &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;
+1     1932281.        1142.    33728421.     2141027.        3065.    38160642.</code></pre>
+</div>
+</div>
+</section>
+<section id="grouping-data-for-analysis-group_by" class="level2">
+<h2 class="anchored" data-anchor-id="grouping-data-for-analysis-group_by">Grouping data for analysis: <code>group_by()</code></h2>
+<p>Many times, we want to get these summary statistics within specific groups in our dataset. We can do this by combining the <code>summarize()</code> function with the <code>group_by()</code> function. The <code>group_by()</code> function takes the variable(s) we want to group by as its arguments.</p>
+<p>If we want to calculate the average amount of money raised, grouped by our party-winner variable we created earlier, we can do this using this code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>house <span class="sc">%&gt;%</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(party_winner) <span class="sc">%&gt;%</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_receipts =</span> <span class="fu">mean</span>(receipts))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 2
+  party_winner avg_receipts
+  &lt;chr&gt;               &lt;dbl&gt;
+1 Dem. Loser       1760934.
+2 Dem. Winner      2680123.
+3 Rep. Loser       1176955.
+4 Rep. Winner      2786996.</code></pre>
+</div>
+</div>
+</section>
+<section id="joining-multiple-datasets" class="level2">
+<h2 class="anchored" data-anchor-id="joining-multiple-datasets">Joining multiple datasets</h2>
+<p>Our data do not always come neatly packaged within a single .csv file. How do we get our data into a form we can use for analysis? We have to use some form of joining function to merge our data together.</p>
+<p>There are a few different types of joins that we regularly use in R. We can see examples below in the graphic taken from Wickham and Grolemund (Ch. 13).</p>
+<p><img src="joins.png" class="img-fluid"></p>
+<p>Another function <code>anti_join(x, y)</code> gives us the observations in <code>x</code> which are not found in <code>y</code>. This can be helpful for checking our merges.</p>
+<p>We need at least one key variable that matches between the two datasets. This key variable must be present in both datasets, and it must match exactly between the two datasets. We can use more than one key if we need (e.g., first name and last name).</p>
+<p>This can be a <strong><em>challenging</em></strong> process. Much of the time keys do not match exactly between datasets: there might be different spellings, different spacing, different punctuation, different capitalization, etc. All of these differences can cause issues with merging, so it is important to be careful when merging. Merging is often an iterative process. We try merging, find mistakes, correct mistakes, and try again.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

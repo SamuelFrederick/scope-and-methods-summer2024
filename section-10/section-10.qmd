@@ -1,0 +1,364 @@
+---
+title: "Section 10. Interactions and Marginal Effects"
+author: "Sam Frederick"
+date: "June 21, 2023"
+format: 
+  html: 
+    code-copy: true
+    toc: true
+---
+
+```{r echo = F}
+knitr::opts_knit$set(root.dir ="/Users/samfrederick/scope-and-methods-summer2023/scope-and-methods-summer2023/")
+knitr::opts_chunk$set(root.dir = "/Users/samfrederick/scope-and-methods-summer2023/scope-and-methods-summer2023/")
+```
+
+```{r echo = F, message = F}
+library(tidyverse)
+library(fastDummies)
+library(dotwhisker)
+library(stargazer)
+library(emmeans)
+library(marginaleffects)
+house <- read_csv("house2020_elections.csv")
+house <- house %>% 
+  mutate(lndisbursements = log(disbursements)) 
+inter_mod <- lm(voteshare~lndisbursements*incumbent_challenge_full, 
+                data = house)
+```
+
+# Interaction Effects
+
+Last time, we worked through dummy variables which allow us to fit lines with different intercepts for different groups. For example, the relationship between campaign spending and vote share has the same slope for incumbents, challengers, and open-seat candidates; however, by adding dummy variables for incumbents and open-seat candidates, we allow incumbents and open-seat candidates to start with higher vote shares, on average, than challengers.
+
+However, sometimes we want there to be different ***slopes*** for different groups. We might think that challengers get more benefits from campaign spending because they are relatively unknown to the public: campaign spending, therefore, should help them get their names out to the public. On the other hand, incumbents are relatively better known than challengers, so the slope of campaign spending in a regression of vote share on campaign spending should be smaller for incumbents than challengers or open-seat candidates. 
+
+To estimate separate slopes for different groups, we use what is known as an interaction term. In our example above, we would estimate a model like the following:
+
+\begin{align*}
+voteshare_i = \beta_0 + \beta_1 * log(spending) + \beta_2*incumbent + \beta_3 * openseat + \\  \beta_4 * incumbent*log(spending) + \beta_5 * openseat*log(spending) + \varepsilon
+\end{align*}
+
+This allows the relationship between spending and voteshare to vary by incumbency status. 
+
+## Estimating Interactions in R
+
+The syntax for estimating interactions in R is fairly straightforward: we simply add a `*` sign between the variables we want to interact. We can do this in the context of our house data below.  
+
+```{r eval = F}
+inter_mod <- lm(voteshare~log(disbursements)*incumbent_challenge_full, 
+                data = house)
+```
+
+
+```{r results = 'asis'}
+
+stargazer(inter_mod, 
+          type = "html", 
+          covariate.labels = c("log(Spending)",
+                               "Incumbent",
+                               "Open Seat",
+                               "log(Spending)*Incumbent",
+                               "log(Spending)*Open Seat",
+                               "Intercept"),
+          omit.stat = c("ser", "f"))
+
+```
+
+
+::: {.panel-tabset}
+### Question
+
+*1. What is the association between campaign spending and vote share for Challengers?* 
+
+### Answer
+
+*1. What is the association between campaign spending and vote share for Challengers?* 
+
+\begin{align*}
+voteshare_i = \beta_0 + \beta_1 * log(spending) + \beta_2 * Incumbent + \\
+  \beta_3 * Open Seat + \beta_4 * log(spending)*Incumbent + \\
+  \beta_5*log(spending)*OpenSeat + \varepsilon
+\end{align*}
+
+Plugging in values of 0 for incumbents and open-seat candidates, we get:
+
+\begin{align*}
+voteshare_i = \beta_0 + \beta_1 * log(spending) + \beta_2 * 0 + \\
+ \beta_3 * 0 + \beta_4 * log(spending)*0 + \\
+ \beta_5*log(spending)*0 + \varepsilon\\
+ = \beta_0 + \beta_1*log(spending) + \varepsilon
+\end{align*}
+
+Therefore, $\beta_1$, the slope of `log(Spending)`, can be interpreted as the association between campaign spending and vote share for challenger candidates. Among challengers, for every one unit increase in spending on the log scale, we would expect vote share to increase by about 3 percentage points, on average. 
+
+:::
+
+::: {.panel-tabset}
+### Question
+
+*2. What is the association between campaign spending and vote share for Incumbents?* 
+
+### Answer
+
+*2. What is the association between campaign spending and vote share for Incumbents?* 
+
+\begin{align*}
+voteshare_i = \beta_0 + \beta_1 * log(spending) + \beta_2 * Incumbent + \\
+  \beta_3 * Open Seat + \beta_4 * log(spending)*Incumbent + \\
+  \beta_5*log(spending)*OpenSeat + \varepsilon
+\end{align*}
+
+Plugging in a value of 0 for open-seat candidates and 1 for incumbent candidates, we get:
+
+\begin{align*}
+voteshare_i = \beta_0 + \beta_1 * log(spending) + \beta_2 * 1 + \\
+\beta_3 * 0 + \beta_4 * log(spending)*1 + \\
+\beta_5*log(spending)*0 + \varepsilon\\
+= \beta_0 + \beta_1*log(spending) + \beta_2 + \beta_4*log(spending) + \varepsilon
+\end{align*}
+
+Therefore, $\beta_1 + \beta_4$, the slopes of `log(Spending)`, can be interpreted as the association between campaign spending and vote share for incumbent candidates. Among incumbent candidates, for every one unit increase in spending on the log scale, we would expect vote share to *decrease* by about 6.23 percentage points, on average. 
+
+:::
+
+::: {.panel-tabset}
+### Question
+
+*3. What is the association between campaign spending and vote share for Open-Seat Candidates?* 
+
+### Answer
+
+*3. What is the association between campaign spending and vote share for Open-Seat Candidates?* 
+
+\begin{align*}
+voteshare_i = \beta_0 + \beta_1 * log(spending) + \beta_2 * Incumbent + \\
+  \beta_3 * Open Seat + \beta_4 * log(spending)*Incumbent + \\
+  \beta_5*log(spending)*OpenSeat + \varepsilon
+\end{align*}
+
+Plugging in a value of 0 for incumbent candidates and 1 for open-seat candidates, we get:
+
+\begin{align*}
+voteshare_i = \beta_0 + \beta_1 * log(spending) + \beta_2 * 0 + \\
+ \beta_3 * 1 + \beta_4 * log(spending)*1 + \\
+ \beta_5*log(spending)*1 + \varepsilon \\
+ = \beta_0 + \beta_1*log(spending) + \beta_3 + \beta_5*log(spending)+  \varepsilon
+\end{align*}
+
+Therefore, $\beta_1 + \beta_5$, the slopes of `log(Spending)`, can be interpreted as the association between campaign spending and vote share for open-seat candidates. Among incumbent candidates, for every one unit increase in spending on the log scale, we would expect vote share to *increase* by about 6.73 percentage points, on average. 
+
+:::
+
+In sum, from the results above, it seems that the relationship between campaign spending and vote share is negative among incumbents and positive for challengers and open-seat candidates. This shows us how interactions can have important implications for our conclusions. 
+
+## Visualizing Interactions in R
+
+First, we can utilize a simple scatterplot, adding in color, to visualize the relationships among our variables. We can see that, among the challenger and open-seat candidate points, shown in red and blue below. Among incumbents (shown in green), however, it appears, consistent with our regression results above, that the relationship between spending and vote share is negative. 
+
+```{r}
+house %>%
+  ggplot(aes(log(disbursements), voteshare, 
+             color = incumbent_challenge_full)) + 
+  geom_point() +
+  labs(x = "log(Spending)", y = "Vote Share", 
+       title = "Relationship between Spending and Vote Share (2020 House Elections)") + 
+  guides(color = guide_legend(title = "Incumbency Status")) + 
+  theme_bw()
+```
+
+We can also add regression lines to display the results of our regression from above. We can use the geom `geom_abline()` from `ggplot2` to manually add our regression lines; however, this can be a bit tedious. 
+
+```{r}
+house %>%
+  ggplot(aes(log(disbursements), voteshare, 
+             color = incumbent_challenge_full)) + 
+  geom_point() +
+  geom_abline(intercept = coef(inter_mod)[1], 
+              slope = coef(inter_mod)[2], 
+              color = "red") + 
+  geom_abline(intercept = coef(inter_mod)[1] + coef(inter_mod)[3], 
+              slope = coef(inter_mod)[2]+coef(inter_mod)[5], 
+              color = "green") + 
+  geom_abline(intercept = coef(inter_mod)[1] + coef(inter_mod)[4], 
+              slope = coef(inter_mod)[2] + coef(inter_mod)[6], 
+              color = "blue") + 
+  #set the labels of the axes and the title
+  labs(x = "log(Spending)", y = "Vote Share", 
+       title = "Relationship between Spending and Vote Share (2020 House Elections)") + 
+  # change the legend title to be more meaningful
+  guides(color = guide_legend(title = "Incumbency Status")) + 
+  # give the plot a black-and-white theme
+  theme_bw()
+```
+
+Importantly, `ggplot2` allows us to add these lines in an automated fashion using the `geom_smooth()` function. Because we are grouping and coloring our data by incumbency status, `ggplot2` will automatically fit separate regression lines for each group. 
+
+```{r, message = F}
+house %>%
+  ggplot(aes(log(disbursements), voteshare, 
+             color = incumbent_challenge_full)) + 
+  geom_point() +
+  # adds linear regression lines, colored and grouped by incumbency
+  geom_smooth(method = "lm")+
+  #update axis titles and plot title
+  labs(x = "log(Spending)", y = "Vote Share", 
+       title = "Relationship between Spending and Vote Share (2020 House Elections)") + 
+  #update legend title
+  guides(color = guide_legend(title = "Incumbency Status")) +
+  #change the theme to black and white
+  theme_bw()
+```
+
+# Marginal Effects
+
+There are a variety of packages which can show the "effects" of different variables in our regression for different subgroups in our data. Some examples of these packages are `emmeans` and `marginaleffects`. This is incredibly helpful when we are running models with interactions. 
+
+::: {.panel-tabset}
+
+## `emmeans`
+
+```{r eval = F}
+install.packages("emmeans")
+library(emmeans)
+
+house <- house %>% 
+  mutate(lndisbursements = log(disbursements)) 
+inter_mod <- lm(voteshare~lndisbursements*incumbent_challenge_full, 
+                data = house)
+```
+
+### Extracting Slopes from Regression Models
+
+First, we are usually interested in the slope of our variable of interest among different groups. This is known as the grouped "marginal effect" of our variable of interest. 
+
+We can calculate these slopes using the `emtrends()` function. 
+
+```{r}
+emtrends(inter_mod, 
+         #tells function what grouping variable we want
+         "incumbent_challenge_full", 
+         # tells function what slope we are interested in
+         var = "lndisbursements") 
+```
+
+Importantly, we can plot these slopes using `ggplot2`. 
+
+```{r}
+emtrends(inter_mod, 
+         "incumbent_challenge_full", 
+         var = "lndisbursements") %>%as_tibble()%>%
+  ggplot(aes(incumbent_challenge_full, lndisbursements.trend)) +
+  # add dots corresponding to slope estimates
+  geom_point() + 
+  # add whiskers to the dot and whisker plot, corresponding to 95% Confidence Intervals around slope estimates
+  geom_errorbar(aes(x = incumbent_challenge_full, 
+                    ymin = lower.CL, ymax = upper.CL), 
+                width = 0) + 
+  # add a horizontal line to display statistical significance
+  geom_hline(yintercept = 0, color = "red", lty = "dashed") + 
+  # change the axis labels
+  labs(x = "", y = "log(Spending) Slope")
+```
+
+### Extracting Predictions from Regression Models
+
+We can use the `emmeans` package to calculate and display predictions from our model for various values of each of our variables. 
+
+First, the `emmeans()` function takes our regression fit and calculates the predictions from our model (as well as confidence intervals). 
+
+```{r}
+emmeans(inter_mod, ~lndisbursements*incumbent_challenge_full)
+```
+
+We can also customize the values at which the predictions are calculated using the `at` argument:
+
+```{r}
+emmeans(inter_mod,~lndisbursements*incumbent_challenge_full,
+        at = list(lndisbursements = 
+                    c(min(house$lndisbursements), 
+                      max(house$lndisbursements))))
+```
+
+
+### Plotting Predictions from Regression Models
+
+Finally, we can plot the predictions from our regression model using the `emmip()` function. We can use the `emmip()` function to plot the results of the `emmeans()` function:
+
+```{r}
+emmeans(inter_mod, ~lndisbursements*incumbent_challenge_full, 
+        at = list(lndisbursements = c(min(house$lndisbursements), 
+                                      max(house$lndisbursements))))%>%
+emmip( 
+  # displays predictions for lndisbursements, faceting by incumbent_challenge_full
+  ~lndisbursements|incumbent_challenge_full, 
+       # adds prediction intervals
+      PIs = T
+  )
+```
+
+
+## `marginaleffects`
+
+```{r eval = F}
+
+install.packages("marginaleffects")
+library(marginaleffects)
+
+house <- house %>% 
+  mutate(lndisbursements = log(disbursements)) 
+inter_mod <- lm(voteshare~lndisbursements*incumbent_challenge_full, 
+                data = house)
+```
+
+### Extracting Slopes from our Regression Models
+
+Like we did above, we often want to know the slope(s) of our variable(s) of interest at different levels of our interaction variables. For example, what is the slope of campaign spending among incumbents? What about among challengers? How about among open-seat candidates? 
+
+The `marginaleffects` package allows us to extract these slopes from our `lm` model object. The `avg_slopes()` function calculates the slope of the variable specified with the `variables` argument for each group/category in the `by` argument. 
+
+```{r}
+avg_slopes(inter_mod, 
+          variables = "lndisbursements", 
+          by = "incumbent_challenge_full")
+```
+
+The `plot_slopes()` function takes the same arguments as the `avg_slopes()` function but plots the slopes for each subgroup in a `ggplot2` format. 
+
+```{r}
+plot_slopes(inter_mod, 
+            variables = "lndisbursements", 
+            by = "incumbent_challenge_full") + 
+  geom_hline(yintercept = 0, color = "red", lty = "dashed") + 
+  theme_bw()+
+  labs(x = "", 
+       title = "Marginal Effects of log(Spending) on Vote Share") 
+```
+
+### Extracting Predictions from Regression Models
+
+To get the average prediction from our model at a given value of the incumbent, we can use the `predictions()` function, passing our model object as well as the variable we want to group by as the `by` argument.
+
+```{r}
+predictions(inter_mod, 
+                by = "incumbent_challenge_full")
+```
+
+We can also plot the predicted values from our model using the `plot_predictions()` function. 
+
+```{r}
+plot_predictions(inter_mod, 
+                 condition = c("lndisbursements", 
+                              "incumbent_challenge_full")) + 
+  labs(x = "log(Spending)", y = "Vote Share", 
+       title = "Predicted Vote Share by log(Spending)") + 
+  guides(color = guide_legend(title = "Incumbency Status"), 
+         fill = guide_legend(title = "Incumbency Status"))
+```
+
+:::
+
+
+
+
+

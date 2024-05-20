@@ -1,0 +1,218 @@
+---
+title: "Section 9. Dummy Variables and Regression"
+author: "Sam Frederick"
+date: "June 21, 2023"
+format: 
+  html: 
+    code-copy: true
+    toc: true
+---
+
+```{r echo = F}
+knitr::opts_knit$set(root.dir ="/Users/samfrederick/scope-and-methods-summer2023/scope-and-methods-summer2023/")
+knitr::opts_chunk$set(root.dir = "/Users/samfrederick/scope-and-methods-summer2023/scope-and-methods-summer2023/")
+```
+
+```{r echo = F, message = F}
+library(tidyverse)
+library(fastDummies)
+library(dotwhisker)
+house <- read_csv("house2020_elections.csv")
+```
+
+# Dummy Variables
+
+We have previously talked about dummy, or indicator, variables which are binary (0,1) variables which take on a value of 1 if some condition is met and 0 otherwise. For example, we might have a variable called "democrat" which equals 1 if an individual in our dataset is a Democrat and 0 otherwise (i.e., if the individual is a Republican or Independent). 
+
+Earlier in the semester, we learned about factor variables in R, a way of encoding and storing categorical variables. In order to meaningfully use these factor variables in regression, we generally put them into the form of a series of dummy variables. For example, if we have a factor variable called "party" which describes the party identification of individuals in the dataset, we might transform it into a series of dummy variables: democrat, independent, republican. 
+
+R can do this automatically in the `lm()` function, but sometimes we want to do this manually as it gives us more control over the output. 
+
+***Important Notes:***
+
+1. The output when changing factor variables into a series of dummy variables depends on the ordering of the factor levels. Remember that, by default, R orders factor variables alphabetically or numerically. 
+
+2. Regression *cannot* handle all categories of the factor variable as dummy variables, and it must exclude one level/category. By default, the excluded level is the first factor level. 
+
+## `fastDummies`
+
+We can do this using the `fastDummies` package in R.
+
+```{r eval = F}
+install.packages("fastDummies")
+library(fastDummies)
+```
+
+The main function to be aware of in `fastDummies` is the `dummy_columns()` function. Here are the main arguments for this function:
+
+```{r, eval = F}
+  dummy_columns(
+      # input the tibble/data.frame dataset
+      .data, 
+      # input the columns you want to convert to a dummy variable
+      # this should be a character vector
+      select_columns = NULL, 
+      # do you want to remove the first factor level?
+      # should be TRUE for regression
+      remove_first_dummy = FALSE,
+      # creates a dummy variable for missing values if FALSE
+      ignore_na = FALSE,
+      #remove columns you're making the dummy variables from if TRUE
+      remove_selected_columns = FALSE
+    )
+```
+
+### Example 
+
+```{r eval = F}
+library(tidyverse)
+house <- read_csv("house2020_elections.csv")
+```
+
+```{r}
+house %>% 
+  dummy_columns(
+      select_columns = c("party", "state", 
+                         "incumbent_challenge_full"), 
+      remove_first_dummy = TRUE,
+      ignore_na = FALSE,
+      remove_selected_columns = TRUE
+    )
+```
+
+Let's start with a simple regression of `voteshare` on `incumbent_challenge_full` and `log(disbursements)`.
+
+```{r}
+mod <- lm(voteshare~log(disbursements) + `incumbent_challenge_full_Incumbent` + `incumbent_challenge_full_Open seat`, 
+          data = 
+            house %>% 
+            dummy_columns(select_columns = c("incumbent_challenge_full"),
+                          remove_first_dummy = TRUE, 
+                          ignore_na = FALSE))
+summary(mod)
+```
+
+## Interpreting Dummy Variable Coefficient Estimates
+
+The coefficient estimate for a dummy variable can be interpreted as the difference in the conditional expected value between the omitted category and the dummy variable. In other words, the inclusion of the dummy variables gives us a different intercept for each category in the factor variable.  
+
+The actual intercept estimate for the regression is the conditional expectation for the omitted category/categories. 
+
+In the example above, 
+
+```{r, echo = F}
+house %>%
+  ggplot(aes(log(disbursements), voteshare)) + 
+  geom_point() + 
+  geom_abline(color = "green", 
+              intercept = coef(mod)[1], 
+              slope = coef(mod)[2]) + 
+    geom_abline(color = "blue", 
+              intercept = coef(mod)[1]+coef(mod)[3], 
+              slope = coef(mod)[2]) + 
+    geom_abline(color = "red" , 
+              intercept = coef(mod)[1]+coef(mod)[4], 
+              slope = coef(mod)[2])  + 
+  annotate(geom = "text",x = 10, y =60, color = "blue", 
+           label = "Incumbent") + 
+  annotate(geom = "text",x = 9, y =45, color = "red", 
+           label = "Open Seat") + 
+  annotate(geom = "text",x = 8, y =20, color = "green", 
+           label = "Challenger")+
+  labs(x = "log(Spending)", y = "Vote Share", 
+       title = "Different Regression Lines with Dummy Variables")
+```
+
+# Summarizing Regression Models
+
+Last time, we discussed using tables to summarize the output of regression models. Often, we want to visually display the results using a plot. We can do this using a variety of packages, including `dotwhisker` and `modelsummary`. Today, we will focus on `dotwhisker`.
+
+These types of plots are popular because they can convey a lot of information in a relatively compact and visually appealing way. 
+
+
+```{r eval = F}
+install.packages("dotwhisker")
+library(dotwhisker)
+library(tidyverse)
+house <- read_csv("house2020_elections.csv")
+```
+
+```{r}
+mod1 <- lm(voteshare~log(disbursements), data = house)
+mod2 <- lm(voteshare~log(disbursements) +
+             incumbent_challenge_full_Incumbent + 
+             `incumbent_challenge_full_Open seat`, 
+           data = house %>%
+             dummy_columns(select_columns = c("incumbent_challenge_full"), 
+                           remove_first_dummy = TRUE))
+mod3 <- lm(voteshare~log(disbursements) +
+             incumbent_challenge_full_Incumbent + 
+             `incumbent_challenge_full_Open seat` + 
+             party_REP, 
+           data = house %>%
+             dummy_columns(select_columns =
+                             c("incumbent_challenge_full", "party"), 
+                           remove_first_dummy = TRUE))
+dwplot(list(mod1, mod2, mod3), 
+       show_intercept = FALSE, 
+       ci = 0.95, 
+       vline = geom_vline(
+           xintercept = 0,
+           colour = "red",
+           linetype = "dashed"
+       ),
+      vars_order = c("log(disbursements)",
+       "incumbent_challenge_full_Incumbent",
+       "incumbent_challenge_full_Open seat", 
+       "party_REP"),
+       model_order = c("Model 1", "Model 2", "Model 3")
+       ) %>% 
+    relabel_predictors(
+        c(
+            `log(disbursements)` = "log(Spending)",
+            incumbent_challenge_full_Incumbent = "Incumbent",
+            `incumbent_challenge_full_Open seat` = "Open Seat",
+            party_REP = "Republican"
+        )
+    )+
+  theme_bw()
+```
+
+# Making Predictions with Regression Models
+
+We can make predictions for new data points using our regression models using the `predict()` function in base R. To make these predictions, we need to have a new dataset in the same form as our old dataset with the same variables:
+
+```{r}
+mod <- lm(voteshare~log(disbursements) + 
+            incumbent_challenge_full_Incumbent +
+            `incumbent_challenge_full_Open seat`, 
+          data = house %>%
+            dummy_columns(select_columns = 
+                            c("incumbent_challenge_full"), 
+                          remove_first_dummy = TRUE))
+
+tibble(disbursements = rep(15000, 3),  
+       incumbent_challenge_full_Incumbent = c(1, 0, 0), 
+       `incumbent_challenge_full_Open seat` = c(0, 1, 0)) %>%
+  predict(mod, . , interval = "prediction") %>%
+  as_tibble() %>%
+  mutate(incumbency_status = 
+           c("Incumbent", "Open Seat", "Challenger")) %>%
+  ggplot(aes(incumbency_status, fit)) + 
+  geom_point(size = 3) + 
+  geom_segment(aes(x = incumbency_status,
+                   xend = incumbency_status, 
+                   y = lwr, yend = upr), 
+               lwd = 1) + 
+  labs(y = "Predicted Value", x = "") + 
+  theme_bw() + 
+  ylim(c(0, 100))
+```
+
+
+
+
+
+
+
+

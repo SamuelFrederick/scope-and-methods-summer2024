@@ -1,0 +1,27 @@
+/*-- scss:defaults --*/
+$presentation-h2-font-size:1.2em;
+
+/* Style/position the footer text */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 8%;
+  background-color: #00b0ff;
+  display: flex; 
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.corner-image {
+  display: block;
+  position: fixed;
+  margin: 0 auto;
+  z-index: 30;
+  right: 14px;
+  bottom: 14px;
+  height: 24px;
+  width: 24px;
+  vertical-align: -0.125em;
+}

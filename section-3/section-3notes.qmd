@@ -1,0 +1,400 @@
+---
+title: "Section 3. Types of Data in R"
+author: "Sam Frederick"
+date: "May 31, 2023"
+format: 
+  html: 
+    code-copy: true
+    toc: true
+---
+
+```{r echo = F}
+knitr::opts_knit$set(root.dir ="/Users/samfrederick/scope-and-methods-summer2023/")
+```
+
+# Picking Up Where We Left Off...
+
+## Review
+
+### Creating Objects in R
+
+In R, we often want to refer back to code output we have previously generated, so we can perform further operations on that output without having to retrace all of our steps. 
+
+To do this, we use the assignment operator (`<-`). This operator assigns the value on the right hand side to the object on the left hand side. For example, to create an object called `x` that stores the number `2`, we could use the following code:
+
+```{r}
+x <- 2
+```
+
+Once we run this code, `x` will appear in the "Global Environment" in the upper right corner of RStudio. 
+
+We can now refer to x in future calculations. 
+
+```{r}
+x^2 + 2
+```
+
+We can call objects whatever we want with several notable restrictions: 
+
+- We should not use spaces in object names. 
+- We should not create objects with the titles of functions that already exist in R. 
+- We should not start object names with numbers.
+- Object names have to contain some alphabetical characters. 
+
+
+### Vectors
+
+Last week, we talked about vectors in R. We can think of vectors as columns in a spreadsheet or dataset. Another way is to think of vectors as "lists" of data; however, the word `list` has a special meaning in R, so we want to be careful about this terminology. Vectors cannot contain more than one type of data (for example, they can contain either numbers or characters/strings but not both). 
+
+Vectors can be created in R using the `c()` command, which puts the arguments into a vector. The arguments inside of the parentheses should be separated by commas. For example, 
+
+```{r}
+c(1,2,3)
+```
+
+We can also create vectors in R using the `:` operator or the `seq()` command. Both of these options create sequences of numbers in vector form. 
+
+The `:` operator outputs the sequence of integers from the left side number to the right side number. 
+
+```{r}
+1:6
+```
+
+The `seq(a, b, by = x)` command outputs the sequence of numbers from `a` to `b` in increments of `x`. 
+
+```{r}
+seq(1, 6, by = 1)
+seq(10, 11, by = 0.1)
+```
+
+After we have created a vector, we can use it as input for the functions we are using. 
+
+For example, to calculate the average of the sequence of integers from 1 to 6, we could use the following code: 
+
+```{r}
+mean(1:6)
+mean(seq(1, 6, by = 1))
+```
+
+### Reading Data into R
+
+Much of the time, the data we want to work with in our research comes in some form of spreadsheet (mostly .csv format). In order to work with this data in R, we need to read the file into R. To do so, we need to know where this data is stored on our computer.
+
+This is why it's helpful to have a dedicated folder somewhere on your computer for this course or for a project you're working on. You can then move your data files from your Downloads folder to the course folder. 
+
+Once we know where the data are located, we can tell R where to look for the data by 
+
+1. Manually entering the path to the file
+    - "/Users/samfrederick/Desktop/Scope and Methods/dataset.csv"
+2. Setting our working directory at the beginning of our R session
+   - `setwd("/Users/samfrederick/Desktop/Scope and Methods/")`
+3. Using an RProject associated with our course folder
+
+#### A Short Digression on Packages in R 
+
+The main way we will read csv data into R in this course is by using the R package `tidyverse`. This is a package that contains a bunch of other helpful packages for reading, cleaning and processing, and visualizing data in R. 
+
+To use `tidyverse`, we first have to download the package. We can download the package using this code:
+
+```{r eval = F}
+# Note the use of quotation marks around the word tidyverse
+install.packages("tidyverse")
+```
+
+***We only have to install packages once.***
+
+To use packages, we need to load the packages using the `library()` command:
+
+```{r}
+library(tidyverse)
+```
+
+Now, we can use the functions that come within the `tidyverse` package. 
+
+#### Back to Reading Files
+
+To read files, we use the `read_csv()` command. 
+
+Say the name of the file we want to read is "house2020_elections.csv", we can read this into R by (1) setting our working directory or using an RProject in our course folder and (2) using this code:
+
+```{r}
+read_csv("house2020_elections.csv")
+```
+
+Finally, we will want to store the data from this file in an object:
+
+```{r}
+house <- read_csv("house2020_elections.csv")
+```
+
+Now, this data should appear in our "Global Environment" in the top right corner of RStudio. 
+
+# Working with Data Frames or Tibbles in R
+
+We can access columns in a tibble using the `$` operator. For example, if we want the `party` column from our `house` dataset, we can use the following code:
+
+```{r eval = F}
+house$party
+```
+
+This will return the party column as a vector containing each candidate's political party. 
+
+We can also use `[]` operators to access specific columns and rows of our data. We use these brackets by specifying: `data[row,column]`. To access columns, we can use either the number of the column we are interested in or the name, and both will give the same output:
+
+```{r eval = F}
+house[,"party"]
+house[,1]
+house$party
+```
+
+Say we want the second row of the data:
+
+```{r}
+house[2,]
+```
+
+Finally, what if we want the second value of the party column of our data?
+
+```{r}
+house[2, 'party']
+house$party[2]
+```
+
+
+
+# Main Types of Data in R
+
+```{r}
+#| echo: false
+
+dplyr::tibble("Types of Data" = c("Numeric", "Categorical", "Logical"), 
+              "R Types" = c("integer (`int`), double (`dbl`)", "character (`chr`), factor (`fct`)", "logical (`lgl`), `TRUE`, `FALSE`, `NA`"), 
+              "Ways to Summarize" = c("`mean`, `median`, `min`, `max`, `range`, `IQR`, `sd`, `var`, `summary`", "`table`, `prop.table`", '')) |> 
+  knitr::kable()
+```
+
+## Categorical Data
+
+In political science, we often treat categorical data or data that comes as a string/character variable as a factor variable. A factor variable is a way of storing this data in categories. We can create them using the `factor()` command. 
+
+Try turning the party variable in our house dataset into a factor:
+
+```{r eval = F}
+factor(house$party)
+```
+
+It is important to note that factors are stored in alphabetical or numeric order by default--though we often want to specify a different order. 
+
+We can use the "levels" argument of the `factor()` command to accomplish this. 
+
+Say we want to organize our house party factor in reverse alphabetical order, we could do that like this:
+
+```{r eval = F}
+factor(house$party, levels = c("REP", "DEM"))
+```
+
+Note about the levels argument: the levels must be spelled **exactly** the same as in the data. Additionally, you must have the same number of levels as there are categories in the data. This is where it can help to determine the specific levels of the categorical variable using `unique(variable)`. 
+
+### Summarizing Factor Variables
+
+Since factor variables are in categories (i.e., are not numeric), we need to take a different approach to summarizing. We generally do this by looking at a table of our data. Tables tell us how many observations are in each category of our data. 
+
+```{r}
+table(house$party)
+```
+
+Sometimes, we might also want to know what proportion of observations falls into each category. We can calculate this using the following code:
+
+```{r}
+prop.table(table(house$party))
+```
+
+## Logical Data in R
+
+Another type of common data in R is "logical" data in R. There are three values logical data can take on: (1) `TRUE`, (2) `FALSE`, and (3) `NA`. 
+
+`TRUE` indicates that some condition is met, or "true." `FALSE` indicates that some condition is not met, or is "false." Finally, `NA` indicates that the data are missing. 
+
+R will check whether various conditions are met for us. We can do this using logical operators:
+
+```{r}
+#| echo: false
+
+dplyr::tibble("Logical Operator" = c("`==`", "`!=`", "`<`", "`>`", "`<=`", "`>=`", "`!`", "`%in%`"),
+              "Task" = c("equal to", "not equal to", "less than", 
+                         "greater than", "less than or equal to", 
+                         "greater than or equal to", "not", "in")) |> 
+  knitr::kable()
+```
+
+If we'd like to check whether 2 is equal to 3, we can use this code:
+
+```{r}
+2==3
+```
+
+R checks whether this is true, and returns `FALSE` because it's not true. 
+
+How about whether 2 is less than or equal to 3? 
+
+```{r}
+2<=3
+```
+
+What if we have a vector of integers between 1 and and 7 called x, and we want to check whether the number 3 is in this vector?
+
+```{r}
+x <- 1:7
+3%in%x
+```
+
+Logical conditions like these are useful for taking portions/subsets of our data to which a certain condition applies. For example, in our house data, we can take only the rows for Democratic candidates:
+
+```{r}
+house[house$party=="DEM",]
+```
+
+This code will give you the same output: 
+
+```{r eval = F}
+house[house$party!="REP",]
+```
+
+We can also look only at candidates who received more than 50\% of the vote:
+
+```{r}
+house[house$voteshare>50,]
+```
+
+### Evaluating Multiple Logical Conditions
+
+```{r}
+#| echo: false
+
+dplyr::tibble("Operator" = c("&", "|"),
+              "Task" = c("AND", "OR")) |> 
+  knitr::kable()
+```
+
+For example, we can get only the observations in our dataset for Democrats who received more than 50\% of the vote. 
+
+```{r}
+house[house$party=="DEM"&house$voteshare>50,]
+```
+
+
+## Exercises
+
+::: {.panel-tabset}
+
+### Question
+
+1. Find the average vote share of candidates in the 2020 elections dataset. 
+
+
+### Answer
+
+1. Find the average vote share of candidates in the 2020 elections dataset. 
+
+
+```{r}
+mean(house$voteshare)
+```
+
+:::
+
+::: {.panel-tabset}
+
+### Question
+
+2. What is the median amount of money spent by candidates in 2020? 
+
+
+### Answer
+
+2. What is the median amount of money spent by candidates in 2020? 
+
+
+```{r}
+median(house$disbursements)
+```
+
+:::
+
+::: {.panel-tabset}
+
+### Question
+
+3. What are three ways we could summarize how spread out campaign fundraising is (look at spending here)? 
+
+
+### Answer
+
+3. What are three ways we could summarize how spread out campaign fundraising is (look at spending here)? 
+
+```{r}
+range(house$receipts)
+IQR(house$receipts)
+sd(house$receipts)
+var(house$receipts)
+```
+
+:::
+
+::: {.panel-tabset}
+
+### Question
+
+4. What's one command we could use to get an overview of many summary statistics for our voteshare column?
+
+
+### Answer
+
+4. What's one command we could use to get an overview of many summary statistics for our voteshare column?
+
+```{r}
+summary(house$voteshare)
+```
+
+:::
+
+::: {.panel-tabset}
+
+### Question
+
+5. Take the `incumbent_challenge_full` variable. Turn it into a factor, and order the levels in this order "Incumbents", "Challengers", and "Open-Seat Candidates." Make a proportion table from this factor variable. 
+
+
+### Answer
+
+5. Take the `incumbent_challenge_full` variable. Turn it into a factor, and order the levels in this order "Incumbents", "Challengers", and "Open-Seat Candidates." Make a proportion table from this factor variable. 
+
+
+```{r}
+factor(house$incumbent_challenge_full, levels = c("Incumbent", "Challenger",
+                                                  "Open seat"))%>%
+  table() %>% 
+  prop.table()
+```
+
+:::
+
+::: {.panel-tabset}
+
+### Question
+
+6. Subset the data so that we only have rows for incumbents OR candidates who received more than 60\% of the vote.  
+
+
+### Answer
+
+6. Subset the data so that we only have rows for incumbents OR candidates who received more than 60\% of the vote.  
+
+
+```{r}
+house[house$incumbent_challenge_full=="Incumbent"|house$voteshare>60,]
+```
+
+:::
+
+

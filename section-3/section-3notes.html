@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.313">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Sam Frederick">
+<meta name="dcterms.date" content="2023-05-31">
+
+<title>Section 3. Types of Data in R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="section-3notes_files/libs/clipboard/clipboard.min.js"></script>
+<script src="section-3notes_files/libs/quarto-html/quarto.js"></script>
+<script src="section-3notes_files/libs/quarto-html/popper.min.js"></script>
+<script src="section-3notes_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="section-3notes_files/libs/quarto-html/anchor.min.js"></script>
+<link href="section-3notes_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="section-3notes_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="section-3notes_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="section-3notes_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="section-3notes_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#picking-up-where-we-left-off" id="toc-picking-up-where-we-left-off" class="nav-link active" data-scroll-target="#picking-up-where-we-left-off">Picking Up Where We Left Off…</a>
+  <ul class="collapse">
+  <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review">Review</a>
+  <ul class="collapse">
+  <li><a href="#creating-objects-in-r" id="toc-creating-objects-in-r" class="nav-link" data-scroll-target="#creating-objects-in-r">Creating Objects in R</a></li>
+  <li><a href="#vectors" id="toc-vectors" class="nav-link" data-scroll-target="#vectors">Vectors</a></li>
+  <li><a href="#reading-data-into-r" id="toc-reading-data-into-r" class="nav-link" data-scroll-target="#reading-data-into-r">Reading Data into R</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#working-with-data-frames-or-tibbles-in-r" id="toc-working-with-data-frames-or-tibbles-in-r" class="nav-link" data-scroll-target="#working-with-data-frames-or-tibbles-in-r">Working with Data Frames or Tibbles in R</a></li>
+  <li><a href="#main-types-of-data-in-r" id="toc-main-types-of-data-in-r" class="nav-link" data-scroll-target="#main-types-of-data-in-r">Main Types of Data in R</a>
+  <ul class="collapse">
+  <li><a href="#categorical-data" id="toc-categorical-data" class="nav-link" data-scroll-target="#categorical-data">Categorical Data</a>
+  <ul class="collapse">
+  <li><a href="#summarizing-factor-variables" id="toc-summarizing-factor-variables" class="nav-link" data-scroll-target="#summarizing-factor-variables">Summarizing Factor Variables</a></li>
+  </ul></li>
+  <li><a href="#logical-data-in-r" id="toc-logical-data-in-r" class="nav-link" data-scroll-target="#logical-data-in-r">Logical Data in R</a>
+  <ul class="collapse">
+  <li><a href="#evaluating-multiple-logical-conditions" id="toc-evaluating-multiple-logical-conditions" class="nav-link" data-scroll-target="#evaluating-multiple-logical-conditions">Evaluating Multiple Logical Conditions</a></li>
+  </ul></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Section 3. Types of Data in R</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Sam Frederick </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 31, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+
+</div>
+<section id="picking-up-where-we-left-off" class="level1">
+<h1>Picking Up Where We Left Off…</h1>
+<section id="review" class="level2">
+<h2 class="anchored" data-anchor-id="review">Review</h2>
+<section id="creating-objects-in-r" class="level3">
+<h3 class="anchored" data-anchor-id="creating-objects-in-r">Creating Objects in R</h3>
+<p>In R, we often want to refer back to code output we have previously generated, so we can perform further operations on that output without having to retrace all of our steps.</p>
+<p>To do this, we use the assignment operator (<code>&lt;-</code>). This operator assigns the value on the right hand side to the object on the left hand side. For example, to create an object called <code>x</code> that stores the number <code>2</code>, we could use the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Once we run this code, <code>x</code> will appear in the “Global Environment” in the upper right corner of RStudio.</p>
+<p>We can now refer to x in future calculations.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6</code></pre>
+</div>
+</div>
+<p>We can call objects whatever we want with several notable restrictions:</p>
+<ul>
+<li>We should not use spaces in object names.</li>
+<li>We should not create objects with the titles of functions that already exist in R.</li>
+<li>We should not start object names with numbers.</li>
+<li>Object names have to contain some alphabetical characters.</li>
+</ul>
+</section>
+<section id="vectors" class="level3">
+<h3 class="anchored" data-anchor-id="vectors">Vectors</h3>
+<p>Last week, we talked about vectors in R. We can think of vectors as columns in a spreadsheet or dataset. Another way is to think of vectors as “lists” of data; however, the word <code>list</code> has a special meaning in R, so we want to be careful about this terminology. Vectors cannot contain more than one type of data (for example, they can contain either numbers or characters/strings but not both).</p>
+<p>Vectors can be created in R using the <code>c()</code> command, which puts the arguments into a vector. The arguments inside of the parentheses should be separated by commas. For example,</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3</code></pre>
+</div>
+</div>
+<p>We can also create vectors in R using the <code>:</code> operator or the <code>seq()</code> command. Both of these options create sequences of numbers in vector form.</p>
+<p>The <code>:</code> operator outputs the sequence of integers from the left side number to the right side number.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span><span class="dv">6</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3 4 5 6</code></pre>
+</div>
+</div>
+<p>The <code>seq(a, b, by = x)</code> command outputs the sequence of numbers from <code>a</code> to <code>b</code> in increments of <code>x</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">6</span>, <span class="at">by =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3 4 5 6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">11</span>, <span class="at">by =</span> <span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 10.0 10.1 10.2 10.3 10.4 10.5 10.6 10.7 10.8 10.9 11.0</code></pre>
+</div>
+</div>
+<p>After we have created a vector, we can use it as input for the functions we are using.</p>
+<p>For example, to calculate the average of the sequence of integers from 1 to 6, we could use the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">6</span>, <span class="at">by =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.5</code></pre>
+</div>
+</div>
+</section>
+<section id="reading-data-into-r" class="level3">
+<h3 class="anchored" data-anchor-id="reading-data-into-r">Reading Data into R</h3>
+<p>Much of the time, the data we want to work with in our research comes in some form of spreadsheet (mostly .csv format). In order to work with this data in R, we need to read the file into R. To do so, we need to know where this data is stored on our computer.</p>
+<p>This is why it’s helpful to have a dedicated folder somewhere on your computer for this course or for a project you’re working on. You can then move your data files from your Downloads folder to the course folder.</p>
+<p>Once we know where the data are located, we can tell R where to look for the data by</p>
+<ol type="1">
+<li>Manually entering the path to the file
+<ul>
+<li>“/Users/samfrederick/Desktop/Scope and Methods/dataset.csv”</li>
+</ul></li>
+<li>Setting our working directory at the beginning of our R session
+<ul>
+<li><code>setwd("/Users/samfrederick/Desktop/Scope and Methods/")</code></li>
+</ul></li>
+<li>Using an RProject associated with our course folder</li>
+</ol>
+<section id="a-short-digression-on-packages-in-r" class="level4">
+<h4 class="anchored" data-anchor-id="a-short-digression-on-packages-in-r">A Short Digression on Packages in R</h4>
+<p>The main way we will read csv data into R in this course is by using the R package <code>tidyverse</code>. This is a package that contains a bunch of other helpful packages for reading, cleaning and processing, and visualizing data in R.</p>
+<p>To use <code>tidyverse</code>, we first have to download the package. We can download the package using this code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Note the use of quotation marks around the word tidyverse</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong><em>We only have to install packages once.</em></strong></p>
+<p>To use packages, we need to load the packages using the <code>library()</code> command:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+✔ ggplot2 3.4.1     ✔ purrr   0.3.4
+✔ tibble  3.1.8     ✔ dplyr   1.1.0
+✔ tidyr   1.2.0     ✔ stringr 1.4.1
+✔ readr   2.1.2     ✔ forcats 0.5.2
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()</code></pre>
+</div>
+</div>
+<p>Now, we can use the functions that come within the <code>tidyverse</code> package.</p>
+</section>
+<section id="back-to-reading-files" class="level4">
+<h4 class="anchored" data-anchor-id="back-to-reading-files">Back to Reading Files</h4>
+<p>To read files, we use the <code>read_csv()</code> command.</p>
+<p>Say the name of the file we want to read is “house2020_elections.csv”, we can read this into R by (1) setting our working directory or using an RProject in our course folder and (2) using this code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">"house2020_elections.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 726 Columns: 8
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (4): party, state, incumbent_challenge_full, last
+dbl (4): district, receipts, disbursements, voteshare
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 726 × 8
+   party state district incumbent_challenge_full receipts disbur…¹ last  votes…²
+   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                       &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
+ 1 REP   AL           1 Open seat                2344517. 2232544. CARL     64.4
+ 2 DEM   AL           1 Open seat                  80095.   78973. AVER…    35.5
+ 3 DEM   AL           2 Open seat                  57723.   57661. HARV…    34.7
+ 4 REP   AL           5 Incumbent                 669026.  223707. BROO…    95.8
+ 5 DEM   AL           7 Incumbent                2171040. 1498832. SEWE…    97.2
+ 6 REP   AR           1 Incumbent                 966801. 1095518. CRAW…   100  
+ 7 DEM   CA           7 Incumbent                1830741. 1126436. BERA     56.6
+ 8 REP   CA           3 Challenger                397099.  384584. HAMI…    45.3
+ 9 DEM   CA           4 Challenger               3022017. 3018529. KENN…    44.1
+10 REP   CA           6 Challenger                 45504.   45286. BISH     26.7
+# … with 716 more rows, and abbreviated variable names ¹​disbursements,
+#   ²​voteshare</code></pre>
+</div>
+</div>
+<p>Finally, we will want to store the data from this file in an object:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>house <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"house2020_elections.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 726 Columns: 8
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (4): party, state, incumbent_challenge_full, last
+dbl (4): district, receipts, disbursements, voteshare
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+</div>
+<p>Now, this data should appear in our “Global Environment” in the top right corner of RStudio.</p>
+</section>
+</section>
+</section>
+</section>
+<section id="working-with-data-frames-or-tibbles-in-r" class="level1">
+<h1>Working with Data Frames or Tibbles in R</h1>
+<p>We can access columns in a tibble using the <code>$</code> operator. For example, if we want the <code>party</code> column from our <code>house</code> dataset, we can use the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>house<span class="sc">$</span>party</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will return the party column as a vector containing each candidate’s political party.</p>
+<p>We can also use <code>[]</code> operators to access specific columns and rows of our data. We use these brackets by specifying: <code>data[row,column]</code>. To access columns, we can use either the number of the column we are interested in or the name, and both will give the same output:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>house[,<span class="st">"party"</span>]</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>house[,<span class="dv">1</span>]</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>house<span class="sc">$</span>party</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Say we want the second row of the data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>house[<span class="dv">2</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 8
+  party state district incumbent_challenge_full receipts disburs…¹ last  votes…²
+  &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                       &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
+1 DEM   AL           1 Open seat                  80095.    78973. AVER…    35.5
+# … with abbreviated variable names ¹​disbursements, ²​voteshare</code></pre>
+</div>
+</div>
+<p>Finally, what if we want the second value of the party column of our data?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>house[<span class="dv">2</span>, <span class="st">'party'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  party
+  &lt;chr&gt;
+1 DEM  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>house<span class="sc">$</span>party[<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "DEM"</code></pre>
+</div>
+</div>
+</section>
+<section id="main-types-of-data-in-r" class="level1">
+<h1>Main Types of Data in R</h1>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 31%">
+<col style="width: 57%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Types of Data</th>
+<th style="text-align: left;">R Types</th>
+<th style="text-align: left;">Ways to Summarize</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Numeric</td>
+<td style="text-align: left;">integer (<code>int</code>), double (<code>dbl</code>)</td>
+<td style="text-align: left;"><code>mean</code>, <code>median</code>, <code>min</code>, <code>max</code>, <code>range</code>, <code>IQR</code>, <code>sd</code>, <code>var</code>, <code>summary</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Categorical</td>
+<td style="text-align: left;">character (<code>chr</code>), factor (<code>fct</code>)</td>
+<td style="text-align: left;"><code>table</code>, <code>prop.table</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Logical</td>
+<td style="text-align: left;">logical (<code>lgl</code>), <code>TRUE</code>, <code>FALSE</code>, <code>NA</code></td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<section id="categorical-data" class="level2">
+<h2 class="anchored" data-anchor-id="categorical-data">Categorical Data</h2>
+<p>In political science, we often treat categorical data or data that comes as a string/character variable as a factor variable. A factor variable is a way of storing this data in categories. We can create them using the <code>factor()</code> command.</p>
+<p>Try turning the party variable in our house dataset into a factor:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">factor</span>(house<span class="sc">$</span>party)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>It is important to note that factors are stored in alphabetical or numeric order by default–though we often want to specify a different order.</p>
+<p>We can use the “levels” argument of the <code>factor()</code> command to accomplish this.</p>
+<p>Say we want to organize our house party factor in reverse alphabetical order, we could do that like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">factor</span>(house<span class="sc">$</span>party, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"REP"</span>, <span class="st">"DEM"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note about the levels argument: the levels must be spelled <strong>exactly</strong> the same as in the data. Additionally, you must have the same number of levels as there are categories in the data. This is where it can help to determine the specific levels of the categorical variable using <code>unique(variable)</code>.</p>
+<section id="summarizing-factor-variables" class="level3">
+<h3 class="anchored" data-anchor-id="summarizing-factor-variables">Summarizing Factor Variables</h3>
+<p>Since factor variables are in categories (i.e., are not numeric), we need to take a different approach to summarizing. We generally do this by looking at a table of our data. Tables tell us how many observations are in each category of our data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(house<span class="sc">$</span>party)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+DEM REP 
+378 348 </code></pre>
+</div>
+</div>
+<p>Sometimes, we might also want to know what proportion of observations falls into each category. We can calculate this using the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(<span class="fu">table</span>(house<span class="sc">$</span>party))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+      DEM       REP 
+0.5206612 0.4793388 </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="logical-data-in-r" class="level2">
+<h2 class="anchored" data-anchor-id="logical-data-in-r">Logical Data in R</h2>
+<p>Another type of common data in R is “logical” data in R. There are three values logical data can take on: (1) <code>TRUE</code>, (2) <code>FALSE</code>, and (3) <code>NA</code>.</p>
+<p><code>TRUE</code> indicates that some condition is met, or “true.” <code>FALSE</code> indicates that some condition is not met, or is “false.” Finally, <code>NA</code> indicates that the data are missing.</p>
+<p>R will check whether various conditions are met for us. We can do this using logical operators:</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Logical Operator</th>
+<th style="text-align: left;">Task</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>==</code></td>
+<td style="text-align: left;">equal to</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>!=</code></td>
+<td style="text-align: left;">not equal to</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>&lt;</code></td>
+<td style="text-align: left;">less than</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>&gt;</code></td>
+<td style="text-align: left;">greater than</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>&lt;=</code></td>
+<td style="text-align: left;">less than or equal to</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>&gt;=</code></td>
+<td style="text-align: left;">greater than or equal to</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>!</code></td>
+<td style="text-align: left;">not</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>%in%</code></td>
+<td style="text-align: left;">in</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>If we’d like to check whether 2 is equal to 3, we can use this code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">==</span><span class="dv">3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+</div>
+<p>R checks whether this is true, and returns <code>FALSE</code> because it’s not true.</p>
+<p>How about whether 2 is less than or equal to 3?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">&lt;=</span><span class="dv">3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<p>What if we have a vector of integers between 1 and and 7 called x, and we want to check whether the number 3 is in this vector?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span><span class="sc">%in%</span>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<p>Logical conditions like these are useful for taking portions/subsets of our data to which a certain condition applies. For example, in our house data, we can take only the rows for Democratic candidates:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>house[house<span class="sc">$</span>party<span class="sc">==</span><span class="st">"DEM"</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 378 × 8
+   party state district incumbent_challenge_full receipts disbur…¹ last  votes…²
+   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                       &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
+ 1 DEM   AL           1 Open seat                  80095.   78973. AVER…    35.5
+ 2 DEM   AL           2 Open seat                  57723.   57661. HARV…    34.7
+ 3 DEM   AL           7 Incumbent                2171040. 1498832. SEWE…    97.2
+ 4 DEM   CA           7 Incumbent                1830741. 1126436. BERA     56.6
+ 5 DEM   CA           4 Challenger               3022017. 3018529. KENN…    44.1
+ 6 DEM   CA           8 Open seat                1878106. 1876718. BUBS…    43.9
+ 7 DEM   CA          11 Incumbent                 612404.  442547. DESA…    73.0
+ 8 DEM   CA           3 Incumbent                1103806.  717060. GARA…    54.7
+ 9 DEM   CA          18 Challenger                777037.  697543. KUMAR    36.8
+10 DEM   CA          22 Challenger               5175373. 5146107. ARBA…    45.8
+# … with 368 more rows, and abbreviated variable names ¹​disbursements,
+#   ²​voteshare</code></pre>
+</div>
+</div>
+<p>This code will give you the same output:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>house[house<span class="sc">$</span>party<span class="sc">!=</span><span class="st">"REP"</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can also look only at candidates who received more than 50% of the vote:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>house[house<span class="sc">$</span>voteshare<span class="sc">&gt;</span><span class="dv">50</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 380 × 8
+   party state district incumbent_challenge_full  receipts disbu…¹ last  votes…²
+   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                        &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
+ 1 REP   AL           1 Open seat                 2344517.  2.23e6 CARL     64.4
+ 2 REP   AL           5 Incumbent                  669026.  2.24e5 BROO…    95.8
+ 3 DEM   AL           7 Incumbent                 2171040.  1.50e6 SEWE…    97.2
+ 4 REP   AR           1 Incumbent                  966801.  1.10e6 CRAW…   100  
+ 5 DEM   CA           7 Incumbent                 1830741.  1.13e6 BERA     56.6
+ 6 REP   CA           8 Open seat                 2028339.  1.96e6 OBER…    56.1
+ 7 DEM   CA          11 Incumbent                  612404.  4.43e5 DESA…    73.0
+ 8 DEM   CA           3 Incumbent                 1103806.  7.17e5 GARA…    54.7
+ 9 REP   CA          25 Incumbent                10140614.  9.76e6 GARC…    50.0
+10 DEM   CA          28 Incumbent                19598363.  1.04e7 SCHI…    72.7
+# … with 370 more rows, and abbreviated variable names ¹​disbursements,
+#   ²​voteshare</code></pre>
+</div>
+</div>
+<section id="evaluating-multiple-logical-conditions" class="level3">
+<h3 class="anchored" data-anchor-id="evaluating-multiple-logical-conditions">Evaluating Multiple Logical Conditions</h3>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Operator</th>
+<th style="text-align: left;">Task</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">&amp;</td>
+<td style="text-align: left;">AND</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">|</td>
+<td style="text-align: left;">OR</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>For example, we can get only the observations in our dataset for Democrats who received more than 50% of the vote.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>house[house<span class="sc">$</span>party<span class="sc">==</span><span class="st">"DEM"</span><span class="sc">&amp;</span>house<span class="sc">$</span>voteshare<span class="sc">&gt;</span><span class="dv">50</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 192 × 8
+   party state district incumbent_challenge_full  receipts disbu…¹ last  votes…²
+   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                        &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
+ 1 DEM   AL           7 Incumbent                 2171040.  1.50e6 SEWE…    97.2
+ 2 DEM   CA           7 Incumbent                 1830741.  1.13e6 BERA     56.6
+ 3 DEM   CA          11 Incumbent                  612404.  4.43e5 DESA…    73.0
+ 4 DEM   CA           3 Incumbent                 1103806.  7.17e5 GARA…    54.7
+ 5 DEM   CA          28 Incumbent                19598363.  1.04e7 SCHI…    72.7
+ 6 DEM   CA          27 Incumbent                 1220538.  9.63e5 CHU      69.8
+ 7 DEM   CA          37 Incumbent                 2233947.  1.22e6 BASS     85.9
+ 8 DEM   CT           3 Incumbent                 1956686.  1.81e6 DELA…    56.1
+ 9 DEM   DC           0 Incumbent                  387489.  3.59e5 NORT…    81.9
+10 DEM   FL          24 Incumbent                  412592.  3.21e5 WILS…    75.6
+# … with 182 more rows, and abbreviated variable names ¹​disbursements,
+#   ²​voteshare</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="exercises" class="level2">
+<h2 class="anchored" data-anchor-id="exercises">Exercises</h2>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Answer</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<ol type="1">
+<li>Find the average vote share of candidates in the 2020 elections dataset.</li>
+</ol>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<ol type="1">
+<li>Find the average vote share of candidates in the 2020 elections dataset.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(house<span class="sc">$</span>voteshare)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 51.15903</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Answer</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<ol start="2" type="1">
+<li>What is the median amount of money spent by candidates in 2020?</li>
+</ol>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<ol start="2" type="1">
+<li>What is the median amount of money spent by candidates in 2020?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(house<span class="sc">$</span>disbursements)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1141486</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">Answer</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<ol start="3" type="1">
+<li>What are three ways we could summarize how spread out campaign fundraising is (look at spending here)?</li>
+</ol>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<ol start="3" type="1">
+<li>What are three ways we could summarize how spread out campaign fundraising is (look at spending here)?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">range</span>(house<span class="sc">$</span>receipts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]     3065.2 38160641.6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">IQR</span>(house<span class="sc">$</span>receipts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2228867</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(house<span class="sc">$</span>receipts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3251062</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(house<span class="sc">$</span>receipts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.05694e+13</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false" href="">Answer</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<ol start="4" type="1">
+<li>What’s one command we could use to get an overview of many summary statistics for our voteshare column?</li>
+</ol>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<ol start="4" type="1">
+<li>What’s one command we could use to get an overview of many summary statistics for our voteshare column?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(house<span class="sc">$</span>voteshare)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  2.168  38.045  51.104  51.159  63.713 100.000 </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false" href="">Answer</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<ol start="5" type="1">
+<li>Take the <code>incumbent_challenge_full</code> variable. Turn it into a factor, and order the levels in this order “Incumbents”, “Challengers”, and “Open-Seat Candidates.” Make a proportion table from this factor variable.</li>
+</ol>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<ol start="5" type="1">
+<li>Take the <code>incumbent_challenge_full</code> variable. Turn it into a factor, and order the levels in this order “Incumbents”, “Challengers”, and “Open-Seat Candidates.” Make a proportion table from this factor variable.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">factor</span>(house<span class="sc">$</span>incumbent_challenge_full, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Incumbent"</span>, <span class="st">"Challenger"</span>,</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>                                                  <span class="st">"Open seat"</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prop.table</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>.
+ Incumbent Challenger  Open seat 
+0.48898072 0.41597796 0.09504132 </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false" href="">Answer</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<ol start="6" type="1">
+<li>Subset the data so that we only have rows for incumbents OR candidates who received more than 60% of the vote.</li>
+</ol>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+<ol start="6" type="1">
+<li>Subset the data so that we only have rows for incumbents OR candidates who received more than 60% of the vote.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>house[house<span class="sc">$</span>incumbent_challenge_full<span class="sc">==</span><span class="st">"Incumbent"</span><span class="sc">|</span>house<span class="sc">$</span>voteshare<span class="sc">&gt;</span><span class="dv">60</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 374 × 8
+   party state district incumbent_challenge_full  receipts disbu…¹ last  votes…²
+   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                        &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
+ 1 REP   AL           1 Open seat                 2344517.  2.23e6 CARL     64.4
+ 2 REP   AL           5 Incumbent                  669026.  2.24e5 BROO…    95.8
+ 3 DEM   AL           7 Incumbent                 2171040.  1.50e6 SEWE…    97.2
+ 4 REP   AR           1 Incumbent                  966801.  1.10e6 CRAW…   100  
+ 5 DEM   CA           7 Incumbent                 1830741.  1.13e6 BERA     56.6
+ 6 DEM   CA          11 Incumbent                  612404.  4.43e5 DESA…    73.0
+ 7 DEM   CA           3 Incumbent                 1103806.  7.17e5 GARA…    54.7
+ 8 REP   CA          25 Incumbent                10140614.  9.76e6 GARC…    50.0
+ 9 DEM   CA          28 Incumbent                19598363.  1.04e7 SCHI…    72.7
+10 DEM   CA          27 Incumbent                 1220538.  9.63e5 CHU      69.8
+# … with 364 more rows, and abbreviated variable names ¹​disbursements,
+#   ²​voteshare</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

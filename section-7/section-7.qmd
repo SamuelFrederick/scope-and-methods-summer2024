@@ -1,0 +1,324 @@
+---
+title: "Section 7. Tables, Chi-Squared Tests, and Correlations"
+author: "Sam Frederick"
+date: "June 12, 2023"
+format: 
+  html: 
+    code-copy: true
+    toc: true
+---
+
+```{r echo = F}
+knitr::opts_knit$set(root.dir ="/Users/samfrederick/scope-and-methods-summer2023/")
+knitr::opts_chunk$set(root.dir = "/Users/samfrederick/scope-and-methods-summer2023/")
+```
+
+```{r echo = F, message = F}
+library(tidyverse)
+house <- read_csv("house2020_elections.csv")
+# ces <- read_csv("CES20_Common_OUTPUT_vv.csv")
+# set.seed(123593)
+# ces <- ces[sample(1:nrow(ces), 1000, replace = T), ] |> 
+  # select(!...1)
+ces <- read_csv("ces2020_example.csv")
+```
+
+# Preliminary Data Cleaning
+
+First, we want to read in our data from the Cooperative Election Study conducted in 2020. We select the three variables we will use for our analyses (`ideo5`, `pid3`, and `commonweight`). Next, we use the `mutate()` function to give our ideology and party variables comprehensible labels. 
+
+```{r message = F}
+ces <- read_csv("ces2020_example.csv")
+ces <- ces %>% 
+  select(ideo5, pid3, commonweight) %>%
+  mutate(ideology = factor(ideo5, 
+                           labels = c("Very liberal", 
+                                      "Liberal", 
+                                      "Moderate", 
+                                      "Conservative", 
+                                      "Very Conservative", 
+                                      "Not Sure")), 
+         party = factor(pid3, 
+                        labels = c("Democrat", 
+                                   "Republican", 
+                                   "Independent", 
+                                   "Other", 
+                                   "Not Sure")))
+```
+
+# Review
+
+## Review of Hypothesis Testing
+
+We usually start with our hypothesis, which is known as the alternative hypothesis, that some statistic is not equal to 0 or is greater than or less than 0. Implicit in this hypothesis is what is known as the null hypothesis: that the statistic we are interested in is equal to 0. 
+
+There are two main types of alternative hypotheses: two-sided and one-sided. Two-sided hypotheses are of the form: $A\not=B$. 
+
+For example:
+
+- $H_0$: The difference between the means for group A and group B is 0.  
+- $H_A$: The difference between the means for group A and group B is not 0. 
+
+One-sided hypotheses are of the form: $A>B$ or $A<B$. 
+
+For example: 
+
+- $H_0$: The difference between the means for group A and group B is 0. 
+- $H_A$: The mean for group A is greater than the mean for group B. 
+
+## Review of t-tests
+
+Under the Central Limit Theorem, the statistic $Z = \frac{\bar{X}-\mu}{\sigma/\sqrt{n}}$ is distributed approximately standard normal as the sample size increases. 
+
+This allows us to conduct a test of the null hypothesis (as discussed above), under the assumption that the null hypothesis is true. If our null hypothesis is true, the statistic $Z = \frac{\bar{X} - \mu_0}{\sigma/\sqrt{n}}$, where $\mu_0$ is the population value under the null hypothesis, will be distributed approximately standard normal with larger sample sizes. 
+
+We can calculate this statistic using our observed data, and as a result of the Central Limit Theorem, we can calculate the probability that we observe a value of this statistic at least as large in magnitude as the one we actually observe ***if the null hypothesis is true***. 
+
+This probability of observing a value at least as large as that actually observed if the null hypothesis is true is known as the ***p-value***. 
+
+### The t-distribution
+
+Because we have small sample sizes and usually don't know the true value of $\sigma$, we usually use the t-distribution instead of the normal distribution. 
+
+The t-distribution is more conservative than the normal distribution (there is more probability in the tails of the distribution, so it is less likely we reject the null hypothesis using the t-distribution). This helps us account for the uncertainty from the small sample sizes and our estimation of the standard deviation. 
+
+```{r echo = F}
+tibble(x = seq(-5, 5, length.out=100)) |> 
+  ggplot(aes(x)) + 
+  stat_function(aes(color = "Normal Distribution"), 
+                fun = dnorm, args = list(mean = 0, sd = 1)) + 
+  stat_function(aes(color = "T-Distribution, 1 DF"), 
+                fun = dt, args = list(df = 1))+ 
+  stat_function(aes(color = "T-Distribution, 5 DF"), 
+                fun = dt, args = list(df = 5))+ 
+  stat_function(aes(color = "T-Distribution, 10 DF"), 
+                fun = dt, args = list(df = 10)) + 
+  scale_color_discrete(limits = c("Normal Distribution", 
+                                  "T-Distribution, 1 DF", 
+                                  "T-Distribution, 5 DF", 
+                                  "T-Distribution, 10 DF"))+
+  labs(x = "X", y = "Density")
+```
+
+### Weighted t-tests
+
+One of the things that is important to remember is that we have to apply survey weights when we are analyzing survey data. Applying the weights will ensure that our survey samples (which may not be representative of the population) will be representative of the population. 
+
+To apply weights when we are conducting t-tests, we should use the `weights` package in R. 
+
+```{r eval = F}
+install.packages("weights")
+```
+
+```{r, message =F}
+library(weights)
+dem.sub <- ces%>% filter(party=="Democrat"&ideo5!=6) 
+rep.sub <- ces %>% filter(party=="Republican"&ideo5!=6)
+wtd.t.test(x = dem.sub$ideo5, 
+           y = rep.sub$ideo5, 
+           weight = dem.sub$commonweight, 
+           weighty = rep.sub$commonweight, 
+           samedata = FALSE,
+           alternative = "two.sided")
+```
+
+# Tables in R
+
+We talked a bit about tables earlier in the semester. Tables are very helpful for summarizing categorical data. We can get the number of observations that fall into a given category or the proportion of observations that fall into each category. 
+
+## Tables: `table()` and `prop.table()`
+
+We can calculate basic tables in R using the `table()` function, as we saw a while ago. For example, if we want to discover the number of respondents in each ideological category in each party group, we can use the `table()` function. 
+
+```{r}
+table(ces$party, ces$ideology)
+```
+We can also calculate the proportion of respondents in each category using the `prop.table()` function. 
+
+```{r}
+prop.table(table(ces$party, ces$ideology))
+```
+
+Remember, we can round these numbers too. 
+
+```{r}
+prop.table(table(ces$party, ces$ideology)) %>%
+  round(digits = 3)
+```
+
+
+## `CrossTable()`
+
+There are a variety of packages that can be used to create nicer looking tables. One of these packages is `gmodels`. Within `gmodels`, there is a function called `CrossTable()` which can generate aesthetically pleasing cross tables. 
+
+```{r eval = F}
+install.packages("gmodels")
+```
+
+
+```{r message = F}
+library(gmodels)
+CrossTable(ces$ideology, 
+           ces$party, 
+           digits = 3, 
+           prop.chisq = FALSE)
+```
+
+If we also want to perform a Chi-Squared test of independence, we can do so using the `chisq` argument:
+
+```{r}
+CrossTable(ces$ideology, 
+           ces$party, 
+           digits = 3, 
+           prop.chisq = FALSE, 
+           chisq = TRUE)
+```
+
+The `CrossTable()` function also allows us to see what the "expected" values in each cell are under the null hypothesis if we use the `expected` argument. 
+
+```{r}
+CrossTable(ces$ideology, 
+           ces$party, 
+           digits = 3, 
+           prop.chisq = FALSE, 
+           chisq = TRUE, 
+           expected = TRUE)
+```
+
+### Chi-Squared Tests
+
+We test the null hypothesis that our categorical variables are independent using the Chi-Squared test statistic and the Chi-Squared distribution. 
+
+As a reminder, the Chi-Squared test statistic is $\chi^2 = \sum_{k=1}^K \frac{(Observed_k - Expected_k)^2}{Expected_k}$ where $k$ indicates a given cell. The expected value in a given cell under the null hypothesis is the row total times the column total divided by the total number of observations. 
+
+Finally, under the null hypothesis, our $\chi^2$ statistic will be distributed according to the $\chi^2$ distribution with $g$ degrees of freedom. $g$ is calculated by multiplying the number of rows minus 1 by the number of columns minus 1. Above, the degrees of freedom will be 20, leading to a Chi-Squared distribution that looks like this:
+
+```{r echo = F}
+tibble(x = seq(0, 50, length.out = 1000)) %>%
+  ggplot(aes(x)) + 
+  stat_function(fun = dchisq, args = list(df = 20)) + 
+  labs(x = "X", y = "Density", 
+       title = "Chi-Squared Distribution with 20 Degrees of Freedom")
+```
+
+
+### Unweighted Chi-Squared Test
+
+If we just want to conduct a Chi-Squared test, we can do so using the `chisq.test()` function. 
+
+```{r}
+chisq.test(ces$ideology, 
+           ces$party)
+```
+
+**The Problem:** the `chisq.test()` function does not apply survey weights. 
+
+### Weighted Chi-Squared Test
+
+If we want to conduct a weighted Chi-Squared test (which we should if our dataset contains weights), we should turn to the `weights` package. In the `weights` package, there is a `wtd.chi.sq()` function which allows us to easily apply weights.
+
+```{r eval = F}
+library(weights)
+```
+
+
+```{r}
+wtd.chi.sq(var1 = ces$ideology, 
+           var2 = ces$party, 
+           weight = ces$commonweight)
+```
+
+## Counting numbers in groups: `count()`
+
+Another way to obtain a table is using the `count()` function in `dplyr`. One of the nice things about the count function is that it allows us to obtain the weighted number of observations in each category using the `wt` argument.
+
+```{r}
+ces %>%
+  count(ideology, wt = commonweight)
+```
+
+To see how important weights are, we can compare to the unweighted counts: 
+
+```{r}
+ces %>%
+  count(ideology)
+```
+
+## `gt`
+
+Finally, there are many packages in R that can be used to generate nice tables. The one we'll talk about is `gt`. 
+
+```{r eval = F}
+install.packages("gt")
+```
+
+```{r message = F}
+library(gt)
+ces %>% 
+  group_by(party) %>%
+  count(ideology, wt = commonweight) %>% 
+  gt(groupname_col = "pid3") %>%
+  opt_row_striping(row_striping = T)
+```
+
+# Correlation Coefficients
+
+Turning back to our dataset of House election results and campaign finance data from 2020, we can think about how we might summarize the relationship between two numeric variables. 
+
+We generally use what is known as the correlation coefficient to summarize bivariate relationships between two numeric variables. 
+
+The correlation coefficient is calculated as follows:
+
+$\frac{Cov(X, Y)}{\sqrt{Var(X)*Var(Y)}} = \frac{\sum_{i=1}^{n}(X_i - \bar{X})*(Y_i - \bar{Y})}{\sqrt{\sum_{i = 1}^{n} (X_i - \bar{X})^2 * \sum_{i=1}^n(Y_i - \bar{Y})^2}}$
+
+You can think of this as roughly the share of the variation in the two variables that is captured by the co-variation in the two variables. 
+
+Correlation coefficients run from -1 to 1, where -1 is a perfect negative relationship and 1 is a perfect positive relationship. 0 indicates that there is no relationship between the variables. 
+
+Note: a positive relationship means that, as X increases, Y tends to increase as well. A negative relationship means that, as X increases, Y tends to decrease. 
+
+We can easily calculate the correlation in R using the `cor()` function. 
+
+```{r}
+cor(log(house$disbursements), house$voteshare)
+```
+
+We can see this is the same as if we actually calculated the correlation coefficient by hand:
+
+```{r}
+cov(log(house$disbursements), house$voteshare)/
+  sqrt(var(log(house$disbursements))*var(house$voteshare))
+```
+
+To conduct an actual hypothesis test, we need to use the `cor.test()` function. 
+
+```{r}
+cor.test(log(house$disbursements), house$voteshare)
+```
+
+This is just a t-test where the t-statistic is calculated as follows:
+
+```{r}
+r <- cor(log(house$disbursements), house$voteshare)
+(r - 0)/(sqrt((1-r^2)/(nrow(house)-2)))
+```
+
+We can confirm that the t-statistic we calculated by hand matches the t-statistic from the `cor.test()` function. 
+
+## Weighted Correlation Coefficients
+
+If we are working with survey data or data with observation weights, we want to apply those weights in calculating the correlation coefficient. 
+
+We can do this using the `weights` package and the `wtd.cor()` function. 
+
+```{r eval = F}
+library(weights)
+wtd.cor(x = var1, 
+        y = var2, 
+        weight = weight)
+```
+
+
+
+
+
