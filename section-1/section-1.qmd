@@ -370,11 +370,11 @@ data <- read.csv("example_data.csv")
 
 - Types of objects in R
 
-- If statements
+<!-- - If statements -->
 
 - Summarizing data
 
 - Missing data
 
-- For loops
+<!-- - For loops -->
 
