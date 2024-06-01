@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Sam Frederick">
-<meta name="dcterms.date" content="2023-06-02">
+<meta name="dcterms.date" content="2024-05-31">
 
 <title>Section 4. Introduction to dplyr</title>
 <style>
@@ -145,7 +145,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 2, 2023</p>
+      <p class="date">May 31, 2024</p>
     </div>
   </div>
   
@@ -172,20 +172,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(party<span class="sc">==</span><span class="st">"REP"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 348 × 8
-   party state district incumbent_challenge_full receipts disbur…¹ last  votes…²
-   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                       &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
- 1 REP   AL           1 Open seat                2344517. 2232544. CARL    64.4 
- 2 REP   AL           5 Incumbent                 669026.  223707. BROO…   95.8 
- 3 REP   AR           1 Incumbent                 966801. 1095518. CRAW…  100   
- 4 REP   CA           3 Challenger                397099.  384584. HAMI…   45.3 
- 5 REP   CA           6 Challenger                 45504.   45286. BISH    26.7 
- 6 REP   CA           7 Challenger                 81732.   67330. PATT…   43.4 
- 7 REP   CA           8 Open seat                2028339. 1958786. OBER…   56.1 
- 8 REP   CA           9 Challenger                 52225    52225  AMAD…   42.4 
- 9 REP   CA          13 Challenger                  9879.    9944. PITE…    9.63
-10 REP   CA          11 Open seat                 186079.  182995. SHAR…   27.0 
-# … with 338 more rows, and abbreviated variable names ¹​disbursements,
-#   ²​voteshare</code></pre>
+   party state district incumbent_challenge_full receipts disbursements last    
+   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                       &lt;dbl&gt;         &lt;dbl&gt; &lt;chr&gt;   
+ 1 REP   AL           1 Open seat                2344517.      2232544. CARL    
+ 2 REP   AL           5 Incumbent                 669026.       223707. BROOKS  
+ 3 REP   AR           1 Incumbent                 966801.      1095518. CRAWFORD
+ 4 REP   CA           3 Challenger                397099.       384584. HAMILTON
+ 5 REP   CA           6 Challenger                 45504.        45286. BISH    
+ 6 REP   CA           7 Challenger                 81732.        67330. PATTERS…
+ 7 REP   CA           8 Open seat                2028339.      1958786. OBERNOL…
+ 8 REP   CA           9 Challenger                 52225         52225  AMADOR  
+ 9 REP   CA          13 Challenger                  9879.         9944. PITERMAN
+10 REP   CA          11 Open seat                 186079.       182995. SHARMA  
+# ℹ 338 more rows
+# ℹ 1 more variable: voteshare &lt;dbl&gt;</code></pre>
 </div>
 </div>
 <p>We can use it to get Republicans who received more than 50% of the vote in Texas:</p>
@@ -194,20 +194,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(party<span class="sc">==</span><span class="st">"REP"</span><span class="sc">&amp;</span>voteshare<span class="sc">&gt;</span><span class="dv">50</span><span class="sc">&amp;</span>state<span class="sc">==</span><span class="st">"TX"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 21 × 8
-   party state district incumbent_challenge_full receipts disbur…¹ last  votes…²
-   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                       &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
- 1 REP   TX           4 Challenger                257176.   95068. FALL…    75.1
- 2 REP   TX          11 Open seat                2598806. 2004400. PFLU…    79.7
- 3 REP   TX          13 Open seat                2151194. 1764055. JACK…    79.4
- 4 REP   TX          22 Open seat                1818077. 1798160. NEHLS    51.5
- 5 REP   TX          23 Open seat                2882972. 2851613. GONZ…    50.6
- 6 REP   TX          17 Open seat                1485909. 1696588. SESS…    55.9
- 7 REP   TX          25 Incumbent                2446005. 3358151. WILL…    55.9
- 8 REP   TX          26 Incumbent                1827226. 2102030. BURG…    60.6
- 9 REP   TX          31 Incumbent                2168868. 2223167. CART…    53.4
-10 REP   TX           1 Incumbent                 564861.  592388. GOHM…    72.6
-# … with 11 more rows, and abbreviated variable names ¹​disbursements,
-#   ²​voteshare</code></pre>
+   party state district incumbent_challenge_full receipts disbursements last    
+   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                       &lt;dbl&gt;         &lt;dbl&gt; &lt;chr&gt;   
+ 1 REP   TX           4 Challenger                257176.        95068. FALLON  
+ 2 REP   TX          11 Open seat                2598806.      2004400. PFLUGER 
+ 3 REP   TX          13 Open seat                2151194.      1764055. JACKSON 
+ 4 REP   TX          22 Open seat                1818077.      1798160. NEHLS   
+ 5 REP   TX          23 Open seat                2882972.      2851613. GONZALES
+ 6 REP   TX          17 Open seat                1485909.      1696588. SESSIONS
+ 7 REP   TX          25 Incumbent                2446005.      3358151. WILLIAMS
+ 8 REP   TX          26 Incumbent                1827226.      2102030. BURGESS 
+ 9 REP   TX          31 Incumbent                2168868.      2223167. CARTER  
+10 REP   TX           1 Incumbent                 564861.       592388. GOHMERT 
+# ℹ 11 more rows
+# ℹ 1 more variable: voteshare &lt;dbl&gt;</code></pre>
 </div>
 </div>
 <p>Often, we want to store these subsets for later analysis, so we can create a new variable. For our Republican subset, we could run the following code:</p>
@@ -237,7 +237,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  8 Challenger                    45.3
  9 Challenger                    44.1
 10 Challenger                    26.7
-# … with 716 more rows</code></pre>
+# ℹ 716 more rows</code></pre>
 </div>
 </div>
 </section>
@@ -263,7 +263,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  8 REP   CA           3 Challenger  397099.  384584. HAMILTON         45.3
  9 DEM   CA           4 Challenger 3022017. 3018529. KENNEDY          44.1
 10 REP   CA           6 Challenger   45504.   45286. BISH             26.7
-# … with 716 more rows</code></pre>
+# ℹ 716 more rows</code></pre>
 </div>
 </div>
 </section>
@@ -277,20 +277,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Incumbent"</span>, <span class="st">"Challenger"</span>, <span class="st">"Open seat"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 726 × 8
-   party state district incumbent_challenge_full receipts disbur…¹ last  votes…²
-   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;fct&gt;                       &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
- 1 REP   AL           1 Open seat                2344517. 2232544. CARL     64.4
- 2 DEM   AL           1 Open seat                  80095.   78973. AVER…    35.5
- 3 DEM   AL           2 Open seat                  57723.   57661. HARV…    34.7
- 4 REP   AL           5 Incumbent                 669026.  223707. BROO…    95.8
- 5 DEM   AL           7 Incumbent                2171040. 1498832. SEWE…    97.2
- 6 REP   AR           1 Incumbent                 966801. 1095518. CRAW…   100  
- 7 DEM   CA           7 Incumbent                1830741. 1126436. BERA     56.6
- 8 REP   CA           3 Challenger                397099.  384584. HAMI…    45.3
- 9 DEM   CA           4 Challenger               3022017. 3018529. KENN…    44.1
-10 REP   CA           6 Challenger                 45504.   45286. BISH     26.7
-# … with 716 more rows, and abbreviated variable names ¹​disbursements,
-#   ²​voteshare</code></pre>
+   party state district incumbent_challenge_full receipts disbursements last    
+   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;fct&gt;                       &lt;dbl&gt;         &lt;dbl&gt; &lt;chr&gt;   
+ 1 REP   AL           1 Open seat                2344517.      2232544. CARL    
+ 2 DEM   AL           1 Open seat                  80095.        78973. AVERHART
+ 3 DEM   AL           2 Open seat                  57723.        57661. HARVEY-…
+ 4 REP   AL           5 Incumbent                 669026.       223707. BROOKS  
+ 5 DEM   AL           7 Incumbent                2171040.      1498832. SEWELL  
+ 6 REP   AR           1 Incumbent                 966801.      1095518. CRAWFORD
+ 7 DEM   CA           7 Incumbent                1830741.      1126436. BERA    
+ 8 REP   CA           3 Challenger                397099.       384584. HAMILTON
+ 9 DEM   CA           4 Challenger               3022017.      3018529. KENNEDY 
+10 REP   CA           6 Challenger                 45504.        45286. BISH    
+# ℹ 716 more rows
+# ℹ 1 more variable: voteshare &lt;dbl&gt;</code></pre>
 </div>
 </div>
 <p>We can also change the labels of our party variable:</p>
@@ -299,20 +299,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">party =</span> <span class="fu">factor</span>(party, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Democrat"</span>, <span class="st">"Republican"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 726 × 8
-   party      state district incumbent_challenge…¹ recei…² disbu…³ last  votes…⁴
-   &lt;fct&gt;      &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
- 1 Republican AL           1 Open seat              2.34e6  2.23e6 CARL     64.4
- 2 Democrat   AL           1 Open seat              8.01e4  7.90e4 AVER…    35.5
- 3 Democrat   AL           2 Open seat              5.77e4  5.77e4 HARV…    34.7
- 4 Republican AL           5 Incumbent              6.69e5  2.24e5 BROO…    95.8
- 5 Democrat   AL           7 Incumbent              2.17e6  1.50e6 SEWE…    97.2
- 6 Republican AR           1 Incumbent              9.67e5  1.10e6 CRAW…   100  
- 7 Democrat   CA           7 Incumbent              1.83e6  1.13e6 BERA     56.6
- 8 Republican CA           3 Challenger             3.97e5  3.85e5 HAMI…    45.3
- 9 Democrat   CA           4 Challenger             3.02e6  3.02e6 KENN…    44.1
-10 Republican CA           6 Challenger             4.55e4  4.53e4 BISH     26.7
-# … with 716 more rows, and abbreviated variable names
-#   ¹​incumbent_challenge_full, ²​receipts, ³​disbursements, ⁴​voteshare</code></pre>
+   party      state district incumbent_challenge_…¹ receipts disbursements last 
+   &lt;fct&gt;      &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                     &lt;dbl&gt;         &lt;dbl&gt; &lt;chr&gt;
+ 1 Republican AL           1 Open seat              2344517.      2232544. CARL 
+ 2 Democrat   AL           1 Open seat                80095.        78973. AVER…
+ 3 Democrat   AL           2 Open seat                57723.        57661. HARV…
+ 4 Republican AL           5 Incumbent               669026.       223707. BROO…
+ 5 Democrat   AL           7 Incumbent              2171040.      1498832. SEWE…
+ 6 Republican AR           1 Incumbent               966801.      1095518. CRAW…
+ 7 Democrat   CA           7 Incumbent              1830741.      1126436. BERA 
+ 8 Republican CA           3 Challenger              397099.       384584. HAMI…
+ 9 Democrat   CA           4 Challenger             3022017.      3018529. KENN…
+10 Republican CA           6 Challenger               45504.        45286. BISH 
+# ℹ 716 more rows
+# ℹ abbreviated name: ¹​incumbent_challenge_full
+# ℹ 1 more variable: voteshare &lt;dbl&gt;</code></pre>
 </div>
 </div>
 </section>
@@ -337,20 +338,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">democrat =</span> <span class="fu">ifelse</span>(party<span class="sc">==</span><span class="st">"DEM"</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 726 × 9
-   party state district incumbent_challe…¹ recei…² disbu…³ last  votes…⁴ democ…⁵
-   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;
- 1 REP   AL           1 Open seat           2.34e6  2.23e6 CARL     64.4       0
- 2 DEM   AL           1 Open seat           8.01e4  7.90e4 AVER…    35.5       1
- 3 DEM   AL           2 Open seat           5.77e4  5.77e4 HARV…    34.7       1
- 4 REP   AL           5 Incumbent           6.69e5  2.24e5 BROO…    95.8       0
- 5 DEM   AL           7 Incumbent           2.17e6  1.50e6 SEWE…    97.2       1
- 6 REP   AR           1 Incumbent           9.67e5  1.10e6 CRAW…   100         0
- 7 DEM   CA           7 Incumbent           1.83e6  1.13e6 BERA     56.6       1
- 8 REP   CA           3 Challenger          3.97e5  3.85e5 HAMI…    45.3       0
- 9 DEM   CA           4 Challenger          3.02e6  3.02e6 KENN…    44.1       1
-10 REP   CA           6 Challenger          4.55e4  4.53e4 BISH     26.7       0
-# … with 716 more rows, and abbreviated variable names
-#   ¹​incumbent_challenge_full, ²​receipts, ³​disbursements, ⁴​voteshare, ⁵​democrat</code></pre>
+   party state district incumbent_challenge_full receipts disbursements last    
+   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                       &lt;dbl&gt;         &lt;dbl&gt; &lt;chr&gt;   
+ 1 REP   AL           1 Open seat                2344517.      2232544. CARL    
+ 2 DEM   AL           1 Open seat                  80095.        78973. AVERHART
+ 3 DEM   AL           2 Open seat                  57723.        57661. HARVEY-…
+ 4 REP   AL           5 Incumbent                 669026.       223707. BROOKS  
+ 5 DEM   AL           7 Incumbent                2171040.      1498832. SEWELL  
+ 6 REP   AR           1 Incumbent                 966801.      1095518. CRAWFORD
+ 7 DEM   CA           7 Incumbent                1830741.      1126436. BERA    
+ 8 REP   CA           3 Challenger                397099.       384584. HAMILTON
+ 9 DEM   CA           4 Challenger               3022017.      3018529. KENNEDY 
+10 REP   CA           6 Challenger                 45504.        45286. BISH    
+# ℹ 716 more rows
+# ℹ 2 more variables: voteshare &lt;dbl&gt;, democrat &lt;dbl&gt;</code></pre>
 </div>
 </div>
 <p>The problem is that, sometimes, we want to check more than one condition and create or modify variables based off of these multiple conditions. An example of this might be we want to create a categorical variable that combines information about both voteshare and party (we want a variable that tells us whether the candidate is a Democratic winner or loser or a Republican winner or loser).</p>
@@ -364,21 +365,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                                  T<span class="sc">~</span><span class="st">"Rep. Loser"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 726 × 9
-   party state district incumbent_challe…¹ recei…² disbu…³ last  votes…⁴ party…⁵
-   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  
- 1 REP   AL           1 Open seat           2.34e6  2.23e6 CARL     64.4 Rep. W…
- 2 DEM   AL           1 Open seat           8.01e4  7.90e4 AVER…    35.5 Dem. L…
- 3 DEM   AL           2 Open seat           5.77e4  5.77e4 HARV…    34.7 Dem. L…
- 4 REP   AL           5 Incumbent           6.69e5  2.24e5 BROO…    95.8 Rep. W…
- 5 DEM   AL           7 Incumbent           2.17e6  1.50e6 SEWE…    97.2 Dem. W…
- 6 REP   AR           1 Incumbent           9.67e5  1.10e6 CRAW…   100   Rep. W…
- 7 DEM   CA           7 Incumbent           1.83e6  1.13e6 BERA     56.6 Dem. W…
- 8 REP   CA           3 Challenger          3.97e5  3.85e5 HAMI…    45.3 Rep. L…
- 9 DEM   CA           4 Challenger          3.02e6  3.02e6 KENN…    44.1 Dem. L…
-10 REP   CA           6 Challenger          4.55e4  4.53e4 BISH     26.7 Rep. L…
-# … with 716 more rows, and abbreviated variable names
-#   ¹​incumbent_challenge_full, ²​receipts, ³​disbursements, ⁴​voteshare,
-#   ⁵​party_winner</code></pre>
+   party state district incumbent_challenge_full receipts disbursements last    
+   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                       &lt;dbl&gt;         &lt;dbl&gt; &lt;chr&gt;   
+ 1 REP   AL           1 Open seat                2344517.      2232544. CARL    
+ 2 DEM   AL           1 Open seat                  80095.        78973. AVERHART
+ 3 DEM   AL           2 Open seat                  57723.        57661. HARVEY-…
+ 4 REP   AL           5 Incumbent                 669026.       223707. BROOKS  
+ 5 DEM   AL           7 Incumbent                2171040.      1498832. SEWELL  
+ 6 REP   AR           1 Incumbent                 966801.      1095518. CRAWFORD
+ 7 DEM   CA           7 Incumbent                1830741.      1126436. BERA    
+ 8 REP   CA           3 Challenger                397099.       384584. HAMILTON
+ 9 DEM   CA           4 Challenger               3022017.      3018529. KENNEDY 
+10 REP   CA           6 Challenger                 45504.        45286. BISH    
+# ℹ 716 more rows
+# ℹ 2 more variables: voteshare &lt;dbl&gt;, party_winner &lt;chr&gt;</code></pre>
 </div>
 </div>
 <p>Note: if we want to save the variables we create, we need to assign the output of the pipe operations above to the house variable.</p>
