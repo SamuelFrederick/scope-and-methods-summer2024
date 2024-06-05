@@ -1,15 +1,15 @@
 ---
 title: "Section 6. Intro to t-tests"
 author: "Sam Frederick"
-date: "June 7, 2023"
+date: "June 5, 2024"
 format: 
   html: 
     code-copy: true
     toc: true
 ---
 ```{r echo = F}
-knitr::opts_knit$set(root.dir ="/Users/samfrederick/scope-and-methods-summer2023/")
-knitr::opts_chunk$set(root.dir = "/Users/samfrederick/scope-and-methods-summer2023/")
+knitr::opts_knit$set(root.dir ="/Users/samfrederick/scope-and-methods-summer2024/")
+knitr::opts_chunk$set(root.dir = "/Users/samfrederick/scope-and-methods-summer2024/")
 ```
 
 ```{r echo = F, message = F}
@@ -58,7 +58,7 @@ tibble(x = seq(-3, 3, length.out = 100))|>
 
 ```{r, echo = F, cache = T, message = F, warning = F}
 library(gganimate)
-samp_sizes <- seq(1, 10000, length.out = 100) 
+samp_sizes <- seq(1, 100000, length.out = 500) 
 nsamps <- 1000
 set.seed(15090492)
 clt_samp <- data.table::rbindlist(parallel::mclapply(samp_sizes, 
