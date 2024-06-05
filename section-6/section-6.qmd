@@ -56,7 +56,7 @@ tibble(x = seq(-3, 3, length.out = 100))|>
 ```
 
 
-```{r, echo = F, cache = T, message = F, warning = F}
+```{r, echo = F, cache = F, message = F, warning = F}
 library(gganimate)
 samp_sizes <- seq(1, 100000, length.out = 500) 
 nsamps <- 1000
@@ -107,7 +107,7 @@ The Standard Error is the standard deviation divided by the square root of the s
 
 The animation below demonstrates, by sampling many times from the population and calculating the 95\% confidence intervals for each sample, that about 95\% of our confidence intervals contain the true population value. 
 
-```{r, echo = F, message = F, warning = F,cache = T}
+```{r, echo = F, message = F, warning = F,cache = F}
 set.seed(12309053)
 ci_samp <-data.table::rbindlist( lapply(1:100, 
                                         function(x) tibble(samp = sample(pop, size = 1000, replace = T))|> mutate(samp_num = x)))
