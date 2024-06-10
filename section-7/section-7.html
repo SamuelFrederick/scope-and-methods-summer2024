@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Sam Frederick">
-<meta name="dcterms.date" content="2023-06-12">
+<meta name="dcterms.date" content="2024-06-10">
 
 <title>Section 7. Tables, Chi-Squared Tests, and Correlations</title>
 <style>
@@ -161,7 +161,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 12, 2023</p>
+      <p class="date">June 10, 2024</p>
     </div>
   </div>
   
@@ -409,8 +409,8 @@ Very Conservative |           6 |          96 |          19 |           6 |     
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">prop.chisq =</span> <span class="cn">FALSE</span>, </span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">chisq =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning in chisq.test(t, correct = FALSE, ...): Chi-squared approximation may be
-incorrect</code></pre>
+<pre><code>Warning in chisq.test(t, correct = FALSE, ...): Chi-squared approximation may
+be incorrect</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -485,8 +485,8 @@ Chi^2 =  768.1034     d.f. =  20     p =  8.288596e-150
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">chisq =</span> <span class="cn">TRUE</span>, </span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">expected =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning in chisq.test(t, correct = FALSE, ...): Chi-squared approximation may be
-incorrect</code></pre>
+<pre><code>Warning in chisq.test(t, correct = FALSE, ...): Chi-squared approximation may
+be incorrect</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -577,8 +577,8 @@ Chi^2 =  768.1034     d.f. =  20     p =  8.288596e-150
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(ces<span class="sc">$</span>ideology, </span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>           ces<span class="sc">$</span>party)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning in chisq.test(ces$ideology, ces$party): Chi-squared approximation may be
-incorrect</code></pre>
+<pre><code>Warning in chisq.test(ces$ideology, ces$party): Chi-squared approximation may
+be incorrect</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -659,14 +659,26 @@ X-squared = 768.1, df = 20, p-value &lt; 2.2e-16</code></pre>
 <span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">opt_row_striping</span>(<span class="at">row_striping =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
-<div id="ylflgifosl" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+<div id="jaoxpcdoxf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#jaoxpcdoxf table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-:where(#ylflgifosl) .gt_table {
+#jaoxpcdoxf thead, #jaoxpcdoxf tbody, #jaoxpcdoxf tfoot, #jaoxpcdoxf tr, #jaoxpcdoxf td, #jaoxpcdoxf th {
+  border-style: none;
+}
+
+#jaoxpcdoxf p {
+  margin: 0;
+  padding: 0;
+}
+
+#jaoxpcdoxf .gt_table {
   display: table;
   border-collapse: collapse;
+  line-height: normal;
   margin-left: auto;
   margin-right: auto;
   color: #333333;
@@ -689,19 +701,12 @@ X-squared = 768.1, df = 20, p-value &lt; 2.2e-16</code></pre>
   border-left-color: #D3D3D3;
 }
 
-:where(#ylflgifosl) .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
+#jaoxpcdoxf .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 
-:where(#ylflgifosl) .gt_title {
+#jaoxpcdoxf .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -713,25 +718,37 @@ X-squared = 768.1, df = 20, p-value &lt; 2.2e-16</code></pre>
   border-bottom-width: 0;
 }
 
-:where(#ylflgifosl) .gt_subtitle {
+#jaoxpcdoxf .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
-  padding-top: 0;
-  padding-bottom: 6px;
+  padding-top: 3px;
+  padding-bottom: 5px;
   padding-left: 5px;
   padding-right: 5px;
   border-top-color: #FFFFFF;
   border-top-width: 0;
 }
 
-:where(#ylflgifosl) .gt_bottom_border {
+#jaoxpcdoxf .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#jaoxpcdoxf .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-:where(#ylflgifosl) .gt_col_headings {
+#jaoxpcdoxf .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -746,7 +763,7 @@ X-squared = 768.1, df = 20, p-value &lt; 2.2e-16</code></pre>
   border-right-color: #D3D3D3;
 }
 
-:where(#ylflgifosl) .gt_col_heading {
+#jaoxpcdoxf .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -766,7 +783,7 @@ X-squared = 768.1, df = 20, p-value &lt; 2.2e-16</code></pre>
   overflow-x: hidden;
 }
 
-:where(#ylflgifosl) .gt_column_spanner_outer {
+#jaoxpcdoxf .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -778,15 +795,15 @@ X-squared = 768.1, df = 20, p-value &lt; 2.2e-16</code></pre>
   padding-right: 4px;
 }
 
-:where(#ylflgifosl) .gt_column_spanner_outer:first-child {
+#jaoxpcdoxf .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-:where(#ylflgifosl) .gt_column_spanner_outer:last-child {
+#jaoxpcdoxf .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-:where(#ylflgifosl) .gt_column_spanner {
+#jaoxpcdoxf .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -798,7 +815,11 @@ X-squared = 768.1, df = 20, p-value &lt; 2.2e-16</code></pre>
   width: 100%;
 }
 
-:where(#ylflgifosl) .gt_group_heading {
+#jaoxpcdoxf .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#jaoxpcdoxf .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -821,9 +842,10 @@ X-squared = 768.1, df = 20, p-value &lt; 2.2e-16</code></pre>
   border-right-width: 1px;
   border-right-color: #D3D3D3;
   vertical-align: middle;
+  text-align: left;
 }
 
-:where(#ylflgifosl) .gt_empty_group_heading {
+#jaoxpcdoxf .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -838,15 +860,15 @@ X-squared = 768.1, df = 20, p-value &lt; 2.2e-16</code></pre>
   vertical-align: middle;
 }
 
-:where(#ylflgifosl) .gt_from_md > :first-child {
+#jaoxpcdoxf .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-:where(#ylflgifosl) .gt_from_md > :last-child {
+#jaoxpcdoxf .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-:where(#ylflgifosl) .gt_row {
+#jaoxpcdoxf .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -865,7 +887,7 @@ X-squared = 768.1, df = 20, p-value &lt; 2.2e-16</code></pre>
   overflow-x: hidden;
 }
 
-:where(#ylflgifosl) .gt_stub {
+#jaoxpcdoxf .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -878,7 +900,7 @@ X-squared = 768.1, df = 20, p-value &lt; 2.2e-16</code></pre>
   padding-right: 5px;
 }
 
-:where(#ylflgifosl) .gt_stub_row_group {
+#jaoxpcdoxf .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -892,11 +914,15 @@ X-squared = 768.1, df = 20, p-value &lt; 2.2e-16</code></pre>
   vertical-align: top;
 }
 
-:where(#ylflgifosl) .gt_row_group_first td {
+#jaoxpcdoxf .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-:where(#ylflgifosl) .gt_summary_row {
+#jaoxpcdoxf .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#jaoxpcdoxf .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -906,16 +932,16 @@ X-squared = 768.1, df = 20, p-value &lt; 2.2e-16</code></pre>
   padding-right: 5px;
 }
 
-:where(#ylflgifosl) .gt_first_summary_row {
+#jaoxpcdoxf .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-:where(#ylflgifosl) .gt_first_summary_row.thick {
+#jaoxpcdoxf .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-:where(#ylflgifosl) .gt_last_summary_row {
+#jaoxpcdoxf .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -925,7 +951,7 @@ X-squared = 768.1, df = 20, p-value &lt; 2.2e-16</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-:where(#ylflgifosl) .gt_grand_summary_row {
+#jaoxpcdoxf .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -935,7 +961,7 @@ X-squared = 768.1, df = 20, p-value &lt; 2.2e-16</code></pre>
   padding-right: 5px;
 }
 
-:where(#ylflgifosl) .gt_first_grand_summary_row {
+#jaoxpcdoxf .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -945,11 +971,21 @@ X-squared = 768.1, df = 20, p-value &lt; 2.2e-16</code></pre>
   border-top-color: #D3D3D3;
 }
 
-:where(#ylflgifosl) .gt_striped {
+#jaoxpcdoxf .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jaoxpcdoxf .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-:where(#ylflgifosl) .gt_table_body {
+#jaoxpcdoxf .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -958,7 +994,7 @@ X-squared = 768.1, df = 20, p-value &lt; 2.2e-16</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-:where(#ylflgifosl) .gt_footnotes {
+#jaoxpcdoxf .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -972,30 +1008,8 @@ X-squared = 768.1, df = 20, p-value &lt; 2.2e-16</code></pre>
   border-right-color: #D3D3D3;
 }
 
-:where(#ylflgifosl) .gt_footnote {
+#jaoxpcdoxf .gt_footnote {
   margin: 0px;
-  font-size: 90%;
-  padding-left: 4px;
-  padding-right: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-:where(#ylflgifosl) .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-:where(#ylflgifosl) .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1003,177 +1017,190 @@ X-squared = 768.1, df = 20, p-value &lt; 2.2e-16</code></pre>
   padding-right: 5px;
 }
 
-:where(#ylflgifosl) .gt_left {
+#jaoxpcdoxf .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#jaoxpcdoxf .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jaoxpcdoxf .gt_left {
   text-align: left;
 }
 
-:where(#ylflgifosl) .gt_center {
+#jaoxpcdoxf .gt_center {
   text-align: center;
 }
 
-:where(#ylflgifosl) .gt_right {
+#jaoxpcdoxf .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-:where(#ylflgifosl) .gt_font_normal {
+#jaoxpcdoxf .gt_font_normal {
   font-weight: normal;
 }
 
-:where(#ylflgifosl) .gt_font_bold {
+#jaoxpcdoxf .gt_font_bold {
   font-weight: bold;
 }
 
-:where(#ylflgifosl) .gt_font_italic {
+#jaoxpcdoxf .gt_font_italic {
   font-style: italic;
 }
 
-:where(#ylflgifosl) .gt_super {
+#jaoxpcdoxf .gt_super {
   font-size: 65%;
 }
 
-:where(#ylflgifosl) .gt_two_val_uncert {
-  display: inline-block;
-  line-height: 1em;
-  text-align: right;
-  font-size: 60%;
-  vertical-align: -0.25em;
-  margin-left: 0.1em;
-}
-
-:where(#ylflgifosl) .gt_footnote_marks {
-  font-style: italic;
-  font-weight: normal;
+#jaoxpcdoxf .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
+  position: initial;
 }
 
-:where(#ylflgifosl) .gt_asterisk {
+#jaoxpcdoxf .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-:where(#ylflgifosl) .gt_slash_mark {
-  font-size: 0.7em;
-  line-height: 0.7em;
-  vertical-align: 0.15em;
+#jaoxpcdoxf .gt_indent_1 {
+  text-indent: 5px;
 }
 
-:where(#ylflgifosl) .gt_fraction_numerator {
-  font-size: 0.6em;
-  line-height: 0.6em;
-  vertical-align: 0.45em;
+#jaoxpcdoxf .gt_indent_2 {
+  text-indent: 10px;
 }
 
-:where(#ylflgifosl) .gt_fraction_denominator {
-  font-size: 0.6em;
-  line-height: 0.6em;
-  vertical-align: -0.05em;
+#jaoxpcdoxf .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#jaoxpcdoxf .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#jaoxpcdoxf .gt_indent_5 {
+  text-indent: 25px;
 }
 </style>
-<table class="gt_table">
-  
-  <thead class="gt_col_headings">
-    <tr>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">party</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">ideology</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">n</th>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="party">party</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="ideology">ideology</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="n">n</th>
     </tr>
   </thead>
   <tbody class="gt_table_body">
-    <tr><td class="gt_row gt_center">Democrat</td>
-<td class="gt_row gt_center">Very liberal</td>
-<td class="gt_row gt_right">86.1513497</td></tr>
-    <tr><td class="gt_row gt_center gt_striped">Democrat</td>
-<td class="gt_row gt_center gt_striped">Liberal</td>
-<td class="gt_row gt_right gt_striped">103.8848878</td></tr>
-    <tr><td class="gt_row gt_center">Democrat</td>
-<td class="gt_row gt_center">Moderate</td>
-<td class="gt_row gt_right">79.9934793</td></tr>
-    <tr><td class="gt_row gt_center gt_striped">Democrat</td>
-<td class="gt_row gt_center gt_striped">Conservative</td>
-<td class="gt_row gt_right gt_striped">14.8124399</td></tr>
-    <tr><td class="gt_row gt_center">Democrat</td>
-<td class="gt_row gt_center">Very Conservative</td>
-<td class="gt_row gt_right">6.7042232</td></tr>
-    <tr><td class="gt_row gt_center gt_striped">Democrat</td>
-<td class="gt_row gt_center gt_striped">Not Sure</td>
-<td class="gt_row gt_right gt_striped">9.3306875</td></tr>
-    <tr><td class="gt_row gt_center">Republican</td>
-<td class="gt_row gt_center">Very liberal</td>
-<td class="gt_row gt_right">0.3514461</td></tr>
-    <tr><td class="gt_row gt_center gt_striped">Republican</td>
-<td class="gt_row gt_center gt_striped">Liberal</td>
-<td class="gt_row gt_right gt_striped">7.2793520</td></tr>
-    <tr><td class="gt_row gt_center">Republican</td>
-<td class="gt_row gt_center">Moderate</td>
-<td class="gt_row gt_right">41.8180993</td></tr>
-    <tr><td class="gt_row gt_center gt_striped">Republican</td>
-<td class="gt_row gt_center gt_striped">Conservative</td>
-<td class="gt_row gt_right gt_striped">104.4875094</td></tr>
-    <tr><td class="gt_row gt_center">Republican</td>
-<td class="gt_row gt_center">Very Conservative</td>
-<td class="gt_row gt_right">126.9780632</td></tr>
-    <tr><td class="gt_row gt_center gt_striped">Republican</td>
-<td class="gt_row gt_center gt_striped">Not Sure</td>
-<td class="gt_row gt_right gt_striped">7.1685850</td></tr>
-    <tr><td class="gt_row gt_center">Independent</td>
-<td class="gt_row gt_center">Very liberal</td>
-<td class="gt_row gt_right">9.2598282</td></tr>
-    <tr><td class="gt_row gt_center gt_striped">Independent</td>
-<td class="gt_row gt_center gt_striped">Liberal</td>
-<td class="gt_row gt_right gt_striped">21.3422818</td></tr>
-    <tr><td class="gt_row gt_center">Independent</td>
-<td class="gt_row gt_center">Moderate</td>
-<td class="gt_row gt_right">116.5471971</td></tr>
-    <tr><td class="gt_row gt_center gt_striped">Independent</td>
-<td class="gt_row gt_center gt_striped">Conservative</td>
-<td class="gt_row gt_right gt_striped">45.6921294</td></tr>
-    <tr><td class="gt_row gt_center">Independent</td>
-<td class="gt_row gt_center">Very Conservative</td>
-<td class="gt_row gt_right">25.8717080</td></tr>
-    <tr><td class="gt_row gt_center gt_striped">Independent</td>
-<td class="gt_row gt_center gt_striped">Not Sure</td>
-<td class="gt_row gt_right gt_striped">4.2594498</td></tr>
-    <tr><td class="gt_row gt_center">Independent</td>
-<td class="gt_row gt_center">NA</td>
-<td class="gt_row gt_right">0.9702168</td></tr>
-    <tr><td class="gt_row gt_center gt_striped">Other</td>
-<td class="gt_row gt_center gt_striped">Very liberal</td>
-<td class="gt_row gt_right gt_striped">7.5267886</td></tr>
-    <tr><td class="gt_row gt_center">Other</td>
-<td class="gt_row gt_center">Liberal</td>
-<td class="gt_row gt_right">2.1869923</td></tr>
-    <tr><td class="gt_row gt_center gt_striped">Other</td>
-<td class="gt_row gt_center gt_striped">Moderate</td>
-<td class="gt_row gt_right gt_striped">16.1317720</td></tr>
-    <tr><td class="gt_row gt_center">Other</td>
-<td class="gt_row gt_center">Conservative</td>
-<td class="gt_row gt_right">6.0002626</td></tr>
-    <tr><td class="gt_row gt_center gt_striped">Other</td>
-<td class="gt_row gt_center gt_striped">Very Conservative</td>
-<td class="gt_row gt_right gt_striped">7.2110614</td></tr>
-    <tr><td class="gt_row gt_center">Other</td>
-<td class="gt_row gt_center">Not Sure</td>
-<td class="gt_row gt_right">0.4421898</td></tr>
-    <tr><td class="gt_row gt_center gt_striped">Not Sure</td>
-<td class="gt_row gt_center gt_striped">Very liberal</td>
-<td class="gt_row gt_right gt_striped">2.1532383</td></tr>
-    <tr><td class="gt_row gt_center">Not Sure</td>
-<td class="gt_row gt_center">Liberal</td>
-<td class="gt_row gt_right">1.5623802</td></tr>
-    <tr><td class="gt_row gt_center gt_striped">Not Sure</td>
-<td class="gt_row gt_center gt_striped">Moderate</td>
-<td class="gt_row gt_right gt_striped">11.7003928</td></tr>
-    <tr><td class="gt_row gt_center">Not Sure</td>
-<td class="gt_row gt_center">Conservative</td>
-<td class="gt_row gt_right">5.1063630</td></tr>
-    <tr><td class="gt_row gt_center gt_striped">Not Sure</td>
-<td class="gt_row gt_center gt_striped">Very Conservative</td>
-<td class="gt_row gt_right gt_striped">3.2099986</td></tr>
-    <tr><td class="gt_row gt_center">Not Sure</td>
-<td class="gt_row gt_center">Not Sure</td>
-<td class="gt_row gt_right">45.8422459</td></tr>
+    <tr><td headers="party" class="gt_row gt_center">Democrat</td>
+<td headers="ideology" class="gt_row gt_center">Very liberal</td>
+<td headers="n" class="gt_row gt_right">86.1513497</td></tr>
+    <tr><td headers="party" class="gt_row gt_center gt_striped">Democrat</td>
+<td headers="ideology" class="gt_row gt_center gt_striped">Liberal</td>
+<td headers="n" class="gt_row gt_right gt_striped">103.8848878</td></tr>
+    <tr><td headers="party" class="gt_row gt_center">Democrat</td>
+<td headers="ideology" class="gt_row gt_center">Moderate</td>
+<td headers="n" class="gt_row gt_right">79.9934793</td></tr>
+    <tr><td headers="party" class="gt_row gt_center gt_striped">Democrat</td>
+<td headers="ideology" class="gt_row gt_center gt_striped">Conservative</td>
+<td headers="n" class="gt_row gt_right gt_striped">14.8124399</td></tr>
+    <tr><td headers="party" class="gt_row gt_center">Democrat</td>
+<td headers="ideology" class="gt_row gt_center">Very Conservative</td>
+<td headers="n" class="gt_row gt_right">6.7042232</td></tr>
+    <tr><td headers="party" class="gt_row gt_center gt_striped">Democrat</td>
+<td headers="ideology" class="gt_row gt_center gt_striped">Not Sure</td>
+<td headers="n" class="gt_row gt_right gt_striped">9.3306875</td></tr>
+    <tr><td headers="party" class="gt_row gt_center">Republican</td>
+<td headers="ideology" class="gt_row gt_center">Very liberal</td>
+<td headers="n" class="gt_row gt_right">0.3514461</td></tr>
+    <tr><td headers="party" class="gt_row gt_center gt_striped">Republican</td>
+<td headers="ideology" class="gt_row gt_center gt_striped">Liberal</td>
+<td headers="n" class="gt_row gt_right gt_striped">7.2793520</td></tr>
+    <tr><td headers="party" class="gt_row gt_center">Republican</td>
+<td headers="ideology" class="gt_row gt_center">Moderate</td>
+<td headers="n" class="gt_row gt_right">41.8180993</td></tr>
+    <tr><td headers="party" class="gt_row gt_center gt_striped">Republican</td>
+<td headers="ideology" class="gt_row gt_center gt_striped">Conservative</td>
+<td headers="n" class="gt_row gt_right gt_striped">104.4875094</td></tr>
+    <tr><td headers="party" class="gt_row gt_center">Republican</td>
+<td headers="ideology" class="gt_row gt_center">Very Conservative</td>
+<td headers="n" class="gt_row gt_right">126.9780632</td></tr>
+    <tr><td headers="party" class="gt_row gt_center gt_striped">Republican</td>
+<td headers="ideology" class="gt_row gt_center gt_striped">Not Sure</td>
+<td headers="n" class="gt_row gt_right gt_striped">7.1685850</td></tr>
+    <tr><td headers="party" class="gt_row gt_center">Independent</td>
+<td headers="ideology" class="gt_row gt_center">Very liberal</td>
+<td headers="n" class="gt_row gt_right">9.2598282</td></tr>
+    <tr><td headers="party" class="gt_row gt_center gt_striped">Independent</td>
+<td headers="ideology" class="gt_row gt_center gt_striped">Liberal</td>
+<td headers="n" class="gt_row gt_right gt_striped">21.3422818</td></tr>
+    <tr><td headers="party" class="gt_row gt_center">Independent</td>
+<td headers="ideology" class="gt_row gt_center">Moderate</td>
+<td headers="n" class="gt_row gt_right">116.5471971</td></tr>
+    <tr><td headers="party" class="gt_row gt_center gt_striped">Independent</td>
+<td headers="ideology" class="gt_row gt_center gt_striped">Conservative</td>
+<td headers="n" class="gt_row gt_right gt_striped">45.6921294</td></tr>
+    <tr><td headers="party" class="gt_row gt_center">Independent</td>
+<td headers="ideology" class="gt_row gt_center">Very Conservative</td>
+<td headers="n" class="gt_row gt_right">25.8717080</td></tr>
+    <tr><td headers="party" class="gt_row gt_center gt_striped">Independent</td>
+<td headers="ideology" class="gt_row gt_center gt_striped">Not Sure</td>
+<td headers="n" class="gt_row gt_right gt_striped">4.2594498</td></tr>
+    <tr><td headers="party" class="gt_row gt_center">Independent</td>
+<td headers="ideology" class="gt_row gt_center">NA</td>
+<td headers="n" class="gt_row gt_right">0.9702168</td></tr>
+    <tr><td headers="party" class="gt_row gt_center gt_striped">Other</td>
+<td headers="ideology" class="gt_row gt_center gt_striped">Very liberal</td>
+<td headers="n" class="gt_row gt_right gt_striped">7.5267886</td></tr>
+    <tr><td headers="party" class="gt_row gt_center">Other</td>
+<td headers="ideology" class="gt_row gt_center">Liberal</td>
+<td headers="n" class="gt_row gt_right">2.1869923</td></tr>
+    <tr><td headers="party" class="gt_row gt_center gt_striped">Other</td>
+<td headers="ideology" class="gt_row gt_center gt_striped">Moderate</td>
+<td headers="n" class="gt_row gt_right gt_striped">16.1317720</td></tr>
+    <tr><td headers="party" class="gt_row gt_center">Other</td>
+<td headers="ideology" class="gt_row gt_center">Conservative</td>
+<td headers="n" class="gt_row gt_right">6.0002626</td></tr>
+    <tr><td headers="party" class="gt_row gt_center gt_striped">Other</td>
+<td headers="ideology" class="gt_row gt_center gt_striped">Very Conservative</td>
+<td headers="n" class="gt_row gt_right gt_striped">7.2110614</td></tr>
+    <tr><td headers="party" class="gt_row gt_center">Other</td>
+<td headers="ideology" class="gt_row gt_center">Not Sure</td>
+<td headers="n" class="gt_row gt_right">0.4421898</td></tr>
+    <tr><td headers="party" class="gt_row gt_center gt_striped">Not Sure</td>
+<td headers="ideology" class="gt_row gt_center gt_striped">Very liberal</td>
+<td headers="n" class="gt_row gt_right gt_striped">2.1532383</td></tr>
+    <tr><td headers="party" class="gt_row gt_center">Not Sure</td>
+<td headers="ideology" class="gt_row gt_center">Liberal</td>
+<td headers="n" class="gt_row gt_right">1.5623802</td></tr>
+    <tr><td headers="party" class="gt_row gt_center gt_striped">Not Sure</td>
+<td headers="ideology" class="gt_row gt_center gt_striped">Moderate</td>
+<td headers="n" class="gt_row gt_right gt_striped">11.7003928</td></tr>
+    <tr><td headers="party" class="gt_row gt_center">Not Sure</td>
+<td headers="ideology" class="gt_row gt_center">Conservative</td>
+<td headers="n" class="gt_row gt_right">5.1063630</td></tr>
+    <tr><td headers="party" class="gt_row gt_center gt_striped">Not Sure</td>
+<td headers="ideology" class="gt_row gt_center gt_striped">Very Conservative</td>
+<td headers="n" class="gt_row gt_right gt_striped">3.2099986</td></tr>
+    <tr><td headers="party" class="gt_row gt_center">Not Sure</td>
+<td headers="ideology" class="gt_row gt_center">Not Sure</td>
+<td headers="n" class="gt_row gt_right">45.8422459</td></tr>
   </tbody>
   
   
