@@ -115,7 +115,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#introduction-to-linear-regression" id="toc-introduction-to-linear-regression" class="nav-link" data-scroll-target="#introduction-to-linear-regression">Introduction to Linear Regression</a>
   <ul class="collapse">
   <li><a href="#a-refresher-on-causality-and-experiments" id="toc-a-refresher-on-causality-and-experiments" class="nav-link" data-scroll-target="#a-refresher-on-causality-and-experiments">A Refresher on Causality and Experiments</a></li>
-  <li><a href="#observational-data" id="toc-observational-data" class="nav-link" data-scroll-target="#observational-data">Observational Data</a>
+  <li><a href="#observational-data" id="toc-observational-data" class="nav-link" data-scroll-target="#observational-data">Observational Data</a></li>
+  <li><a href="#bivariate-regression" id="toc-bivariate-regression" class="nav-link" data-scroll-target="#bivariate-regression">Bivariate Regression</a>
   <ul class="collapse">
   <li><a href="#the-meaning-of-regression-estimates" id="toc-the-meaning-of-regression-estimates" class="nav-link" data-scroll-target="#the-meaning-of-regression-estimates">The Meaning of Regression Estimates</a></li>
   <li><a href="#interpreting-regression-estimates" id="toc-interpreting-regression-estimates" class="nav-link" data-scroll-target="#interpreting-regression-estimates">Interpreting Regression Estimates</a></li>
@@ -197,7 +198,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p>Regression gives us a framework to account for these confounding variables and to better approximate the experimental ideal. It is important to note that we cannot ever be sure that we have accounted for all potential confounding variables, however. This is why experiments are the “gold standard” for identifying causal effects.</p>
-<p>That said, sometimes it is impossible, infeasible, or unethical to conduct experiments, so observational data are the best available way to test our hypotheses. In these settings, it is crucial to think <strong><em>carefully</em></strong> about potential confounding variables which could cause “treated” units to systematically differ from “untreated” units. ## Bivariate Regression</p>
+<p>That said, sometimes it is impossible, infeasible, or unethical to conduct experiments, so observational data are the best available way to test our hypotheses. In these settings, it is crucial to think <strong><em>carefully</em></strong> about potential confounding variables which could cause “treated” units to systematically differ from “untreated” units.</p>
+</section>
+<section id="bivariate-regression" class="level2">
+<h2 class="anchored" data-anchor-id="bivariate-regression">Bivariate Regression</h2>
 <p>Starting with a single variable, we have a formula of the form:</p>
 <p><span class="math display">\[y_i = \beta_0 + \beta_1 * x_i + \varepsilon_i\]</span> We fit our Y or outcome variable to a line with slope <span class="math inline">\(\beta_1\)</span> and y-intercept <span class="math inline">\(\beta_0\)</span>. The <span class="math inline">\(\varepsilon\)</span> captures “error” which is not explained by our model. We estimate <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> using Ordinary Least Squares (OLS) or Linear Regression.</p>
 <p>Ordinary Least Squares finds the values of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> which minimize the sum of squared residuals. Residuals are the difference between our actual, observed Y values and the predicted Y values using <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.</p>

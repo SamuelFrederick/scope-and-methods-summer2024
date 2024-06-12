@@ -70,6 +70,7 @@ The reasons that people or lawmaking bodies have for selecting some "treatment" 
 Regression gives us a framework to account for these confounding variables and to better approximate the experimental ideal. It is important to note that we cannot ever be sure that we have accounted for all potential confounding variables, however. This is why experiments are the "gold standard" for identifying causal effects. 
 
 That said, sometimes it is impossible, infeasible, or unethical to conduct experiments, so observational data are the best available way to test our hypotheses. In these settings, it is crucial to think ***carefully*** about potential confounding variables which could cause "treated" units to systematically differ from "untreated" units. 
+
 ## Bivariate Regression
 
 Starting with a single variable, we have a formula of the form:
