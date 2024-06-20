@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Sam Frederick">
-<meta name="dcterms.date" content="2023-06-21">
+<meta name="dcterms.date" content="2024-06-21">
 
 <title>Section 10. Interactions and Marginal Effects</title>
 <style>
@@ -141,7 +141,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 21, 2023</p>
+      <p class="date">June 21, 2024</p>
     </div>
   </div>
   
@@ -647,15 +647,16 @@ Confidence level used: 0.95 </code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>
             Term    Contrast incumbent_challenge_full Estimate Std. Error     z
- lndisbursements mean(dY/dX)               Open seat      6.73      0.741  9.08
- lndisbursements mean(dY/dX)               Incumbent     -6.23      0.632 -9.85
  lndisbursements mean(dY/dX)               Challenger     2.97      0.301  9.85
+ lndisbursements mean(dY/dX)               Incumbent     -6.23      0.632 -9.85
+ lndisbursements mean(dY/dX)               Open seat      6.73      0.741  9.08
  Pr(&gt;|z|)    S 2.5 % 97.5 %
-   &lt;0.001 63.0  5.28   8.18
-   &lt;0.001 73.6 -7.47  -4.99
    &lt;0.001 73.7  2.38   3.56
+   &lt;0.001 73.6 -7.47  -4.99
+   &lt;0.001 63.0  5.28   8.18
 
-Columns: term, contrast, incumbent_challenge_full, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high, predicted, predicted_hi, predicted_lo </code></pre>
+Columns: term, contrast, incumbent_challenge_full, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high, predicted_lo, predicted_hi, predicted 
+Type:  response </code></pre>
 </div>
 </div>
 <p>The <code>plot_slopes()</code> function takes the same arguments as the <code>avg_slopes()</code> function but plots the slopes for each subgroup in a <code>ggplot2</code> format.</p>
@@ -685,7 +686,8 @@ Columns: term, contrast, incumbent_challenge_full, estimate, std.error, statisti
                Incumbent      63.7      0.531 119.9   &lt;0.001 Inf  62.7   64.8
                Challenger     37.6      0.576  65.2   &lt;0.001 Inf  36.5   38.7
 
-Columns: incumbent_challenge_full, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high </code></pre>
+Columns: incumbent_challenge_full, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high 
+Type:  response </code></pre>
 </div>
 </div>
 <p>We can also plot the predicted values from our model using the <code>plot_predictions()</code> function.</p>

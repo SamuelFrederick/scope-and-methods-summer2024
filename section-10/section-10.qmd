@@ -1,7 +1,7 @@
 ---
 title: "Section 10. Interactions and Marginal Effects"
 author: "Sam Frederick"
-date: "June 21, 2023"
+date: "June 21, 2024"
 format: 
   html: 
     code-copy: true
@@ -9,8 +9,8 @@ format:
 ---
 
 ```{r echo = F}
-knitr::opts_knit$set(root.dir ="/Users/samfrederick/scope-and-methods-summer2023/scope-and-methods-summer2023/")
-knitr::opts_chunk$set(root.dir = "/Users/samfrederick/scope-and-methods-summer2023/scope-and-methods-summer2023/")
+knitr::opts_knit$set(root.dir ="/Users/samfrederick/scope-and-methods-summer2024/")
+knitr::opts_chunk$set(root.dir = "/Users/samfrederick/scope-and-methods-summer2024/")
 ```
 
 ```{r echo = F, message = F}

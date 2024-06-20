@@ -1,0 +1,45 @@
+---
+title: "Cheat Sheet"
+format: html
+---
+
+```{dot}
+digraph G {
+layout=neato;
+  init [label = "Type of Variable?"]; 
+  categ1 [label = "Categorical"];
+  num1 [label = "Numeric"]; 
+  
+  init2c [label = "Number of Variables?"];
+  init2n [label = "Number of Variables?"];
+
+  vars1c [label = "Univariate"];
+  vars2c [label = "Multivariate"];
+  vars1n [label = "Univariate"];
+  vars2n [label = "Multivariate"];
+  uni_categ [label =<<table><th><td>Analysis </td><td>Options</td><td>Code</td></th><tr><td>Plots</td><td>Barplot</td><td>geom_bar()</td></tr><tr><td rowspan="2">Summary Stats</td><td>Count/Table</td><td>table(), count()</td></tr> <tr> <td>Proportion table</td><td>prop.table()</td></tr></table>>];
+  uni_num [label = <<table><th><td>Analysis </td><td>Options</td><td>Code</td></th><tr><td rowspan="2">Plots</td><td>Histogram</td><td>geom_histogram()</td></tr><tr><td>Density Plot</td><td>geom_density()</td></tr><tr><td rowspan="2">Summary Stats: Central Tendency</td><td>Mean</td><td>mean()</td></tr><tr> <td>Median</td><td>median()</td></tr>
+  <tr><td rowspan="4">Summary Stats: Spread</td><td>Standard Deviation</td><td>sd()</td></tr><tr> <td>Variance</td><td>var()</td></tr>
+  <tr> <td>IQR</td><td>IQR()</td></tr><tr> <td>Range</td><td>range()</td></tr><tr><td>Overall Summary</td> <td>Multiple summary stats</td><td>summary()</td></tr></table>>];
+  temp [style=invis];
+
+  init -> categ1; 
+  init -> num1;
+  categ1 -> init2c; 
+  init2c -> vars1c; 
+  init2c -> vars2c; 
+  vars1c -> uni_categ;
+  vars1n -> temp [style=invis];
+  temp -> uni_num [style=invis];
+  vars1n -> uni_num;
+  
+  num1 -> init2n;
+  init2n -> vars1n; 
+  init2n -> vars2n; 
+}
+```
+
+
+
+
+
